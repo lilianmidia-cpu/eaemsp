@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel · Meta Ads</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="painel-root"></div>
+
+  <template id="content-tpl">
+    <div class="page-head fade-up">
+      <div class="acct-badge"><span class="dot" id="connDot"></span><span id="connTxt">Verificando conexão…</span></div>
+      <h1 class="title">Meta Ads</h1>
+      <div class="subtitle">Relatório geral da conta</div>
+    </div>
+
+    <div class="toolbar fade-up" id="rangeBar"></div>
+
+    <div id="notConnectedAlert" class="alert fade-up" style="display:none">
+      <span class="label">Não conectado.</span>
+      Os números estão zerados porque o Meta Ads ainda não foi vinculado. Veja o
+      <a href="/PASSO_A_PASSO.md" style="color:var(--accent);text-decoration:underline">passo-a-passo</a>
+      pra ligar o token (sem precisar mexer no código).
+    </div>
+
+    <section class="kpi-grid fade-up">
+      <div class="card">
+        <div class="kpi-label">Valor Usado</div>
+        <div class="kpi-value mono amber" id="kpi-spend">—</div>
+        <div class="kpi-sub">Investimento total</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Alcance</div>
+        <div class="kpi-value mono accent" id="kpi-reach">—</div>
+        <div class="kpi-sub">Pessoas únicas</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-value mono green" id="kpi-ctr">—</div>
+        <div class="kpi-sub">Cliques no link / imp.</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">CPM</div>
+        <div class="kpi-value mono dim" id="kpi-cpm">—</div>
+        <div class="kpi-sub">Custo por mil impressões</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Frequência</div>
+        <div class="kpi-value mono purple" id="kpi-freq">—</div>
+        <div class="kpi-sub">Imp. por pessoa</div>
+      </div>
+    </section>
+
+    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div>
+          <div style="font-weight:600">Gasto diário</div>
+          <div class="kpi-sub">Investimento por dia</div>
+        </div>
+      </div>
+      <div style="height:220px"><canvas id="chart-spend"></canvas></div>
+    </section>
+
+    <section class="table-wrap fade-up">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Campanhas</div>
+          <div class="table-sub">Ordenado por valor usado</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Campanha</th>
+          <th class="num">Valor Usado</th>
+          <th class="num">Alcance</th>
+          <th class="num">CPM</th>
+          <th class="num">CTR</th>
+          <th class="num">Resultados</th>
+          <th class="num">Custo/Resultado</th>
+        </tr></thead>
+        <tbody id="campTbody"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
+      </table>
+    </section>
+
+    <section class="table-wrap fade-up">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Anúncios</div>
+          <div class="table-sub">Ordenado por valor usado</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Anúncio</th>
+          <th class="num">Valor Usado</th>
+          <th class="num">Alcance</th>
+          <th class="num">CPM</th>
+          <th class="num">CTR</th>
+          <th class="num">Impressões</th>
+        </tr></thead>
+        <tbody id="adsTbody"><tr><td colspan="6" class="empty">Carregando…</td></tr></tbody>
+      </table>
+    </section>
+  </template>
+
+  <script type="module">
+    import { mountLayout, api, fmt, rangePicker } from '/painel/_shared/app.js';
+
+    mountLayout({ active: 'meta-ads' });
+
+    const main = document.getElementById('painel-main');
+    main.appendChild(document.getElementById('content-tpl').content.cloneNode(true));
+
+    let chart;
+    let currentRange = null;
+
+    async function load({ startDate, endDate }) {
+      currentRange = { startDate, endDate };
+      const qs = `?startDate=${startDate}&endDate=${endDate}`;
+
+      const [kpisR, tsR, campR, adsR] = await Promise.all([
+        api('/api/painel/meta-mock?type=kpis' + qs.replace('?', '&')),
+        api('/api/painel/meta-mock?type=timeseries' + qs.replace('?', '&')),
+        api('/api/painel/meta-mock?type=campaigns' + qs.replace('?', '&')),
+        api('/api/painel/meta-mock?type=ads' + qs.replace('?', '&')),
+      ]);
+
+      // Conexão
+      const connected = !!kpisR.meta_connected;
+      const dot = document.getElementById('connDot');
+      const txt = document.getElementById('connTxt');
+      dot.className = 'dot ' + (connected ? '' : 'warn');
+      txt.textContent = connected ? 'Meta Ads conectado' : 'Meta Ads não conectado';
+      document.getElementById('notConnectedAlert').style.display = connected ? 'none' : 'block';
+
+      // KPIs
+      const k = kpisR.data || {};
+      document.getElementById('kpi-spend').textContent = fmt.brl(k.valorUsado);
+      document.getElementById('kpi-reach').textContent = fmt.num(k.alcance);
+      document.getElementById('kpi-ctr').textContent   = fmt.pct(k.ctr);
+      document.getElementById('kpi-cpm').textContent   = fmt.brl(k.cpm);
+      document.getElementById('kpi-freq').textContent  = fmt.dec(k.frequencia, 2);
+
+      // Chart
+      const labels = (tsR.data || []).map((p) => fmt.dateBR(p.date));
+      const values = (tsR.data || []).map((p) => p.valorUsado);
+      if (chart) chart.destroy();
+      const ctx = document.getElementById('chart-spend').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{
+          label: 'Gasto', data: values,
+          borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.1)',
+          tension: 0.3, fill: true, pointRadius: 0, borderWidth: 2,
+        }]},
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#7a7a8c', font: { family: 'JetBrains Mono', size: 11 } }, grid: { color: '#1f1f28' } },
+            y: { ticks: { color: '#7a7a8c', font: { family: 'JetBrains Mono', size: 11 }, callback: (v) => fmt.brl(v) }, grid: { color: '#1f1f28' } },
+          },
+        },
+      });
+
+      // Tabelas
+      renderCampaigns(campR.data || []);
+      renderAds(adsR.data || []);
+    }
+
+    function renderCampaigns(rows) {
+      const tb = document.getElementById('campTbody');
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="7" class="empty">Sem dados no período. ${currentRange ? '' : ''}</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map((r) => `
+        <tr>
+          <td>${escapeHtml(r.campaignName || '—')}</td>
+          <td class="num mono amber">${fmt.brl(r.valorUsado)}</td>
+          <td class="num mono">${fmt.num(r.alcance)}</td>
+          <td class="num mono dim">${fmt.brl(r.cpm)}</td>
+          <td class="num mono green">${fmt.pct(r.ctr)}</td>
+          <td class="num mono">${fmt.num(r.resultados)}</td>
+          <td class="num mono red">${fmt.brl(r.custoPorResultado)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAds(rows) {
+      const tb = document.getElementById('adsTbody');
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="6" class="empty">Sem dados no período.</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map((r) => `
+        <tr>
+          <td>${escapeHtml(r.adName || '—')}</td>
+          <td class="num mono amber">${fmt.brl(r.valorUsado)}</td>
+          <td class="num mono">${fmt.num(r.alcance)}</td>
+          <td class="num mono dim">${fmt.brl(r.cpm)}</td>
+          <td class="num mono green">${fmt.pct(r.ctr)}</td>
+          <td class="num mono">${fmt.num(r.impressions)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    rangePicker({
+      container: document.getElementById('rangeBar'),
+      defaultDays: 30,
+      onChange: load,
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel · Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css">
+</head>
+<body>
+  <div id="painel-root"></div>
+
+  <template id="content-tpl">
+    <div class="page-head fade-up">
+      <div class="acct-badge"><span class="dot" id="connDot"></span><span id="connTxt">Verificando…</span></div>
+      <h1 class="title">Financeiro</h1>
+      <div class="subtitle">Gasto mensal + impostos (12,15% ISS/PIS a partir de jan/2026)</div>
+    </div>
+
+    <div id="notConnectedAlert" class="alert fade-up" style="display:none">
+      <span class="label">Não conectado.</span>
+      Os valores ficam zerados até o Meta Ads ser ligado no painel da Cloudflare.
+    </div>
+
+    <section class="kpi-grid fade-up">
+      <div class="card">
+        <div class="kpi-label">Gasto (período)</div>
+        <div class="kpi-value mono accent" id="totSpend">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Impostos</div>
+        <div class="kpi-value mono amber" id="totTax">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Total cobrado</div>
+        <div class="kpi-value mono red" id="totAll">—</div>
+      </div>
+    </section>
+
+    <section class="table-wrap fade-up">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Por mês</div>
+          <div class="table-sub" id="acctSub">—</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Mês</th>
+          <th class="num">Gasto</th>
+          <th class="num">Imposto (12,15%)</th>
+          <th class="num">Total</th>
+        </tr></thead>
+        <tbody id="monthTbody"><tr><td colspan="4" class="empty">Carregando…</td></tr></tbody>
+      </table>
+    </section>
+
+    <div class="subtitle" id="updatedAt" style="font-size:.75rem;margin-top:1rem"></div>
+  </template>
+
+  <script type="module">
+    import { mountLayout, api, fmt } from '/painel/_shared/app.js';
+
+    mountLayout({ active: 'financeiro' });
+    document.getElementById('painel-main').appendChild(document.getElementById('content-tpl').content.cloneNode(true));
+
+    const MONTH_NAMES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+    (async () => {
+      const r = await api('/api/painel/financeiro-mock');
+      const months = r.months || [];
+
+      const connected = !!r.meta_connected;
+      document.getElementById('connDot').className = 'dot ' + (connected ? '' : 'warn');
+      document.getElementById('connTxt').textContent = connected ? 'Meta Ads conectado' : 'Meta Ads não conectado';
+      document.getElementById('notConnectedAlert').style.display = connected ? 'none' : 'block';
+
+      const totSpend = months.reduce((a, m) => a + (m.spend || 0), 0);
+      const totTax   = months.reduce((a, m) => a + (m.tax || 0), 0);
+      const totAll   = months.reduce((a, m) => a + (m.total || 0), 0);
+      document.getElementById('totSpend').textContent = fmt.brl(totSpend);
+      document.getElementById('totTax').textContent   = fmt.brl(totTax);
+      document.getElementById('totAll').textContent   = fmt.brl(totAll);
+
+      const acct = r.account || {};
+      document.getElementById('acctSub').textContent =
+        `${acct.name} · ID ${acct.accountId} · ${acct.currency} · ${acct.timezone}`;
+
+      const tb = document.getElementById('monthTbody');
+      if (!months.length) {
+        tb.innerHTML = `<tr><td colspan="4" class="empty">Sem meses para mostrar.</td></tr>`;
+      } else {
+        tb.innerHTML = months.map((m) => {
+          const [y, mo] = m.monthStart.split('-');
+          const label = `${MONTH_NAMES[parseInt(mo,10)-1]} / ${y}`;
+          return `
+            <tr>
+              <td>${label}</td>
+              <td class="num mono accent">${fmt.brl(m.spend)}</td>
+              <td class="num mono amber">${fmt.brl(m.tax)}</td>
+              <td class="num mono red">${fmt.brl(m.total)}</td>
+            </tr>
+          `;
+        }).join('') + `
+          <tr style="background:var(--surface-alt);font-weight:600">
+            <td>Total</td>
+            <td class="num mono accent">${fmt.brl(totSpend)}</td>
+            <td class="num mono amber">${fmt.brl(totTax)}</td>
+            <td class="num mono red">${fmt.brl(totAll)}</td>
+          </tr>
+        `;
+      }
+
+      document.getElementById('updatedAt').textContent =
+        `Atualizado em ${new Date(r.updatedAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
+    })().catch((e) => {
+      document.getElementById('monthTbody').innerHTML =
+        `<tr><td colspan="4" class="empty">Erro: ${e.message}</td></tr>`;
+    });
+  </script>
+</body>
+</html>

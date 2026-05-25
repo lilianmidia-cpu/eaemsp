@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel — Acesso restrito</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0c; --surface:#121216; --surface-alt:#18181e;
+      --border:#1f1f28; --border-light:#2a2a36;
+      --text:#e8e8ed; --text-dim:#7a7a8c; --text-muted:#4a4a58;
+      --accent:#3b82f6; --red:#ef4444; --green:#22c55e;
+      --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
+    }
+    html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+    .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px}
+    .input{background:var(--surface-alt);border:1px solid var(--border);color:var(--text);
+      border-radius:10px;padding:.85rem 1rem;font-family:var(--mono);width:100%;outline:none;
+      transition:border-color .15s}
+    .input:focus{border-color:var(--accent)}
+    .btn{background:var(--accent);color:#fff;border-radius:10px;padding:.85rem 1rem;
+      font-family:var(--mono);font-weight:600;width:100%;cursor:pointer;border:0;
+      transition:opacity .15s}
+    .btn:hover{opacity:.9}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .err{color:var(--red);font-family:var(--mono);font-size:.875rem;margin-top:.75rem;min-height:1.25rem}
+  </style>
+</head>
+<body class="flex items-center justify-center px-4">
+  <div class="w-full max-w-md card p-8 fade-in">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-lg bg-[color:var(--accent)] flex items-center justify-center font-bold text-white">P</div>
+      <div>
+        <div class="font-semibold">Painel</div>
+        <div class="text-xs" style="color:var(--text-muted)">Imersão Escritores · Acesso restrito</div>
+      </div>
+    </div>
+
+    <h1 class="text-xl font-semibold mb-1">Entre com a senha</h1>
+    <p class="text-sm mb-6" style="color:var(--text-dim)">Esse painel é privado. Use a senha combinada.</p>
+
+    <form id="loginForm" autocomplete="off">
+      <label class="block text-xs uppercase mb-2" style="color:var(--text-muted);letter-spacing:.05em">Senha</label>
+      <input id="senha" name="senha" type="password" class="input" placeholder="••••••••" required autofocus>
+      <button id="btn" type="submit" class="btn mt-5">Entrar</button>
+      <div id="err" class="err"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const errEl = document.getElementById('err');
+    const btn = document.getElementById('btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Verificando…';
+
+      try {
+        const r = await fetch('/api/painel/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: document.getElementById('senha').value }),
+        });
+        const data = await r.json();
+        if (!r.ok || !data.ok) {
+          errEl.textContent = data.error || 'Erro ao entrar';
+          btn.disabled = false;
+          btn.textContent = 'Entrar';
+          return;
+        }
+        window.location.href = data.redirect || '/painel';
+      } catch (ex) {
+        errEl.textContent = 'Falha de rede. Tente de novo.';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>

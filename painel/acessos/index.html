@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel · Acessos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css">
+</head>
+<body>
+  <div id="painel-root"></div>
+
+  <template id="content-tpl">
+    <div class="page-head fade-up">
+      <div class="acct-badge"><span class="dot"></span>Registro interno</div>
+      <h1 class="title">Acessos</h1>
+      <div class="subtitle">De onde vêm os acessos ao painel (IP, país, cidade, navegador)</div>
+    </div>
+
+    <section class="kpi-grid fade-up">
+      <div class="card">
+        <div class="kpi-label">Total de acessos</div>
+        <div class="kpi-value mono accent" id="kpiTotal">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">IPs únicos</div>
+        <div class="kpi-value mono green" id="kpiIps">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Últimas 24h</div>
+        <div class="kpi-value mono amber" id="kpi24h">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Logins (com senha)</div>
+        <div class="kpi-value mono purple" id="kpiLog">—</div>
+      </div>
+    </section>
+
+    <div class="toolbar fade-up">
+      <button class="range-btn active" id="fAll">Todos</button>
+      <button class="range-btn" id="fLogged">Só logados</button>
+    </div>
+
+    <section class="table-wrap fade-up">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Últimos acessos</div>
+          <div class="table-sub">Ordenado do mais recente</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Quando</th>
+          <th>Página</th>
+          <th>País</th>
+          <th>Cidade / Região</th>
+          <th>IP</th>
+          <th>Navegador</th>
+          <th>Logado?</th>
+        </tr></thead>
+        <tbody id="accTbody"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
+      </table>
+    </section>
+  </template>
+
+  <script type="module">
+    import { mountLayout, api, fmt } from '/painel/_shared/app.js';
+
+    mountLayout({ active: 'acessos' });
+    document.getElementById('painel-main').appendChild(document.getElementById('content-tpl').content.cloneNode(true));
+
+    let onlyLogged = false;
+
+    async function load() {
+      const r = await api('/api/painel/acessos' + (onlyLogged ? '?onlyLogged=1' : ''));
+      const s = r.summary || {};
+      document.getElementById('kpiTotal').textContent = fmt.num(s.total || 0);
+      document.getElementById('kpiIps').textContent   = fmt.num(s.unique_ips || 0);
+      document.getElementById('kpi24h').textContent   = fmt.num(s.last_24h || 0);
+      document.getElementById('kpiLog').textContent   = fmt.num(s.logged_in || 0);
+
+      const tb = document.getElementById('accTbody');
+      const rows = r.rows || [];
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="7" class="empty">Nenhum acesso registrado ainda.</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map((row) => `
+        <tr>
+          <td class="mono">${fmt.ts(row.accessed_at)}</td>
+          <td class="mono dim">${escapeHtml(row.path || '—')}</td>
+          <td>${fmt.country(row.country)}</td>
+          <td class="dim">${escapeHtml([row.city, row.region].filter(Boolean).join(' / ') || '—')}</td>
+          <td class="mono dim" style="font-size:.78rem">${escapeHtml(row.ip_address || '—')}</td>
+          <td class="dim">${escapeHtml(fmt.ua(row.user_agent))}</td>
+          <td>${row.is_logged_in ? '<span class="green mono">✓ sim</span>' : '<span class="dim mono">não</span>'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    document.getElementById('fAll').addEventListener('click', () => {
+      onlyLogged = false;
+      document.getElementById('fAll').classList.add('active');
+      document.getElementById('fLogged').classList.remove('active');
+      load();
+    });
+    document.getElementById('fLogged').addEventListener('click', () => {
+      onlyLogged = true;
+      document.getElementById('fLogged').classList.add('active');
+      document.getElementById('fAll').classList.remove('active');
+      load();
+    });
+
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<svg width="1300" height="285" viewBox="30 5 1300 285" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="5" width="1300" height="285" fill="white"/>
+
+  <!-- Ícone -->
+  <g transform="translate(40,40)">
+    <path d="M60 30C60 20 68 12 78 12H150V170C135 155 118 148 90 148H78C68 148 60 140 60 130V30Z" fill="#8B4DDB"/>
+    <path d="M170 12H242C252 12 260 20 260 30V130C260 140 252 148 242 148H230C202 148 185 155 170 170V12Z" fill="#6C2BD9"/>
+    <path d="M40 40C40 25 52 14 67 14H78V150H90C122 150 145 158 160 178C175 158 198 150 230 150H242V14H253C268 14 280 25 280 40V170C280 185 268 196 253 196H190L120 250L135 196H67C52 196 40 185 40 170V40Z" stroke="#8B4DDB" stroke-width="10" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Texto -->
+  <text x="390" y="85" font-family="Montserrat, Arial, sans-serif" font-size="38" letter-spacing="18" fill="#111111">
+    IMERSÃO
+  </text>
+
+  <text x="390" y="175" font-family="Montserrat, Arial, sans-serif" font-size="88" font-weight="700" fill="#111111">
+    Escritores Admiráveis
+  </text>
+
+  <!-- Linha esquerda -->
+  <line x1="390" y1="240" x2="530" y2="240" stroke="#8B4DDB" stroke-width="4"/>
+
+  <!-- Subtítulo -->
+  <text x="560" y="260" font-family="Brush Script MT, cursive" font-size="64" fill="#8B4DDB">
+    o livro é só o começo
+  </text>
+
+  <!-- Linha direita -->
+  <line x1="1180" y1="240" x2="1320" y2="240" stroke="#8B4DDB" stroke-width="4"/>
+</svg>
