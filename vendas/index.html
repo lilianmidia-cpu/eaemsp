@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Imersão Escritores Admiráveis — 04 Set 2026 · São Paulo</title>
-  <meta name="description" content="Uma imersão presencial completa para escritores que querem transformar seus livros em projetos reais. 04 de setembro, Holiday Inn Anhembi, São Paulo.">
+  <title>Imersão Escritores Admiráveis — O livro é só o começo · 04 Set 2026 · São Paulo</title>
+  <meta name="description" content="Imersão presencial completa para escritores que querem transformar seus livros em projetos reais. 04 de setembro, Holiday Inn Anhembi, ao lado da Bienal do Livro de São Paulo.">
 
   <meta name="facebook-domain-verification" content="nm0l4jlpy0o5aqide9yej6uol583y1" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- GA4 -->
   <script async src="/scripts/gtag.js?id=G-XXXXXXXXXX"></script>
@@ -24,993 +25,1342 @@
 
   <style>
     /* ═══════════════════════════════════════════════════
-       PALETA — Escritores Admiráveis
-       Roxo #5B1F9E · Vermelho CTA #E8272D · Amarelo #F9D138
+       PALETA — Imersão Escritores Admiráveis (novo design)
     ═══════════════════════════════════════════════════ */
     :root {
-      --purple:      #5B1F9E;
-      --purple-dark: #3D1370;
-      --purple-deep: #2A0D52;
-      --purple-mid:  #4A1A8B;
-      --purple-light:#7B3FC4;
-      --purple-pale: #F3ECFF;
+      --purple:       #B16AE8;
+      --purple-dim:   #7B3FC4;
+      --purple-deep:  #5B1F9E;
+      --purple-soft:  #BC8DEC;
+      --purple-pale:  #F3ECFF;
 
-      --red:         #E8272D;
-      --red-dark:    #C01E23;
-      --red-light:   #FF4D52;
+      --black:        #0A0A0F;
+      --black-soft:   #15151C;
+      --black-mid:    #1F1F2A;
 
-      --yellow:      #F9D138;
-      --yellow-dark: #D4A800;
+      --red:          #E8272D;
+      --red-dark:     #C01E23;
 
-      --green:       #22C55E;
+      --bg:           #FFFFFF;
+      --bg-grey:      #EFEFF1;
+      --bg-light:     #F8F5FF;
 
-      --ink:         #1A0A2E;
-      --ink-soft:    #4A3568;
-      --ink-mute:    #7B6B96;
-      --line:        #E8E0F5;
-      --bg:          #FFFFFF;
-      --bg-alt:      #F8F5FF;
+      --ink:          #1A0A2E;
+      --ink-soft:     #4A3568;
+      --ink-mute:     #7B6B96;
+      --line:         #E8E0F5;
 
-      --shadow:      0 4px 20px rgba(61,19,112,.12);
-      --shadow-lg:   0 20px 60px rgba(61,19,112,.18), 0 8px 24px rgba(61,19,112,.1);
-      --shadow-red:  0 8px 28px rgba(232,39,45,.40);
-      --shadow-purple: 0 8px 28px rgba(91,31,158,.35);
+      --shadow-card:  0 12px 36px rgba(91,31,158,.10), 0 2px 8px rgba(0,0,0,.04);
+      --shadow-cta:   0 12px 32px rgba(155,89,226,.40);
+      --shadow-red:   0 12px 32px rgba(232,39,45,.40);
 
-      --r:  10px;
-      --rl: 18px;
-      --rx: 24px;
+      --r:   12px;
+      --rl:  18px;
+      --rx:  28px;
+      --rxl: 42px;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 110%; } /* +10%: corpo um pouco maior, proporção mantida */
     body {
       margin: 0; overflow-x: hidden;
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: 'Nunito Sans', 'Inter', -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
       line-height: 1.6; color: var(--ink); background: var(--bg);
+      letter-spacing: -.005em;
     }
     img { max-width: 100%; display: block; }
     a   { color: inherit; text-decoration: none; }
     ul  { padding: 0; margin: 0; list-style: none; }
     p   { margin: 0; }
-    h1,h2,h3,h4 { margin: 0; font-family: 'Sora', sans-serif; }
-    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.06; font-weight: 800; }
-    h2 { font-size: clamp(1.625rem, 3.2vw, 2.5rem); line-height: 1.1; font-weight: 700; }
-    h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.3; }
 
-    .container    { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
-    .container-sm { max-width: 52rem; }
-    .section      { padding: 5.5rem 0; }
-    .section-alt  { background: var(--bg-alt); }
-    .section-dark { background: var(--purple-dark); }
-    .section-deep { background: var(--purple-deep); }
-
-    .eyebrow {
-      display: inline-block;
-      font-family: 'Inter', sans-serif;
-      font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--purple); margin-bottom: .875rem;
+    /* Tipografia chunky display (estilo Anton/Bowlby) */
+    h1, h2, h3, h4 { margin: 0; }
+    .display {
+      font-family: 'Anton', Impact, sans-serif;
+      font-weight: 400;
+      letter-spacing: .01em;
+      line-height: 0.95;
+      text-transform: uppercase;
     }
-    .eyebrow-light { color: rgba(249,209,56,.9); }
+    h1.display { font-size: clamp(2rem, 3.6vw, 3.65rem); line-height: 1.02; }
+    h2.display { font-size: clamp(1.85rem, 3.4vw, 2.85rem); line-height: 1.0; }
+    h3.display { font-size: clamp(1.35rem, 2.4vw, 1.85rem); }
 
-    .section-head { text-align: center; max-width: 44rem; margin: 0 auto 3rem; }
-    .section-head p { margin-top: .875rem; font-size: 1.0625rem; color: var(--ink-soft); }
-    .section-dark .section-head p,
-    .section-deep .section-head p { color: rgba(255,255,255,.65); }
-    .section-dark h2, .section-deep h2,
-    .section-dark h3, .section-deep h3 { color: #fff; }
+    /* Layout helpers */
+    .container    { width: 100%; max-width: 76rem; margin: 0 auto; padding: 0 1.5rem; }
+    .container-sm { max-width: 56rem; }
+    .section      { padding: 5rem 0; }
+    .section-tight { padding: 3rem 0; }
+    .section-grey { background: var(--bg-grey); }
+    .section-dark { background: var(--black); color: #fff; position: relative; }
+    .section-purple { background: var(--purple); color: #fff; position: relative; overflow: hidden; }
 
-    /* ── MARKER — destaque amarelo exato do site ── */
-    mark {
-      background: var(--yellow);
-      color: var(--ink);
-      padding: .05em .3em;
-      border-radius: 3px;
-      font-style: normal;
-      -webkit-text-fill-color: var(--ink);
-    }
-
-    /* ── BOTÕES ── */
+    /* Botões */
     .btn {
-      appearance: none; border: 0; cursor: pointer;
-      font-family: 'Sora', sans-serif; font-weight: 700;
-      font-size: .9375rem; letter-spacing: .02em;
-      padding: .875rem 1.5rem; border-radius: var(--r);
-      transition: transform .1s, box-shadow .15s, filter .15s;
-      display: inline-flex; align-items: center; gap: .5rem;
-      white-space: nowrap; line-height: 1;
+      display: inline-flex; align-items: center; gap: .55rem;
+      padding: 1rem 1.75rem;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: .9rem;
+      letter-spacing: .04em; text-transform: uppercase;
+      border: 0; border-radius: 999px; cursor: pointer;
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s;
+      will-change: transform;
     }
-    .btn svg { width: 1rem; height: 1rem; flex: none; }
-    .btn-red {
-      color: #fff;
-      background: linear-gradient(180deg, var(--red) 0%, var(--red-dark) 100%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.2), var(--shadow-red);
-    }
-    .btn-red:hover  { filter: brightness(1.08); transform: translateY(-1px); }
-    .btn-red:active { transform: translateY(0); }
     .btn-purple {
-      color: #fff;
-      background: linear-gradient(180deg, var(--purple-light) 0%, var(--purple-dark) 100%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.15), var(--shadow-purple);
+      background: var(--purple); color: #fff;
+      box-shadow: var(--shadow-cta);
     }
-    .btn-purple:hover  { filter: brightness(1.08); transform: translateY(-1px); }
-    .btn-ghost-white {
-      background: transparent; color: #fff;
-      border: 1.5px solid rgba(255,255,255,.35);
-    }
-    .btn-ghost-white:hover { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.07); }
-    .btn-lg  { padding: 1.125rem 2rem; font-size: 1.0625rem; border-radius: 14px; }
-    .btn-xl  { padding: 1.25rem 2.5rem; font-size: 1.125rem; border-radius: 16px; }
-    .btn-full { width: 100%; justify-content: center; }
+    .btn-purple:hover { background: var(--purple-dim); transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 40px rgba(155,89,226,.55); }
+    .btn-black { background: var(--black); color: #fff; }
+    .btn-black:hover { background: var(--black-soft); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-outline:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.6); }
+    .btn-sm { padding: .65rem 1.15rem; font-size: .72rem; }
+    .btn-lg { padding: 1.15rem 2.1rem; font-size: 1rem; }
+    .btn::after { content: '↗'; font-weight: 400; transition: transform .2s; }
+    .btn:hover::after { transform: translate(3px, -3px); }
 
-    /* ══════════════════════════════════════
-       NOTICE BAR
-    ══════════════════════════════════════ */
-    .notice-bar {
-      background: var(--purple-dark);
-      color: rgba(255,255,255,.85);
-      text-align: center; padding: .55rem 1rem;
-      font-size: .8125rem; font-weight: 500;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-    }
-    .notice-bar a { color: var(--yellow); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
-    .dot-blink {
-      display: inline-block; width: 6px; height: 6px;
-      background: var(--red); border-radius: 50%; vertical-align: middle;
-      margin-right: .4rem; animation: blink 1.4s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    /* Highlights e detalhes tipográficos */
+    .hl-purple { color: var(--purple); }
+    .hl-red    { color: var(--red); }
+    .hl-yellow { background: linear-gradient(180deg, transparent 60%, rgba(155,89,226,.25) 60%); padding: 0 .15em; }
 
-    /* ══════════════════════════════════════
-       NAV
-    ══════════════════════════════════════ */
-    .nav {
-      position: sticky; top: 0; z-index: 40;
-      background: rgba(255,255,255,.97);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
-      box-shadow: 0 1px 12px rgba(91,31,158,.08);
-    }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
-    .wordmark {
-      display: inline-flex; align-items: center; gap: .625rem;
-      font-family: 'Sora', sans-serif; font-weight: 700; font-size: .9375rem; color: var(--ink);
-    }
-    .wordmark img { height: 64px; width: auto; }
-    .wm-fallback {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: var(--purple); display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 800; color: #fff;
-    }
-
-    /* ══════════════════════════════════════
-       HERO — fundo branco, foto Lilian colorida
-    ══════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
     .hero {
-      position: relative; overflow: hidden;
-      background: var(--bg);
-      min-height: 86vh; display: flex; align-items: center;
-    }
-    /* foto de multidão em P&B ao fundo */
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: url('assets/hero-crowd.jpg') center/cover no-repeat;
-      opacity: .08; filter: grayscale(1);
-    }
-    /* fade da esquerda para o fundo ficar legível */
-    .hero-fade {
-      position: absolute; inset: 0;
-      background: linear-gradient(100deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.9) 50%, rgba(255,255,255,.1) 100%);
-    }
-    .hero > .container {
-      position: relative; z-index: 2;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 3rem; align-items: center;
-      padding-top: 4rem; padding-bottom: 5rem;
-    }
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(91,31,158,.09); border: 1px solid rgba(91,31,158,.2);
-      border-radius: 999px; padding: .3rem .875rem;
-      font-size: .75rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--purple);
-      margin-bottom: 1.125rem;
-    }
-    .hero h1 { color: var(--ink); max-width: 15ch; margin-bottom: 1.125rem; }
-    .hero-sub {
-      font-size: 1.0625rem; color: var(--ink-soft);
-      max-width: 30rem; line-height: 1.75; margin-bottom: 1.75rem;
-    }
-    .hero-cta-group { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .hero-fine { font-size: .8125rem; color: var(--ink-mute); }
-    .hero-fine svg { width: .75rem; height: .75rem; vertical-align: -.1em; margin-right: .2rem; }
-
-    /* Badges de info */
-    .hero-badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
-    .hbadge {
-      display: inline-flex; align-items: center; gap: .3rem;
-      background: var(--bg-alt); border: 1px solid var(--line);
-      border-radius: 999px; padding: .3rem .75rem;
-      font-size: .8125rem; color: var(--ink-soft); font-weight: 500;
-    }
-    .hbadge svg { width: .8rem; height: .8rem; opacity: .5; flex: none; }
-
-    /* Foto da Lilian — lado direito do hero */
-    .hero-photo-col { position: relative; display: flex; justify-content: center; }
-    .hero-photo-frame {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 460px;
-      border-radius: var(--rx);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      aspect-ratio: 3/4;
-      background: var(--purple-pale);
-    }
-    .hero-photo-frame img {
-      width: 100%; height: 100%; object-fit: cover; object-position: top center;
-    }
-    /* placeholder */
-    .photo-placeholder {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: .75rem; color: var(--purple-light); font-size: .875rem; text-align: center; padding: 2rem;
-    }
-    .photo-placeholder svg { width: 4rem; height: 4rem; opacity: .25; }
-    .photo-placeholder small { color: var(--ink-mute); font-size: .8125rem; }
-    /* Badges flutuantes sobre a foto */
-    .float-card {
-      position: absolute; z-index: 3;
-      background: #fff; border-radius: var(--rl);
-      padding: .875rem 1.125rem;
-      box-shadow: 0 8px 32px rgba(61,19,112,.2);
-      font-family: 'Sora', sans-serif;
-      text-align: center; line-height: 1.3;
-    }
-    .float-card.top { top: 1.25rem; right: -1.25rem; }
-    .float-card.bottom { bottom: 3rem; left: -1.25rem; background: var(--purple); color: #fff; }
-    .float-card .fc-num { font-size: 1.5rem; font-weight: 800; color: var(--red); display: block; }
-    .float-card.bottom .fc-num { color: var(--yellow); }
-    .float-card .fc-label { font-size: .6875rem; font-weight: 600; color: var(--ink-mute); }
-    .float-card.bottom .fc-label { color: rgba(255,255,255,.65); }
-
-    /* ══════════════════════════════════════
-       SOBRE
-    ══════════════════════════════════════ */
-    .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .sobre-copy p { font-size: 1.0625rem; line-height: 1.8; color: var(--ink-soft); margin-bottom: 1rem; }
-    .sobre-copy p:last-child { margin: 0; }
-    .pullquote {
-      border-left: 3px solid var(--purple);
-      padding: .875rem 1.25rem;
-      background: var(--purple-pale);
-      border-radius: 0 var(--r) var(--r) 0;
-      margin: 1.75rem 0;
-      font-size: 1.0625rem; font-style: italic;
-      color: var(--ink); font-weight: 500; line-height: 1.6;
-    }
-
-    /* Card visual lado direito de "sobre" */
-    .sobre-card {
-      background: var(--purple-dark);
-      border-radius: var(--rx);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-    }
-    .sobre-card-photo {
-      width: 100%; height: 280px; position: relative; overflow: hidden;
-      background: var(--purple-mid);
-    }
-    .sobre-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-    .sobre-card-photo-ph {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: .5rem; color: rgba(255,255,255,.2); font-size: .8125rem;
-    }
-    .sobre-card-photo-ph svg { width: 3rem; height: 3rem; opacity: .2; }
-    .sobre-card-body { padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; }
-    .sc-stat {
-      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--r); padding: .875rem 1rem;
-    }
-    .sc-stat-label { font-size: .75rem; color: rgba(255,255,255,.45); font-weight: 500; margin-bottom: .25rem; }
-    .sc-stat-value { font-size: 1rem; font-weight: 700; color: #fff; font-family: 'Sora', sans-serif; }
-    .sc-stat-value.y { color: var(--yellow); }
-
-    /* ══════════════════════════════════════
-       PROGRAMAÇÃO
-    ══════════════════════════════════════ */
-    .schedule { display: grid; gap: .625rem; max-width: 52rem; margin: 0 auto; }
-    .sch-item {
-      display: grid; grid-template-columns: 4.5rem 2px 1fr;
-      gap: 0 1.25rem; align-items: start;
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: var(--rl); padding: 1.25rem 1.5rem;
-      box-shadow: 0 1px 4px rgba(61,19,112,.06);
-      transition: border-color .2s, transform .2s;
-    }
-    .sch-item:hover { border-color: rgba(91,31,158,.3); transform: translateX(3px); }
-    .sch-time { font-family: 'Sora', sans-serif; font-size: .875rem; font-weight: 700; color: var(--purple); padding-top: .1rem; }
-    .sch-line { width: 2px; background: var(--line); align-self: stretch; border-radius: 2px; }
-    .sch-body h4 { margin-bottom: .3rem; font-size: 1rem; }
-    .sch-body p  { font-size: .875rem; color: var(--ink-soft); }
-
-    /* ══════════════════════════════════════
-       KIT
-    ══════════════════════════════════════ */
-    .kit-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
-    .kit-card {
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: var(--rl); padding: 2rem 1.25rem; text-align: center;
-      box-shadow: 0 1px 4px rgba(61,19,112,.06);
-      transition: transform .2s, box-shadow .2s, border-color .2s;
-    }
-    .kit-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(91,31,158,.25); }
-    .kit-icon {
-      width: 56px; height: 56px; margin: 0 auto 1rem; border-radius: 16px;
-      background: var(--purple-pale); border: 1px solid rgba(91,31,158,.15);
-      display: flex; align-items: center; justify-content: center; font-size: 1.625rem;
-    }
-    .kit-card h4 { margin-bottom: .375rem; font-size: .9375rem; }
-    .kit-card p  { font-size: .8125rem; color: var(--ink-mute); }
-
-    /* ══════════════════════════════════════
-       LILIAN
-    ══════════════════════════════════════ */
-    .lilian-grid { display: grid; grid-template-columns: 360px 1fr; gap: 5rem; align-items: center; }
-    .lilian-frame {
       position: relative;
-      border-radius: var(--rx); overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,.35);
-      aspect-ratio: 3/4; background: var(--purple-mid);
+      background: var(--black);
+      color: #fff;
+      overflow: hidden;
+      padding: 5rem 0 6rem 0;
     }
-    .lilian-frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-    .lilian-frame-ph {
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        radial-gradient(ellipse at 70% 20%, rgba(155,89,226,.18), transparent 60%),
+        linear-gradient(180deg, rgba(10,10,15,.58) 0%, rgba(10,10,15,.88) 100%),
+        url('/vendas/assets/hero-bg.png');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(.9);
+    }
+    .hero-bg::after {
+      content: '';
       position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: .75rem; color: rgba(255,255,255,.25); font-size: .875rem; text-align: center; padding: 2rem;
+      background: linear-gradient(135deg, rgba(91,31,158,.25) 0%, transparent 60%);
     }
-    .lilian-frame-ph svg { width: 4rem; height: 4rem; opacity: .15; }
-    .lilian-badge-float {
-      position: absolute; bottom: -1rem; right: -1rem;
-      background: var(--yellow); color: var(--ink);
-      border-radius: var(--rl); padding: .875rem 1.25rem;
-      font-family: 'Sora', sans-serif; font-weight: 800; font-size: .875rem; line-height: 1.2;
-      box-shadow: 0 8px 24px rgba(249,209,56,.45); text-align: center;
+    .hero-grid {
+      position: relative; z-index: 2;
+      display: grid; gap: 2rem;
+      grid-template-columns: 1fr 1.05fr;
+      align-items: center;
     }
-    .lilian-badge-float span { display: block; font-size: .6875rem; font-weight: 600; opacity: .7; }
-    .lilian-copy h2  { color: #fff; margin-bottom: .375rem; }
-    .lilian-role     { font-size: .9375rem; color: var(--yellow); font-weight: 600; margin-bottom: 1.375rem; }
-    .lilian-copy p   { color: rgba(255,255,255,.72); font-size: 1.0625rem; line-height: 1.8; margin-bottom: .875rem; }
-    .lilian-tags     { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
-    .lilian-tags li  {
-      font-size: .75rem; padding: .3rem .75rem;
-      border: 1px solid rgba(255,255,255,.15); border-radius: 999px;
-      color: rgba(255,255,255,.6); background: rgba(255,255,255,.05);
+    .hero-content { max-width: 42rem; min-width: 0; }
+    .hero-title { color: var(--purple); margin-bottom: 1.25rem; overflow-wrap: break-word; }
+    .hero-title .accent { color: var(--purple); }
+    .hero-title .light { color: #fff; }
+    .hero-sub {
+      font-size: 1.05rem; line-height: 1.55;
+      color: rgba(255,255,255,.78);
+      max-width: 32rem;
+      margin-bottom: 1.75rem;
     }
-
-    /* ══════════════════════════════════════
-       INGRESSOS — countdown integrado aqui
-    ══════════════════════════════════════ */
-    .ingressos-section { background: var(--purple-deep); }
-    .ingressos-section h2 { color: #fff; }
-    .ingressos-section .section-head p { color: rgba(255,255,255,.6); }
-
-    /* Countdown compacto — acima dos cards de ingresso */
-    .countdown-bar {
-      max-width: 56rem; margin: 0 auto 2.5rem;
-      background: rgba(232,39,45,.1);
-      border: 1px solid rgba(232,39,45,.28);
-      border-radius: var(--rl);
-      padding: 1.375rem 2rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
-    }
-    .cd-label-wrap { flex: 1; }
-    .cd-title {
-      font-size: .6875rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: #FC8181; margin-bottom: .3rem;
-    }
-    .cd-sub { font-size: .875rem; color: rgba(255,255,255,.5); }
-    .cd-units { display: flex; align-items: center; gap: .5rem; flex: none; }
-    .cd-unit  { display: flex; flex-direction: column; align-items: center; }
-    .cd-num {
-      font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1;
-      color: #fff; font-variant-numeric: tabular-nums;
-      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
-      border-radius: 8px; padding: .45rem .6rem; min-width: 56px; text-align: center;
-      transition: color .3s, background .3s, border-color .3s;
-    }
-    .cd-unit.hot .cd-num { color: #FC8181; border-color: rgba(232,39,45,.35); background: rgba(232,39,45,.1); }
-    .cd-sep { font-size: 1.5rem; font-weight: 700; color: rgba(255,255,255,.2); margin-bottom: 1.1rem; }
-    .cd-unit-label { font-size: .625rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-top: .3rem; }
-
-    /* Cards de ingresso */
-    .lotes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 56rem; margin: 0 auto; }
-    .lote {
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      padding: 1.1rem 1.25rem; margin-bottom: 1.75rem;
       background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: var(--rx); padding: 2rem;
-      position: relative; transition: transform .2s, box-shadow .2s;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--rl);
     }
-    .lote:hover { transform: translateY(-3px); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
-    .lote.destaque {
-      border-color: rgba(249,209,56,.4);
-      background: linear-gradient(160deg, rgba(249,209,56,.06), rgba(255,255,255,.03));
+    .hero-meta-item { display: flex; align-items: center; gap: .65rem; }
+    .hero-meta-ico {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: 8px;
+      background: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
     }
-    .lote-top-badge {
-      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-      background: var(--yellow); color: var(--ink);
-      font-family: 'Sora', sans-serif; font-size: .6875rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
-      padding: .28rem 1rem; border-radius: 0 0 8px 8px;
+    .hero-meta-text .meta-label { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.2; }
+    .hero-meta-text .meta-sub   { font-size: .95rem; color: rgba(255,255,255,.75); margin-top: 2px; }
+    .hero-photo {
+      position: relative; z-index: 2;
+      align-self: end;          /* foto encosta na base do hero */
+      margin-bottom: -6rem;     /* cancela o padding inferior do hero (5rem 0 6rem 0) p/ tirar o vão preto */
+      display: flex; align-items: flex-end; justify-content: center;
+      min-height: 720px;
     }
-    .lote-tag {
-      display: inline-block; font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      padding: .28rem .75rem; border-radius: 999px; margin-bottom: 1.25rem;
+    .hero-photo img {
+      max-height: 880px; width: auto;
+      filter: drop-shadow(0 30px 60px rgba(155,89,226,.35));
     }
-    .lote-tag.gold   { background: rgba(249,209,56,.15); color: var(--yellow); border: 1px solid rgba(249,209,56,.3); }
-    .lote-tag.white  { background: rgba(255,255,255,.06); color: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.12); }
-    .lote h3         { color: #fff; margin-bottom: .25rem; }
-    .lote-sub        { font-size: .875rem; color: rgba(255,255,255,.4); margin-bottom: 1.5rem; }
-    .lote-price-row  { display: flex; align-items: baseline; gap: .25rem; }
-    .lote-cur        { font-size: 1rem; font-weight: 600; color: rgba(255,255,255,.5); }
-    .lote-val        { font-family: 'Sora', sans-serif; font-size: 3.25rem; font-weight: 800; color: #fff; letter-spacing: -.04em; line-height: 1; }
-    .lote-taxa       { font-size: .75rem; color: rgba(255,255,255,.3); margin-bottom: .375rem; }
-    .lote-parc       { font-size: .875rem; color: rgba(255,255,255,.5); margin-bottom: 1.5rem; }
-    .lote-parc strong { color: rgba(255,255,255,.8); }
-    .lote-items {
-      display: grid; gap: .45rem; padding: 1.25rem 0; margin-bottom: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,.08);
+    .hero-photo-placeholder {
+      width: 100%; max-width: 400px; aspect-ratio: 3/4;
+      background: linear-gradient(135deg, rgba(155,89,226,.15), rgba(155,89,226,.05));
+      border: 2px dashed rgba(155,89,226,.4);
+      border-radius: var(--rxl);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.5); font-size: .85rem; text-align: center; padding: 2rem;
     }
-    .lote-items li {
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BARRA STICKY DE OFERTA
+    ═══════════════════════════════════════════════════ */
+    .sticky-offer {
+      background: var(--purple);
+      color: #fff;
+      padding: 1.1rem 1.5rem;
+      position: sticky; top: 0;
+      z-index: 50;
+      display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+      box-shadow: 0 4px 16px rgba(155,89,226,.25);
+    }
+    .sticky-offer .offer-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .sticky-offer .btn {
+      background: #fff; color: var(--purple);
+      box-shadow: none;
+      padding: .65rem 1.15rem; font-size: .75rem;
+    }
+    .sticky-offer .btn:hover { background: var(--purple-pale); transform: translateY(-1px); }
+
+    /* ═══════════════════════════════════════════════════
+       SEÇÃO "UM DIA INTEIRO"
+    ═══════════════════════════════════════════════════ */
+    .section-head { text-align: center; max-width: 50rem; margin: 0 auto 3rem; }
+    .section-head p { margin-top: 1rem; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.5; }
+
+    .two-cards {
+      display: grid; gap: 1.5rem;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 60rem; margin: 0 auto;
+    }
+    .info-card {
+      background: var(--bg);
+      border: 2px solid var(--black);
+      border-radius: var(--rx);
+      padding: 2.5rem 2.25rem 2rem 2.25rem;
+      position: relative;
+      text-align: center;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .info-card-solo {
+      max-width: 52rem;
+      margin: 1.75rem auto 0 auto;
+      padding: 3rem 2.5rem 2.25rem 2.5rem;
+    }
+    .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .info-card-icon {
+      position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.5rem;
+      box-shadow: 0 8px 24px rgba(155,89,226,.4);
+    }
+    .info-card p {
+      font-family: 'Nunito Sans', 'Inter', sans-serif;
+      color: var(--ink-soft); font-size: 1rem; line-height: 1.55;
+      margin-top: 0;
+    }
+    .info-card p + p { margin-top: 1.25rem; }
+
+    /* ═══════════════════════════════════════════════════
+       SEÇÃO 3 PERFIS (fundo escuro)
+    ═══════════════════════════════════════════════════ */
+    .perfis-grid {
+      display: grid; gap: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 60rem; margin: 3rem auto 0 auto;
+    }
+    .perfil {
+      padding: 0 .5rem;
+    }
+    .perfil-num {
+      font-family: 'Anton', sans-serif;
+      color: var(--purple);
+      display: inline;
+    }
+    .perfil-title {
+      font-family: 'Anton', sans-serif;
+      color: #fff;
+      font-size: 27px;
+      line-height: 1.25;
+      letter-spacing: .01em;
+      margin-bottom: .85rem;
+      font-weight: 400;
+    }
+    .perfil p {
+      color: rgba(255,255,255,.7);
+      font-size: 1.05rem; line-height: 1.55;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PROGRAMAÇÃO (pílulas com hora)
+    ═══════════════════════════════════════════════════ */
+    .programa-list {
+      max-width: 56rem; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .programa-item {
+      background: #fff;
+      border: 2px solid var(--black);
+      border-radius: 999px;
+      padding: 1rem 1.5rem 1rem 1rem;
+      display: flex; align-items: center; gap: 1.25rem;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .programa-item:hover {
+      transform: translateX(6px);
+      box-shadow: var(--shadow-card);
+    }
+    .programa-hora {
+      flex-shrink: 0;
+      background: var(--purple-soft);
+      color: var(--black);
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: .82rem;
+      padding: .55rem 1rem;
+      border-radius: 999px;
+      letter-spacing: .01em;
+      white-space: nowrap;
+    }
+    .programa-text { display: flex; flex-direction: column; gap: .15rem; }
+    .programa-title {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: .95rem; color: var(--ink);
+      line-height: 1.35;
+    }
+    .programa-speaker {
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-size: .85rem; color: var(--purple-dim, var(--purple));
+      line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SEU INGRESSO INCLUI (fundo roxo + tickets)
+    ═══════════════════════════════════════════════════ */
+    .ingresso-inclui {
+      background: var(--purple);
+      color: #fff;
+      padding: 5.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .ingresso-inclui::before,
+    .ingresso-inclui::after {
+      content: ''; position: absolute;
+      width: 280px; height: 100px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 100'%3E%3Cpath fill='%23ffffff' fill-opacity='.18' d='M20 20h240a10 10 0 0 1 10 10v10a10 10 0 0 0 0 20v10a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10V60a10 10 0 0 0 0-20V30a10 10 0 0 1 10-10zm20 25v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10m20-10v10' stroke='%23ffffff' stroke-opacity='.18' stroke-width='2'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      filter: blur(1px);
+    }
+    .ingresso-inclui::before { top: 15%; left: -60px; transform: rotate(-18deg); }
+    .ingresso-inclui::after  { bottom: 15%; right: -60px; transform: rotate(15deg); }
+    .ingresso-inclui-content {
+      position: relative; z-index: 2;
+      text-align: center;
+    }
+    .ingresso-inclui-card {
+      display: inline-block;
+      background: #fff;
+      border-radius: var(--rxl);
+      padding: 2rem 2.5rem;
+      margin: 2.5rem auto 2rem auto;
+      text-align: left;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+    .ingresso-inclui-card ul {
+      list-style: none; padding: 0; margin: 0;
+      color: var(--ink);
+    }
+    .ingresso-inclui-card li {
+      padding: .55rem 0; font-size: 1rem; font-weight: 600;
       display: flex; align-items: center; gap: .5rem;
-      font-size: .875rem; color: rgba(255,255,255,.65);
     }
-    .lote-items li::before {
-      content: ""; width: 1rem; height: 1rem; flex: none;
-      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23F9D138' fill-opacity='.2'/><path d='M4.75 8.25l2.25 2.25 4.25-4.5' fill='none' stroke='%23F9D138' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    .ingresso-inclui-card li::before { content: '•'; color: var(--purple); font-weight: 900; }
+
+    /* ═══════════════════════════════════════════════════
+       NO MESMO DIA (bio Lilian)
+    ═══════════════════════════════════════════════════ */
+    .bio-grid {
+      display: grid; gap: 3.5rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      max-width: 64rem; margin: 0 auto;
+    }
+    .bio-text { font-family: 'Nunito Sans', 'Inter', sans-serif; color: rgba(255,255,255,.85); font-size: 1.25rem; line-height: 1.45; letter-spacing: -.022rem; }
+    .bio-text p { margin-bottom: 1.1rem; }
+    .bio-text strong { color: #fff; font-weight: 700; }
+    .bio-subtitle {
+      font-family: 'Anton', sans-serif;
+      color: #fff;
+      background: var(--purple);
+      display: inline-block;
+      padding: .3rem .75rem;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: .015em;
+      margin: 1.75rem 0 1rem 0;
+    }
+    .bio-photo {
+      position: relative;
+      border-radius: var(--rxl);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    }
+    .bio-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .bio-photo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--purple-deep), var(--black));
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.5); font-size: .85rem; text-align: center; padding: 2rem;
     }
 
-    /* ══════════════════════════════════════
-       FAQ
-    ══════════════════════════════════════ */
-    .faq { max-width: 44rem; margin: 0 auto; display: grid; gap: .5rem; }
-    details.qi {
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: var(--r); padding: 0 1.375rem;
-      transition: border-color .15s;
+    /* ═══════════════════════════════════════════════════
+       INGRESSOS (2 cards lado a lado)
+    ═══════════════════════════════════════════════════ */
+    .tickets-wrap {
+      display: grid; gap: 1.5rem;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 60rem; margin: 0 auto;
     }
-    details.qi[open]  { border-color: rgba(91,31,158,.3); }
-    details.qi summary {
-      list-style: none; cursor: pointer;
-      padding: 1.25rem 0;
-      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1rem; color: var(--ink);
-      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    .ticket-card {
+      background: #fff;
+      border-radius: var(--rxl);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-card);
+      transition: transform .3s, box-shadow .3s;
+      position: relative;
     }
-    details.qi summary::-webkit-details-marker { display: none; }
-    details.qi summary::after {
-      content: ""; width: 1.125rem; height: 1.125rem; flex: none;
-      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 6l4 4 4-4' stroke='%237B6B96' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>") center/contain no-repeat;
-      transition: transform .2s;
+    .ticket-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(91,31,158,.20); }
+    .ticket-header {
+      padding: 1.25rem 1.5rem;
+      color: #fff;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.35rem; text-transform: uppercase; letter-spacing: .025em;
+      text-align: center;
+      line-height: 1.2;
     }
-    details.qi[open] summary::after { transform: rotate(180deg); }
-    details.qi p { padding: 0 0 1.25rem; font-size: .9375rem; color: var(--ink-soft); line-height: 1.75; }
+    .ticket-header-red    { background: var(--red); }
+    .ticket-header-purple { background: var(--purple); }
+    .ticket-lote {
+      background: var(--black);
+      color: #fff;
+      text-align: center;
+      padding: .85rem;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: .92rem;
+    }
+    .ticket-body { padding: 2rem 1.75rem; flex: 1; }
+    .ticket-body ul { display: flex; flex-direction: column; gap: .6rem; }
+    .ticket-body li {
+      font-size: 1.05rem; color: var(--ink-soft);
+      display: flex; align-items: center; gap: .65rem;
+    }
+    .ticket-body li::before {
+      content: ''; width: 18px; height: 18px; flex-shrink: 0;
+      background: var(--purple);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 10l5 5L18 4' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 10l5 5L18 4' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+      border-radius: 4px;
+      background-color: var(--purple);
+    }
+    .ticket-price {
+      text-align: center; padding: 1rem 1.75rem 0 1.75rem;
+    }
+    .ticket-price small {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem; color: var(--ink);
+      vertical-align: baseline;
+      margin-right: .15rem;
+    }
+    .ticket-price strong {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.75rem; color: var(--black);
+      letter-spacing: .01em;
+      font-weight: 400;
+    }
+    .ticket-cta { padding: 1rem 1.75rem 2rem 1.75rem; text-align: center; }
 
-    /* ══════════════════════════════════════
-       CTA FINAL
-    ══════════════════════════════════════ */
-    .cta-final {
-      background: var(--purple-dark); text-align: center;
-      padding: 7rem 0; position: relative; overflow: hidden;
+    /* ═══════════════════════════════════════════════════
+       FAQ (design Brenda: dark, 2 colunas, accordion roxo)
+    ═══════════════════════════════════════════════════ */
+    .faq-section {
+      background: var(--black);
+      color: #fff;
+      padding: 3rem 0 4rem 0;
+      position: relative;
+      overflow: hidden;
     }
-    .cta-glow {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      width: 70vw; height: 70vw; max-width: 800px; max-height: 800px;
-      background: radial-gradient(circle, rgba(249,209,56,.1) 0%, transparent 65%);
+    .faq-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 25% 50%, rgba(155,89,226,.14), transparent 60%);
       pointer-events: none;
     }
-    .cta-final .container { position: relative; z-index: 1; }
-    .cta-final h2 { color: #fff; max-width: 22ch; margin: .375rem auto 1rem; }
-    .cta-final > .container > p { color: rgba(255,255,255,.6); font-size: 1.0625rem; max-width: 38rem; margin: 0 auto 2.5rem; }
-    .cta-pills {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: .625rem; margin-top: 2.25rem;
+    .faq-grid {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 3rem;
+      align-items: start;
     }
-    .cta-pill {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 999px;
-      padding: .5rem 1.1rem;
-      font-size: .9375rem; color: rgba(255,255,255,.65);
-      line-height: 1;
+    .faq-title {
+      font-family: 'Anton', Impact, sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: 53px;
+      line-height: 55.7px;
+      color: var(--purple);
+      letter-spacing: 0;
+      position: sticky;
+      top: 6rem;
+      margin: 0;
     }
-    .cta-pill svg { width: .875rem; height: .875rem; flex: none; color: var(--yellow); }
+    @media (max-width: 900px) { .faq-title { font-size: 40px; line-height: 42px; } }
+    .faq-cards { display: flex; flex-direction: column; gap: 1rem; }
+    .faq-item {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--rx);
+      overflow: hidden;
+      transition: border-color .25s, background .25s;
+    }
+    .faq-item[open] {
+      background: rgba(255,255,255,.06);
+      border-color: rgba(155,89,226,.45);
+    }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1.1rem 1.4rem;
+      display: flex; align-items: center; gap: 1rem;
+      font-family: 'Anton', sans-serif;
+      font-weight: 400; font-size: 24px; line-height: 1.3;
+      letter-spacing: .3px;
+      color: #fff;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '';
+      margin-left: auto;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,.4);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: center;
+      flex-shrink: 0;
+      transition: transform .3s ease, border-color .3s, background-color .3s;
+    }
+    .faq-item[open] summary::after {
+      transform: rotate(180deg);
+      border-color: var(--purple);
+      background-color: rgba(155,89,226,.25);
+    }
+    .faq-body {
+      padding: 0 1.4rem 1.4rem 1.4rem;
+      color: rgba(255,255,255,.75);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    .faq-body p { margin: 0 0 .75rem 0; }
+    .faq-body p:last-child { margin-bottom: 0; }
+    .faq-body strong { color: #fff; }
+    .faq-body a { color: var(--purple); text-decoration: underline; font-weight: 600; }
 
-    /* ── FOOTER ── */
-    footer { padding: 2.5rem 0; text-align: center; font-size: .9375rem; color: var(--ink-mute); border-top: 1px solid var(--line); }
-    footer a { color: var(--purple); }
-    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: .625rem; flex-wrap: wrap; }
-    .footer-links a { font-size: .875rem; color: var(--ink-mute); text-decoration: underline; text-underline-offset: 3px; }
-    .footer-links a:hover { color: var(--purple); }
+    @media (max-width: 900px) {
+      .faq-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .faq-title { position: static; }
+    }
 
-    /* ══════════════════════════════════════
-       RESPONSIVE
-    ══════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════
+       CTA FINAL (fundo plateia)
+    ═══════════════════════════════════════════════════ */
+    .cta-final {
+      position: relative;
+      background-image: url('/vendas/assets/cta-bg.png');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      padding: 6rem 0;
+      text-align: center;
+    }
+    .cta-final .display { color: var(--purple); }
+    .cta-final .display .white { color: #fff; }
+    .cta-final-sub { margin-top: 1.5rem; color: rgba(255,255,255,.85); font-size: 1.1rem; line-height: 1.5; }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    footer { background: var(--black); color: rgba(255,255,255,.5); padding: 2.5rem 0; font-size: .82rem; text-align: center; }
+    footer a { color: rgba(255,255,255,.7); }
+    footer a:hover { color: #fff; }
+
+    /* ═══════════════════════════════════════════════════
+       Animações de scroll reveal
+    ═══════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal-stagger.show > * { opacity: 1; transform: translateY(0); }
+    .reveal-stagger.show > *:nth-child(2) { transition-delay: .08s; }
+    .reveal-stagger.show > *:nth-child(3) { transition-delay: .16s; }
+    .reveal-stagger.show > *:nth-child(4) { transition-delay: .24s; }
+    .reveal-stagger.show > *:nth-child(5) { transition-delay: .32s; }
+    .reveal-stagger.show > *:nth-child(6) { transition-delay: .40s; }
+    .reveal-stagger.show > *:nth-child(7) { transition-delay: .48s; }
+    .reveal-stagger.show > *:nth-child(8) { transition-delay: .56s; }
+
+    /* Pulse no CTA principal pra chamar atenção */
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 12px 32px rgba(155,89,226,.40); }
+      50%      { box-shadow: 0 12px 40px rgba(155,89,226,.65), 0 0 0 6px rgba(155,89,226,.08); }
+    }
+    .btn-pulse { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+    /* ═══════════════════════════════════════════════════
+       Responsivo — tablet (até 1024px) e celular (até 768px / 480px)
+    ═══════════════════════════════════════════════════ */
+
+    /* Tablets */
     @media (max-width: 1024px) {
-      .kit-grid    { grid-template-columns: 1fr 1fr; }
-      .lilian-grid { grid-template-columns: 300px 1fr; gap: 3rem; }
+      .container { padding: 0 1.25rem; }
+      .hero-photo img { max-height: 640px; }
+      .perfis-grid { gap: 1.75rem; }
     }
-    @media (max-width: 860px) {
-      .section { padding: 4rem 0; }
-      .hero > .container,
-      .sobre-grid,
-      .lilian-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .hero { min-height: auto; }
-      .hero > .container { padding-top: 3rem; padding-bottom: 3rem; }
-      .hero-photo-col { order: -1; }
-      .hero-photo-frame { max-width: 320px; margin: 0 auto; aspect-ratio: 4/3; }
-      .float-card.top   { top: .75rem; right: -.75rem; }
-      .float-card.bottom{ bottom: 1rem; left: -.75rem; }
-      .lotes-grid { grid-template-columns: 1fr; max-width: 28rem; }
-      .lilian-grid { text-align: center; }
-      .lilian-frame { max-width: 320px; margin: 0 auto; aspect-ratio: 4/3; }
-      .lilian-badge-float { right: auto; left: 50%; transform: translateX(-50%); }
-      .lilian-tags { justify-content: center; }
-      .countdown-bar { flex-direction: column; text-align: center; gap: 1.25rem; }
+
+    /* Celular grande / tablet pequeno */
+    @media (max-width: 880px) {
+      .section, .ingresso-inclui, .cta-final { padding: 3.5rem 0; }
+      .section-head { margin-bottom: 2rem; }
+
+      /* Hero — no mobile a manchete vem primeiro e a foto vai pra baixo do texto */
+      .hero { padding: 2.5rem 0 0 0; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .hero-content { order: 1; text-align: center; margin: 0 auto; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-meta { text-align: left; }
+      .hero-photo { order: 2; min-height: auto; align-self: auto; margin-bottom: 0; display: block; line-height: 0; font-size: 0; }
+      .hero-photo picture { display: block; line-height: 0; font-size: 0; }
+      .hero-photo img { display: block; max-height: none; width: 100%; height: auto; animation: none; vertical-align: bottom; }
+      .hero-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 1.1rem;
+      }
+      .hero-meta-item { width: 100%; }
+      .hero-title { font-size: 2.25rem; }
+
+      /* Sticky offer — empilha em mobile */
+      .sticky-offer {
+        flex-direction: column;
+        gap: .75rem;
+        padding: .9rem 1rem;
+        position: sticky;
+      }
+      .sticky-offer .offer-title { font-size: 1rem; text-align: center; }
+      .sticky-offer .btn { width: 100%; max-width: 280px; justify-content: center; }
+
+      /* Seções de conteúdo */
+      .two-cards { gap: 1.25rem; }
+      .info-card { padding: 2.25rem 1.25rem 1.5rem 1.25rem; }
+      .info-card-icon { top: -22px; width: 48px; height: 48px; font-size: 1.25rem; }
+
+      .perfis-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+      .perfil { padding: 0; text-align: center; }
+
+      .programa-list { gap: 1rem; }
+      .programa-item {
+        border-radius: 22px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .55rem;
+        padding: 1rem 1.25rem;
+      }
+      .programa-hora { font-size: .75rem; padding: .45rem .85rem; }
+      .programa-title { font-size: .95rem; }
+
+      .ingresso-inclui { padding: 4rem 0; }
+      .ingresso-inclui-card { padding: 1.75rem 1.75rem; margin: 1.75rem 1rem 1.5rem 1rem; }
+      .ingresso-inclui-card li { font-size: 1.05rem; padding: .45rem 0; }
+      .ingresso-inclui::before, .ingresso-inclui::after { width: 180px; height: 64px; }
+
+      .bio-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .bio-photo { order: 1; max-width: 360px; margin: 0 auto; }
+      .bio-text  { order: 2; }
+      .bio-text p { font-size: 1.05rem; }
+
+      .tickets-wrap { grid-template-columns: 1fr; gap: 1.25rem; }
+      .ticket-card { max-width: 420px; margin: 0 auto; width: 100%; }
+      .ticket-price strong { font-size: 3.25rem; }
+      .ticket-price small { font-size: 1.15rem; }
+
+      .cta-final { padding: 4rem 0; }
+      .cta-final .display { font-size: 1.65rem; }
+      .cta-final-sub { font-size: 1.05rem; }
+
+      .btn-lg { padding: 1rem 1.5rem; font-size: .85rem; }
+      .btn { padding: .85rem 1.4rem; font-size: .8rem; }
+
+      .display { letter-spacing: .01em; }
+      h1.display { font-size: 2.25rem; line-height: 1.0; }
+      h2.display { font-size: 1.75rem; line-height: 1.05; }
+      h3.display { font-size: 1.25rem; }
     }
-    @media (max-width: 640px) {
-      .kit-grid { grid-template-columns: 1fr 1fr; }
-      .nav-inner { height: 56px; }
-      .cd-num { font-size: 1.75rem; min-width: 48px; }
-      .lote-val { font-size: 2.75rem; }
-      h1 { font-size: 1.875rem; }
+
+    /* Celular pequeno */
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .hero { padding: 1.5rem 0 0 0; }
+      .hero-title { font-size: 1.95rem; }
+      .hero-sub { font-size: 1.05rem; }
+      .hero-meta-text .meta-label { font-size: .95rem; }
+      .hero-photo img { max-height: 300px; width: auto; max-width: 100%; }
+
+      .section, .ingresso-inclui, .cta-final { padding: 3rem 0; }
+      h2.display { font-size: 1.55rem; }
+      .section-head p { font-size: 1.05rem; }
+
+      .two-cards { grid-template-columns: 1fr; gap: 2rem; }
+      .info-card { padding: 2rem 1.25rem 1.5rem 1.25rem; }
+      .info-card p { font-size: 1.05rem; }
+
+      .programa-item { padding: .9rem 1rem; }
+      .programa-title { font-size: .95rem; line-height: 1.4; }
+      .programa-hora { font-size: .72rem; padding: .4rem .75rem; }
+
+      .ingresso-inclui-card { padding: 1.5rem 1.25rem; margin: 1.5rem .5rem 1.25rem .5rem; }
+
+      .ticket-header { font-size: 1rem; padding: 1rem 1.25rem; }
+      .ticket-body { padding: 1.5rem 1.25rem; }
+      .ticket-body li { font-size: 1.05rem; }
+      .ticket-price strong { font-size: 2.75rem; }
+      .ticket-price small { font-size: 1rem; }
+      .ticket-cta { padding: .85rem 1.25rem 1.75rem 1.25rem; }
+
+      .cta-final .display { font-size: 1.4rem; line-height: 1.15; }
+      .cta-final-sub { font-size: 1.05rem; }
+
+      .modal-card { padding: 1.75rem 1.4rem 1.4rem 1.4rem; }
+      .modal-title { font-size: 1.4rem; }
+      .modal-sub { font-size: .88rem; }
+      .modal-field input { font-size: 1rem; } /* 16px no mobile evita zoom no iOS */
+    }
+
+    /* Mantém a foto da Lilian "flutuando" só no desktop */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-photo img { animation: none; }
+      .reveal, .reveal-stagger > * { transition: none; opacity: 1; transform: none; }
+      .btn-pulse { animation: none; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       Modal de form pré-checkout
+    ═══════════════════════════════════════════════════ */
+    .modal-bg {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,10,15,.78);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-bg.show { display: flex; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    .modal-card {
+      background: #fff;
+      border-radius: var(--rxl);
+      max-width: 480px; width: 100%;
+      padding: 2.25rem 2rem 1.75rem 2rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      position: relative;
+      animation: slideUp .35s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 32px; height: 32px;
+      border: 0; background: var(--bg-grey); border-radius: 8px;
+      cursor: pointer; font-size: 1.1rem; color: var(--ink-soft);
+    }
+    .modal-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.65rem; color: var(--ink);
+      text-transform: uppercase; letter-spacing: .01em;
+      margin-bottom: .25rem;
+    }
+    .modal-sub { color: var(--ink-soft); font-size: .92rem; margin-bottom: 1.4rem; }
+    .modal-field { margin-bottom: .85rem; }
+    .modal-field label {
+      display: block;
+      font-size: .72rem; font-weight: 700; color: var(--ink-soft);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: .35rem;
+    }
+    .modal-field input {
+      width: 100%;
+      padding: .85rem 1rem;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      font-family: inherit; font-size: .95rem; color: var(--ink);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .modal-field input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(155,89,226,.12); }
+    .modal-submit {
+      width: 100%;
+      margin-top: .5rem;
+      padding: 1rem;
+      background: var(--purple); color: #fff;
+      border: 0; border-radius: 12px;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: .95rem;
+      letter-spacing: .03em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background .15s, transform .15s;
+    }
+    .modal-submit:hover { background: var(--purple-dim); transform: translateY(-1px); }
+    .modal-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .modal-err { color: var(--red); font-size: .85rem; margin: .55rem 0 0 0; min-height: 1.1rem; font-weight: 500; }
+    .modal-note { color: var(--ink-mute); font-size: .72rem; text-align: center; margin-top: .85rem; }
+
+    /* ═══════════════════════════════════════════════════
+       AJUSTES DO PRINT + ANIMAÇÕES NEURO
+    ═══════════════════════════════════════════════════ */
+
+    @media (min-width: 881px) { .hero { padding: 4.5rem 0 5rem 0; } }
+    @media (min-width: 1200px) {
+      .hero { padding: 5rem 0 5.5rem 0; }
+      .hero-photo { min-height: 720px; }
+      .hero-photo img { max-height: 880px; }
+    }
+    @media (min-width: 1600px) {
+      .hero-photo { min-height: 780px; }
+      .hero-photo img { max-height: 960px; }
+    }
+
+    .btn-purple { position: relative; overflow: hidden; isolation: isolate; }
+    .btn-purple > * { position: relative; z-index: 1; }
+    .btn-purple::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -120%;
+      width: 80%; height: 100%;
+      background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.32) 50%, transparent 100%);
+      animation: shimmer-sweep 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes shimmer-sweep {
+      0%, 55%   { left: -120%; }
+      75%, 100% { left: 130%; }
+    }
+
+    .sticky-offer { position: relative; overflow: hidden; }
+    .sticky-offer::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,.12), transparent 65%);
+      opacity: 0;
+      animation: badge-glow 3.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes badge-glow {
+      0%, 100% { opacity: 0; transform: scale(.85); }
+      50%      { opacity: 1; transform: scale(1.05); }
+    }
+
+    .ticket-price strong { font-variant-numeric: tabular-nums; display: inline-block; }
+    .ticket-price.in-view strong {
+      animation: price-pop .55s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes price-pop {
+      0%   { transform: scale(.65); opacity: 0; }
+      60%  { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .ticket-card { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s; will-change: transform; }
+    .ticket-card:hover {
+      transform: translateY(-8px) rotate(-.5deg);
+      box-shadow: 0 30px 60px rgba(91,31,158,.22), 0 8px 20px rgba(0,0,0,.08);
+    }
+    .ticket-card:nth-child(2):hover { transform: translateY(-8px) rotate(.5deg); }
+
+    .programa-item { transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, border-color .25s; }
+    .programa-item:hover {
+      transform: translateX(8px);
+      box-shadow: -4px 8px 24px rgba(155,89,226,.18);
+      border-color: var(--purple-soft);
+    }
+
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,.7);
+      padding: 3.5rem 0 2rem 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .footer-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .footer-brand h4 {
+      font-family: 'Anton', Impact, sans-serif;
+      text-transform: uppercase;
+      font-size: 1.25rem;
+      letter-spacing: .01em;
+      color: #fff;
+      margin-bottom: .4rem;
+      line-height: 1.1;
+    }
+    .footer-brand p { font-size: .85rem; line-height: 1.55; color: rgba(255,255,255,.65); }
+    .footer-links { display: flex; flex-direction: row; gap: 1.25rem; justify-content: center; }
+    .footer-links h5 { display: none; }
+    .footer-links a {
+      color: rgba(255,255,255,.82);
+      font-size: .9rem; font-weight: 500;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--purple); }
+    .footer-bottom {
+      text-align: center;
+      font-size: .75rem;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .02em;
     }
   </style>
 </head>
 <body>
 
-<!-- ── NOTICE BAR ── -->
-<div class="notice-bar">
-  <span class="dot-blink" aria-hidden="true"></span>
-  <strong>1º Lote encerra dia 20/05</strong> — depois o valor sobe.
-  <a href="#ingressos">Garantir agora →</a>
-</div>
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content reveal">
+        <h1 class="display hero-title">
+          Imersão escritores admiráveis:<br>
+          <span class="light">o livro é só o começo</span>
+        </h1>
+        <p class="hero-sub">Um encontro presencial para escritores que querem entender como transformar um livro em posicionamento, leitores, oportunidades e carreira no mercado editorial.</p>
 
-<!-- ── NAV ── -->
-<header class="nav">
-  <div class="container nav-inner">
-    <a class="wordmark" href="https://escritoresadmiraveis.com.br/" target="_blank" rel="noopener">
-      <img src="assets/logo.svg" alt="Escritores Admiráveis" style="height:38px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex';">
-      <span class="wm-fallback" aria-hidden="true" style="display:none;">EA</span>
-    </a>
-    <div style="display:flex;align-items:center;gap:.75rem;">
-      <a class="btn" href="#sobre" style="padding:.5rem .875rem;font-size:.875rem;color:var(--ink-soft);background:transparent;border:1.5px solid var(--line);">Sobre</a>
-      <a class="btn btn-red" href="#ingressos">Garantir Vaga</a>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <div class="hero-meta-ico">📅</div>
+            <div class="hero-meta-text">
+              <div class="meta-label">04 de setembro</div>
+              <div class="meta-sub">2026 · 8h às 18h</div>
+            </div>
+          </div>
+          <div class="hero-meta-item">
+            <div class="hero-meta-ico">📍</div>
+            <div class="hero-meta-text">
+              <div class="meta-label">São Paulo</div>
+              <div class="meta-sub">Ao lado da Bienal Internacional do Livro de SP</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#ingressos" id="hero-cta-link" class="btn btn-purple btn-lg btn-pulse">Quero garantir minha vaga</a>
+      </div>
+
+      <div class="hero-photo reveal">
+        <!-- TROCAR PELA FOTO DA LILIAN COM LIVRO (recortada, fundo transparente PNG) -->
+        <picture>
+          <source media="(max-width: 880px)" srcset="/vendas/assets/lilian-hero-mobile.webp" type="image/webp">
+          <source srcset="/vendas/assets/lilian-hero.webp" type="image/webp">
+          <img src="/vendas/assets/lilian-hero.png" alt="Lilian Cardoso" onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'">
+        </picture>
+        <div class="hero-photo-placeholder" style="display:none">Foto da Lilian segurando livro<br>(exportar do Figma como PNG transparente)<br><code style="margin-top:.5rem;font-size:.75rem">vendas/assets/lilian-hero.png</code></div>
+      </div>
     </div>
   </div>
-</header>
+</section>
 
-<main>
+<!-- ════════════════════════════════════
+     BARRA STICKY DE OFERTA
+════════════════════════════════════ -->
+<div class="sticky-offer">
+  <span class="offer-title">Oferta especial Lote 1</span>
+  <button class="btn" id="sticky-cta">Quero me inscrever agora</button>
+</div>
 
-  <!-- ══════════════════════════════════════════
-       HERO
-  ══════════════════════════════════════════ -->
-  <section class="hero" id="topo">
-    <!--
-      FOTO DE FUNDO (multidão, P&B)
-      Adicione: assets/hero-crowd.jpg
-    -->
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-fade" aria-hidden="true"></div>
+<!-- ════════════════════════════════════
+     UM DIA INTEIRO
+════════════════════════════════════ -->
+<section class="section section-grey">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display">Um dia inteiro para entender</h2>
+      <p>o que ninguém te contou sobre o <strong><em>mercado do livro</em></strong>.</p>
+    </div>
 
-    <div class="container">
-      <!-- Texto -->
-      <div class="hero-copy">
-        <div class="hero-tag">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3v3.5l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Evento presencial · São Paulo · 04 Set 2026
-        </div>
+    <div class="info-card info-card-solo reveal">
+      <div class="info-card-icon">📖</div>
+      <p>O Brasil publica mais de 60 mil títulos por ano. A maior parte some antes de completar três meses de lançamento — não por falta de qualidade, mas porque escrever e construir uma carreira literária são dois problemas completamente diferentes.</p>
+      <p><strong>A Imersão Escritores Admiráveis existe para o segundo problema.</strong></p>
+      <p>Ao longo de um dia, você vai estar ao lado de Lilian Cardoso, da equipe LC, de convidados do mercado editorial, do marketing e do comercial — pessoas que vivem esse universo na prática — discutindo o que realmente diferencia autores que constroem carreira de autores que apenas publicam livros.</p>
+      <p><strong>Posicionamento. Leitura de mercado. Comunidade. Direção.</strong></p>
+      <p>Você vem para reorganizar sua visão sobre o que é ser escritor nos dias atuais.</p>
+    </div>
+  </div>
+</section>
 
-        <h1>O livro é<br><mark>só o começo.</mark></h1>
+<!-- ════════════════════════════════════
+     3 PERFIS (fundo escuro)
+════════════════════════════════════ -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display" style="font-size: clamp(1.9rem, 4.2vw, 3.4rem);"><span style="color:var(--purple)">Para escritores que não querem depender</span><br>da sorte e trabalhar no escuro</h2>
+      <p style="color:rgba(255,255,255,.7)">A imersão foi pensada para <strong style="color:#fff">autores em diferentes fases da carreira:</strong></p>
+    </div>
 
-        <p class="hero-sub">
-          Uma imersão de um dia inteiro para escritores que querem transformar seu livro em um projeto real — com posicionamento, estratégia e direção clara para o mercado.
-        </p>
-
-        <div class="hero-cta-group">
-          <a id="hero-cta" class="btn btn-red btn-lg" href="#ingressos">
-            Quero meu ingresso
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="btn btn-ghost-white" href="#sobre" style="color:var(--ink-soft);border-color:var(--line);">
-            Saiba mais
-          </a>
-        </div>
-
-        <p class="hero-fine">
-          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.25"/><path d="M4.5 6l1.25 1.25 2.25-2.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
-          Apenas 250 vagas · Kit + Almoço + Coffee Break inclusos
-        </p>
-
-        <div class="hero-badges">
-          <span class="hbadge">
-            <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v3M11 1v3M2 6h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            04 de Setembro, 2026
-          </span>
-          <span class="hbadge">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.485-2.015-4.5-4.5-4.5z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.25"/></svg>
-            Holiday Inn Anhembi, SP
-          </span>
-          <span class="hbadge">
-            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5v4l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            08h às 18h
-          </span>
-          <span class="hbadge">Ao lado da Bienal do Livro</span>
-        </div>
+    <div class="perfis-grid reveal-stagger">
+      <div class="perfil">
+        <h3 class="perfil-title"><span class="perfil-num">1—</span> Livro lançado, mas que parou de circular depois da primeira semana</h3>
       </div>
-
-      <!-- Foto da Lilian -->
-      <div class="hero-photo-col">
-        <div class="hero-photo-frame">
-          <!--
-            ★ FOTO DA LILIAN — HERO
-            Adicione: assets/lilian-hero.jpg
-            Proporção ideal: retrato 3:4 (ex: 600×800px)
-            Igual ao site: Lilian com blazer colorido segurando um livro
-          -->
-          <img src="assets/lilian-hero.jpg" alt="Lilian Cardoso" onerror="this.style.display='none'">
-          <div class="photo-placeholder" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" stroke="currentColor" stroke-width="2"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <strong style="color:var(--purple-light);">Adicione assets/lilian-hero.jpg</strong>
-            <small>Proporção 3:4 · retrato em cor</small>
-          </div>
-        </div>
-
-        <!-- Badge flutuante: vagas -->
-        <div class="float-card top">
-          <span class="fc-num">250</span>
-          <span class="fc-label" style="color:var(--ink-mute);">vagas únicas</span>
-        </div>
-
-        <!-- Badge flutuante: data -->
-        <div class="float-card bottom">
-          <span class="fc-num" style="font-size:1.25rem;">04 Set</span>
-          <span class="fc-label">São Paulo</span>
-        </div>
+      <div class="perfil">
+        <h3 class="perfil-title"><span class="perfil-num">2—</span> Nome que ainda não virou referência, mesmo com anos de escrita</h3>
+      </div>
+      <div class="perfil">
+        <h3 class="perfil-title"><span class="perfil-num">3—</span> Muito trabalho, pouca visibilidade — e sem saber onde está o problema</h3>
+      </div>
+      <div class="perfil">
+        <h3 class="perfil-title"><span class="perfil-num">4—</span> Primeiro livro ainda no forno — e vontade de entender o mercado antes de publicar</h3>
       </div>
     </div>
-  </section>
 
-  <!-- ══════════════════════════════════════════
-       SOBRE
-  ══════════════════════════════════════════ -->
-  <section class="section" id="sobre">
-    <div class="container">
-      <div class="sobre-grid">
-        <div class="sobre-copy">
-          <span class="eyebrow">A experiência</span>
-          <h2>Mais do que um evento.<br>Uma virada de chave.</h2>
+    <div style="text-align:center;margin-top:3rem" class="reveal">
+      <a href="#ingressos" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
+    </div>
+  </div>
+</section>
 
-          <p>No dia 04 de setembro — mesma data da abertura da Bienal do Livro de São Paulo — você vai viver uma experiência que vai muito além de palestras.</p>
+<!-- ════════════════════════════════════
+     PROGRAMAÇÃO
+════════════════════════════════════ -->
+<section class="section section-grey">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display">Os assuntos que ninguém discute<br>abertamente no mercado editorial:</h2>
+    </div>
 
-          <blockquote class="pullquote">
-            "Você não vem apenas para aprender. Vem para reorganizar sua visão, ganhar direção e sair com clareza sobre os próximos passos."
-          </blockquote>
+    <div class="programa-list reveal-stagger">
+      <div class="programa-item"><span class="programa-hora">08h00 às 08h30</span><div class="programa-text"><span class="programa-title">Credenciamento + recepção dos participantes</span></div></div>
+      <div class="programa-item"><span class="programa-hora">08h30 às 09h00</span><div class="programa-text"><span class="programa-title">Comunicação que vende livros</span><span class="programa-speaker">Com Eduardo Zugaib</span></div></div>
+      <div class="programa-item"><span class="programa-hora">09h15 às 10h00</span><div class="programa-text"><span class="programa-title">Inspiração de quem começou do zero e fez seu nome pela literatura</span><span class="programa-speaker">Mediação por Marina Hadlich</span></div></div>
+      <div class="programa-item"><span class="programa-hora">10h15 às 10h45</span><div class="programa-text"><span class="programa-title">Agente literária: os melhores conselhos de uma das maiores caçadoras de escritores do Brasil</span><span class="programa-speaker">Com Alessandra Ruiz</span></div></div>
+      <div class="programa-item"><span class="programa-hora">11h00 às 12h00</span><div class="programa-text"><span class="programa-title">O Livro Invisível: como metadados, ficha técnica e decisões editoriais determinam se você vende para além da capa</span><span class="programa-speaker">Com André Fonseca, Cinthya Müller e Eduardo Cunha</span></div></div>
+      <div class="programa-item"><span class="programa-hora">12h00 às 13h30</span><div class="programa-text"><span class="programa-title">Almoço e momento de networking</span></div></div>
+      <div class="programa-item"><span class="programa-hora">13h30 às 14h30</span><div class="programa-text"><span class="programa-title">Divulgação e venda de livros sem depender da sorte</span><span class="programa-speaker">Com Bruno Zolotar + palestrantes a confirmar</span></div></div>
+      <div class="programa-item"><span class="programa-hora">14h45 às 15h30</span><div class="programa-text"><span class="programa-title">Editores: o que faz eles apostarem na sua obra?</span><span class="programa-speaker">Com Paulo Tadeu + palestrantes a confirmar</span></div></div>
+      <div class="programa-item"><span class="programa-hora">15h30 às 16h00</span><div class="programa-text"><span class="programa-title">Coffee Break</span></div></div>
+      <div class="programa-item"><span class="programa-hora">16h00 às 16h45</span><div class="programa-text"><span class="programa-title">Autopublicação e Amazon KDP: o que realmente faz alguns autores viverem da própria escrita</span><span class="programa-speaker">Palestrantes a confirmar</span></div></div>
+      <div class="programa-item"><span class="programa-hora">16h45 às 17h30</span><div class="programa-text"><span class="programa-title">BookTok, influenciadores e comunidade: os novos caminhos que estão formando leitores e best-sellers</span><span class="programa-speaker">Palestrantes a confirmar</span></div></div>
+    </div>
+  </div>
+</section>
 
-          <p>Ao longo do dia, você estará ao lado de autores, especialistas e profissionais do editorial, marketing e comercial — pessoas que vivem o mercado do livro na prática e compartilham um objetivo: tornar sua jornada mais clara, estratégica e possível.</p>
-        </div>
+<!-- ════════════════════════════════════
+     SEU INGRESSO INCLUI
+════════════════════════════════════ -->
+<section class="ingresso-inclui">
+  <div class="container ingresso-inclui-content">
+    <h2 class="display reveal">Seu ingresso inclui:</h2>
+    <div class="ingresso-inclui-card reveal">
+      <ul>
+        <li>Kit de boas-vindas</li>
+        <li>Credencial do evento</li>
+        <li>Almoço completo</li>
+        <li>Coffee break</li>
+        <li>Acesso à programação completa da imersão</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <a href="#ingressos" class="btn btn-black btn-lg">Quero meu ingresso</a>
+    </div>
+  </div>
+</section>
 
-        <div class="sobre-card">
-          <div class="sobre-card-photo">
-            <!--
-              FOTO DO EVENTO OU LILIAN
-              Adicione: assets/lilian-sobre.jpg
-            -->
-            <img src="assets/lilian-sobre.jpg" alt="Lilian Cardoso" onerror="this.style.display='none'">
-            <div class="sobre-card-photo-ph" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" stroke="currentColor" stroke-width="2"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              Adicione assets/lilian-sobre.jpg
-            </div>
-          </div>
-          <div class="sobre-card-body">
-            <div class="sc-stat"><div class="sc-stat-label">Data</div><div class="sc-stat-value">04 Set 2026</div></div>
-            <div class="sc-stat"><div class="sc-stat-label">Duração</div><div class="sc-stat-value">10 horas</div></div>
-            <div class="sc-stat"><div class="sc-stat-label">Vagas</div><div class="sc-stat-value y">250 vagas</div></div>
-            <div class="sc-stat"><div class="sc-stat-label">Local</div><div class="sc-stat-value" style="font-size:.875rem;">Holiday Inn SP</div></div>
-          </div>
-        </div>
+<!-- ════════════════════════════════════
+     NO MESMO DIA DA ABERTURA (bio Lilian)
+════════════════════════════════════ -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display"><span style="color:var(--purple)">No mesmo dia da abertura</span><br>da Bienal do Livro de São Paulo</h2>
+    </div>
+
+    <div class="bio-grid">
+      <div class="bio-text reveal">
+        <p>A Imersão Escritores Admiráveis acontece no <strong>Holiday Inn Parque Anhembi</strong>, ao lado da Bienal.</p>
+        <p>Isso significa que você poderá viver dois movimentos importantes no mesmo dia: participar de uma <strong>imersão focada em carreira literária</strong> e, depois, entrar no maior evento do mercado editorial brasileiro <strong>com uma nova visão sobre o que deseja construir como autor</strong>.</p>
+
+        <div class="bio-subtitle">Imersão conduzida pela CEO da agência que mais divulga livros no Brasil</div>
+
+        <p>Autora best-seller e fundadora do <strong>Grupo LC, Lilian Cardoso</strong> é a mente por trás da Imersão Escritores Admiráveis. De romances a títulos técnicos, de novos autores a best-sellers, trabalhou com a sua equipe em mais de <strong>5 mil campanhas literárias</strong>. Em 2019, saiu dos bastidores de lançamentos para realizar um sonho antigo: criar o curso <strong>Escritores Admiráveis</strong>. É reconhecida também pelos workshops e eventos on-line gratuitos que já impactaram <strong>mais de 100 mil autores</strong>.</p>
+
+        <p>Na imersão, ela reúne ao seu redor um time de convidados especiais — <strong>do editorial ao marketing</strong> — para que você saia do dia com total clareza e direção de quais passos dar na sua carreira literária.</p>
+      </div>
+
+      <div class="bio-photo reveal">
+        <img src="/vendas/assets/lilian-palco.png" alt="Lilian Cardoso no palco" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="bio-photo-placeholder" style="display:none">Foto da Lilian no palco<br><code style="margin-top:.5rem;font-size:.75rem">vendas/assets/lilian-palco.jpg</code></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       PROGRAMAÇÃO
-  ══════════════════════════════════════════ -->
-  <section class="section section-alt" id="programacao">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Programação</span>
-        <h2>Um dia inteiro de imersão</h2>
-        <p>Convidados e programação completa divulgados em breve.</p>
+<!-- ════════════════════════════════════
+     FAQ (design Brenda)
+════════════════════════════════════ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-grid">
+      <div class="reveal">
+        <h2 class="faq-title">Perguntas<br>frequentes</h2>
       </div>
-      <div class="schedule">
-        <div class="sch-item"><div class="sch-time">08:00</div><div class="sch-line"></div><div class="sch-body"><h4>Abertura e credenciamento</h4><p>Recepção com kit de boas-vindas e integração com a comunidade.</p></div></div>
-        <div class="sch-item"><div class="sch-time">09:00</div><div class="sch-line"></div><div class="sch-body"><h4>Posicionamento e mercado editorial</h4><p>Como se posicionar estrategicamente no mercado do livro hoje.</p></div></div>
-        <div class="sch-item"><div class="sch-time">11:00</div><div class="sch-line"></div><div class="sch-body"><h4>Painel com convidados especiais</h4><p>Autores e profissionais do editorial compartilham suas trajetórias reais.</p></div></div>
-        <div class="sch-item"><div class="sch-time">13:00</div><div class="sch-line"></div><div class="sch-body"><h4>Almoço e networking</h4><p>Refeição completa inclusa. Espaço de conexão com autores e profissionais.</p></div></div>
-        <div class="sch-item"><div class="sch-time">14:30</div><div class="sch-line"></div><div class="sch-body"><h4>Comunidade e audiência</h4><p>Como construir uma comunidade ao redor da sua escrita.</p></div></div>
-        <div class="sch-item"><div class="sch-time">16:30</div><div class="sch-line"></div><div class="sch-body"><h4>Coffee break + perguntas abertas</h4><p>Pausa com lanches e espaço para trocas com os palestrantes.</p></div></div>
-        <div class="sch-item"><div class="sch-time">17:00</div><div class="sch-line"></div><div class="sch-body"><h4>Próximos passos e encerramento</h4><p>Clareza, direção e ações concretas para avançar como autor.</p></div></div>
+      <div class="faq-cards reveal-stagger">
+
+        <details class="faq-item" open>
+          <summary>O ingresso inclui a entrada da Bienal do Livro?</summary>
+          <div class="faq-body">
+            <p>Não. A Imersão Escritores Admiráveis e a Bienal Internacional do Livro de São Paulo são eventos independentes. Seu ingresso dá acesso somente à programação da imersão no Holiday Inn Parque Anhembi, com almoço, coffee break, kit de boas-vindas e credencial inclusos.</p>
+            <p>A entrada da Bienal é vendida separadamente, no site oficial do evento. Como os dois acontecem lado a lado, no mesmo dia, você pode aproveitar para visitar a Bienal depois da Imersão.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Não sou aluno(a) dos cursos da Lilian. Posso participar da imersão?</summary>
+          <div class="faq-body">
+            <p>Sim. O evento também é aberto para não alunos. Nesse caso, basta selecionar a opção “Público geral” no momento da compra do ingresso.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Onde o evento acontecerá?</summary>
+          <div class="faq-body">
+            <p>O evento será realizado no Hotel Holiday Inn Anhembi, em São Paulo.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>O ingresso inclui hospedagem?</summary>
+          <div class="faq-body">
+            <p>Não. Os custos com hospedagem e locomoção são de responsabilidade dos participantes.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Onde posso me hospedar?</summary>
+          <div class="faq-body">
+            <p>Caso não consiga ou não queira se hospedar no Holiday Inn Anhembi, existem outras opções próximas, como: Golden Tower Express Anhembi, Ramada Encore Centro Tiradentes, ibis São Paulo Barra Funda e Novotel São Paulo Center Norte.</p>
+            <p>A LC não possui parceria com esses hotéis e não se responsabiliza pelos serviços prestados por eles. As opções acima são apenas sugestões de hospedagem próximas ao local do evento.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso participar on-line?</summary>
+          <div class="faq-body">
+            <p>Não. A imersão será realizada exclusivamente de forma presencial e não terá transmissão on-line.</p>
+          </div>
+        </details>
+
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       KIT
-  ══════════════════════════════════════════ -->
-  <section class="section" id="incluso">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Tudo incluso no ingresso</span>
-        <h2>Sem surpresas no dia</h2>
-      </div>
-      <div class="kit-grid">
-        <div class="kit-card"><div class="kit-icon">🎒</div><h4>Kit de boas-vindas</h4><p>Material exclusivo para levar para casa.</p></div>
-        <div class="kit-card"><div class="kit-icon">🏷️</div><h4>Credencial oficial</h4><p>Sua identificação como participante.</p></div>
-        <div class="kit-card"><div class="kit-icon">🍽️</div><h4>Almoço completo</h4><p>Refeição completa inclusa no ingresso.</p></div>
-        <div class="kit-card"><div class="kit-icon">☕</div><h4>Coffee break</h4><p>Pausa com café e lanches ao longo do dia.</p></div>
-      </div>
+<!-- ════════════════════════════════════
+     INGRESSOS — 2 cards
+════════════════════════════════════ -->
+<section id="ingressos" class="section section-grey">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display">Garanta sua vaga no 1º lote</h2>
+      <p>O menor preço disponível e por <strong>tempo limitado</strong></p>
     </div>
-  </section>
 
-  <!-- ══════════════════════════════════════════
-       LILIAN CARDOSO
-  ══════════════════════════════════════════ -->
-  <section class="section section-dark" id="lilian">
-    <div class="container">
-      <div class="lilian-grid">
-        <div style="position:relative;">
-          <div class="lilian-frame">
-            <!--
-              ★ FOTO PRINCIPAL DA LILIAN
-              Adicione: assets/lilian-perfil.jpg
-              Proporção ideal: retrato 3:4 (ex: 600×800px)
-            -->
-            <img src="assets/lilian-perfil.jpg" alt="Lilian Cardoso" onerror="this.style.display='none'">
-            <div class="lilian-frame-ph" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="9" stroke="currentColor" stroke-width="2"/><path d="M6 44c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <strong style="color:rgba(255,255,255,.4);">assets/lilian-perfil.jpg</strong>
-              <small style="color:rgba(255,255,255,.25);">Retrato 3:4</small>
-            </div>
-          </div>
-          <div class="lilian-badge-float">
-            Escritores<br>Admiráveis
-            <span>Fundadora · Equipe LC</span>
-          </div>
-        </div>
-
-        <div class="lilian-copy">
-          <span class="eyebrow eyebrow-light">Quem conduz a imersão</span>
-          <h2>Lilian Cardoso</h2>
-          <div class="lilian-role">Fundadora · Escritores Admiráveis · Equipe LC</div>
-          <p>Lilian Cardoso dedicou sua carreira a ajudar escritores a transformar seus livros em projetos com real potencial de mercado. À frente da comunidade Escritores Admiráveis e da Equipe LC, ela já acompanhou centenas de autores em todas as fases da jornada editorial.</p>
-          <p>Na imersão, ela reúne ao seu redor um time de convidados especiais — do editorial ao marketing — para que você saia do dia com clareza e direção.</p>
-          <ul class="lilian-tags">
-            <li>Fundadora · Equipe LC</li>
-            <li>Comunidade Escritores Admiráveis</li>
-            <li>Mercado editorial</li>
-            <li>Desenvolvimento de autores</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       INGRESSOS — countdown integrado aqui
-  ══════════════════════════════════════════ -->
-  <section class="section ingressos-section" id="ingressos">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow eyebrow-light">Ingressos</span>
-        <h2>Garanta sua vaga no 1º Lote</h2>
-        <p>O menor preço disponível. Após 20 de maio, os valores sobem — sem exceção.</p>
-      </div>
-
-      <!-- COUNTDOWN aqui, integrado com os ingressos -->
-      <div class="countdown-bar" role="timer">
-        <div class="cd-label-wrap">
-          <div class="cd-title">⚡ Virada de lote — encerra em</div>
-          <div class="cd-sub">Após 20/05 os preços mudam. Garante agora o menor valor.</div>
-        </div>
-        <div class="cd-units" aria-live="off">
-          <div class="cd-unit" id="cu-d"><div class="cd-num" id="cd-d">14</div><div class="cd-unit-label">dias</div></div>
-          <div class="cd-sep" aria-hidden="true">:</div>
-          <div class="cd-unit" id="cu-h"><div class="cd-num" id="cd-h">00</div><div class="cd-unit-label">horas</div></div>
-          <div class="cd-sep" aria-hidden="true">:</div>
-          <div class="cd-unit" id="cu-m"><div class="cd-num" id="cd-m">00</div><div class="cd-unit-label">min</div></div>
-          <div class="cd-sep" aria-hidden="true">:</div>
-          <div class="cd-unit" id="cu-s"><div class="cd-num" id="cd-s">00</div><div class="cd-unit-label">seg</div></div>
-        </div>
-      </div>
-
-      <div class="lotes-grid">
-        <!-- Alunos/Clientes LC -->
-        <div class="lote destaque">
-          <div class="lote-top-badge">✦ Exclusivo — Alunos LC</div>
-          <span class="lote-tag gold" style="margin-top:1.25rem;">Alunos &amp; Clientes LC</span>
-          <h3>1º Lote</h3>
-          <div class="lote-sub">Para alunos e clientes da Equipe LC</div>
-          <div class="lote-price-row">
-            <span class="lote-cur">R$</span>
-            <span class="lote-val">590</span>
-          </div>
-          <div class="lote-taxa">+ R$ 59,00 taxa da plataforma</div>
-          <div class="lote-parc">ou em até <strong>12× no cartão</strong></div>
-          <ul class="lote-items">
+    <div class="tickets-wrap reveal-stagger">
+      <!-- TICKET 1: ALUNOS LC -->
+      <div class="ticket-card">
+        <div class="ticket-header ticket-header-red">Exclusivo — Alunos LC &amp; Clientes LC</div>
+        <div class="ticket-lote">1º Lote</div>
+        <div class="ticket-body">
+          <ul>
             <li>Imersão presencial completa — dia inteiro</li>
             <li>Kit de boas-vindas + credencial</li>
             <li>Almoço completo incluso</li>
             <li>Coffee break incluso</li>
             <li>Acesso aos convidados e palestrantes</li>
           </ul>
-          <a id="checkout-btn-alunos" class="btn btn-red btn-lg btn-full" href="#">
-            Garantir minha vaga agora
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
         </div>
+        <div class="ticket-price">
+          <small>R$</small><strong>590</strong>
+        </div>
+        <div class="ticket-cta">
+          <button id="checkout-btn-alunos" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
+        </div>
+      </div>
 
-        <!-- Público geral -->
-        <div class="lote">
-          <span class="lote-tag white">Público geral</span>
-          <h3>1º Lote</h3>
-          <div class="lote-sub">Para não alunos e não clientes LC</div>
-          <div class="lote-price-row">
-            <span class="lote-cur">R$</span>
-            <span class="lote-val">750</span>
-          </div>
-          <div class="lote-taxa">+ R$ 75,00 taxa da plataforma</div>
-          <div class="lote-parc">ou em até <strong>12× no cartão</strong></div>
-          <ul class="lote-items">
+      <!-- TICKET 2: PÚBLICO GERAL -->
+      <div class="ticket-card">
+        <div class="ticket-header ticket-header-purple">Público geral</div>
+        <div class="ticket-lote">1º Lote</div>
+        <div class="ticket-body">
+          <ul>
             <li>Imersão presencial completa — dia inteiro</li>
             <li>Kit de boas-vindas + credencial</li>
             <li>Almoço completo incluso</li>
             <li>Coffee break incluso</li>
             <li>Acesso aos convidados e palestrantes</li>
           </ul>
-          <a id="checkout-btn-publico" class="btn btn-red btn-lg btn-full" href="#">
-            Garantir minha vaga agora
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+        </div>
+        <div class="ticket-price">
+          <small>R$</small><strong>750</strong>
+        </div>
+        <div class="ticket-cta">
+          <button id="checkout-btn-publico" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       FAQ
-  ══════════════════════════════════════════ -->
-  <section class="section section-alt" id="faq">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Dúvidas</span>
-        <h2>Perguntas frequentes</h2>
-      </div>
-      <div class="faq">
-        <details class="qi">
-          <summary>Para quem é essa imersão?</summary>
-          <p>Para escritores e escritoras em qualquer fase da carreira que querem transformar seus livros em projetos reais, com estrutura e potencial de crescimento no mercado editorial.</p>
-        </details>
-        <details class="qi">
-          <summary>Onde acontece?</summary>
-          <p>Holiday Inn Parque Anhembi, São Paulo — ao lado do local da Bienal do Livro. Você pode aproveitar o primeiro dia da Bienal logo após a imersão.</p>
-        </details>
-        <details class="qi">
-          <summary>O que muda na virada de lote do dia 20/05?</summary>
-          <p>Os ingressos do 1º Lote têm o menor preço disponível e são válidos apenas até 20 de maio. Após essa data, os valores sobem para o 2º Lote. É a única oportunidade de garantir pelo menor preço.</p>
-        </details>
-        <details class="qi">
-          <summary>Qual a diferença entre os dois ingressos?</summary>
-          <p>O ingresso para alunos e clientes LC tem valor reduzido (R$ 590 + taxa) como reconhecimento para quem já faz parte da comunidade. O público geral paga R$ 750 + taxa. Os benefícios do dia são idênticos para todos.</p>
-        </details>
-        <details class="qi">
-          <summary>O que está incluso no ingresso?</summary>
-          <p>Kit de boas-vindas exclusivo, credencial do evento, almoço completo e coffee break. Tudo incluso — sem nenhum custo adicional no dia.</p>
-        </details>
-        <details class="qi">
-          <summary>Quem são os convidados?</summary>
-          <p>A programação completa com os nomes dos convidados será divulgada em breve. O evento conta com autores, especialistas e profissionais do editorial, marketing e comercial do mercado do livro.</p>
-        </details>
-        <details class="qi">
-          <summary>Posso parcelar?</summary>
-          <p>Sim. O ingresso pode ser parcelado em até 12× no cartão de crédito.</p>
-        </details>
-        <details class="qi">
-          <summary>Quantas vagas tem?</summary>
-          <p>São apenas 250 vagas. Quando esgotarem, não haverá mais ingressos disponíveis para esta edição.</p>
-        </details>
-      </div>
+<!-- ════════════════════════════════════
+     CTA FINAL
+════════════════════════════════════ -->
+<section class="cta-final">
+  <div class="container container-sm">
+    <h2 class="display reveal">
+      Seu livro pode abrir portas, mas alguém precisa te ensinar como atravessá-las.<br>
+      <span class="white" style="margin-top:.5rem;display:inline-block">A imersão é esse caminho.</span>
+    </h2>
+    <p class="cta-final-sub reveal"><strong style="font-size:1.35em;color:#fff;display:block;margin-bottom:.35rem">04 de setembro · 8h às 18h</strong>Holiday Inn Anhembi (SP) · <strong style="color:var(--purple)">Poucas vagas</strong></p>
+    <div style="margin-top:2rem" class="reveal">
+      <a href="#ingressos" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       CTA FINAL
-  ══════════════════════════════════════════ -->
-  <section class="cta-final">
-    <div class="cta-glow" aria-hidden="true"></div>
-    <div class="container">
-      <span class="eyebrow eyebrow-light">04 Set 2026 · São Paulo</span>
-      <h2>Dê o próximo passo na sua carreira como autor.</h2>
-      <p>250 vagas. 1º Lote até 20/05. Garanta a sua agora — com o menor preço disponível.</p>
-      <a id="final-cta" class="btn btn-red btn-xl" href="#ingressos">
-        Garantir minha vaga agora
-        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <div class="cta-pills">
-        <span class="cta-pill"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Almoço completo incluso</span>
-        <span class="cta-pill"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Coffee Break incluso</span>
-        <span class="cta-pill"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Kit exclusivo incluso</span>
-        <span class="cta-pill"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Parcele em até 12×</span>
-      </div>
-    </div>
-  </section>
-
-</main>
-
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
 <footer>
   <div class="container">
-    <p>&copy; 2026 Escritores Admiráveis · Equipe LC</p>
-    <div class="footer-links">
-      <a href="https://escritoresadmiraveis.com.br/" target="_blank" rel="noopener">escritoresadmiraveis.com.br</a>
-      <a href="/politica-de-privacidade">Política de Privacidade</a>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>Imersão Escritores Admiráveis</h4>
+        <p>04 de setembro de 2026 · Holiday Inn Parque Anhembi · São Paulo</p>
+        <p>Realização: Grupo LC</p>
+      </div>
+      <nav class="footer-links" aria-label="Rodapé">
+        <h5>Informações</h5>
+        <a href="/politica-de-privacidade/">Política de privacidade</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Imersão Escritores Admiráveis. Todos os direitos reservados.
     </div>
   </div>
 </footer>
 
 <!-- ════════════════════════════════════
-     COUNTDOWN
+     JS: scroll reveal + sticky CTA + tracking + checkout direto pra Sympla
 ════════════════════════════════════ -->
 <script>
+// ============== Scroll Reveal (IntersectionObserver) ==============
 (function(){
-  var END = new Date('2026-05-20T00:00:00-03:00').getTime();
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function tick(){
-    var diff = END - Date.now();
-    var d = diff>0 ? Math.floor(diff/86400000) : 0;
-    var h = diff>0 ? Math.floor((diff%86400000)/3600000) : 0;
-    var m = diff>0 ? Math.floor((diff%3600000)/60000) : 0;
-    var s = diff>0 ? Math.floor((diff%60000)/1000) : 0;
-    var el;
-    if((el=document.getElementById('cd-d'))) el.textContent=pad(d);
-    if((el=document.getElementById('cd-h'))) el.textContent=pad(h);
-    if((el=document.getElementById('cd-m'))) el.textContent=pad(m);
-    if((el=document.getElementById('cd-s'))) el.textContent=pad(s);
-    var hot = diff>0 && diff<172800000;
-    ['cu-d','cu-h','cu-m','cu-s'].forEach(function(id){
-      var u=document.getElementById(id);
-      if(u) u.classList.toggle('hot', hot||diff<=0);
-    });
+  const els = document.querySelectorAll('.reveal, .reveal-stagger');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('show'));
+    return;
   }
-  tick(); setInterval(tick,1000);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+  els.forEach(el => io.observe(el));
+  // Fail-safe: garante que nada fique invisível pra sempre se o observer não disparar
+  // (rolagem rápida no celular, navegadores com quirks, página aberta já rolada, etc.)
+  setTimeout(() => { els.forEach(el => el.classList.add('show')); }, 2500);
 })();
-</script>
 
-<!-- ════════════════════════════════════
-     ATTRIBUTION WIRING
-════════════════════════════════════ -->
-<script>
+// ============== Sticky CTA scroll-into-view ==============
+document.getElementById('sticky-cta').addEventListener('click', () => {
+  document.getElementById('ingressos').scrollIntoView({ behavior: 'smooth' });
+});
+
+
+// ============== Checkout wiring (direto pra Sympla) ==============
 (function(){
-  var URL_ALUNOS  = 'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056';
-  var URL_PUBLICO = 'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056';
-  var PLATFORM    = 'sympla';
-  var TRK         = {eduzz:'trk',hotmart:'xcod',kiwify:'sck'};
+  // URLs do Sympla por tipo de ingresso (fallback se as duas forem iguais)
+  var URLS = {
+    alunos:  'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056',
+    publico: 'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056',
+  };
+  var BUTTONS = [
+    { id: 'checkout-btn-alunos',  ticket: 'alunos'  },
+    { id: 'checkout-btn-publico', ticket: 'publico' },
+  ];
 
+  // Atribuição: gera trk e persiste em checkout_sessions
   var trk = sessionStorage.getItem('krob_trk');
   if(!trk){ trk=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'-'+Math.random().toString(36).slice(2); sessionStorage.setItem('krob_trk',trk); }
-
-  var p=new URLSearchParams(location.search);
-  var utm={src:p.get('utm_source')||'',med:p.get('utm_medium')||'',cmp:p.get('utm_campaign')||'',cnt:p.get('utm_content')||'',trm:p.get('utm_term')||''};
-
+  var p = new URLSearchParams(location.search);
+  var utm = {
+    src:p.get('utm_source')||'',med:p.get('utm_medium')||'',cmp:p.get('utm_campaign')||'',cnt:p.get('utm_content')||'',trm:p.get('utm_term')||'',
+  };
   fetch('/checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({trk,utm_source:utm.src,utm_medium:utm.med,utm_campaign:utm.cmp,utm_content:utm.cnt,utm_term:utm.trm,event_source_url:location.href})}).catch(function(){});
+
+  function dest(base){
+    var params = new URLSearchParams();
+    params.set('trk', trk);
+    if(utm.src) params.set('utm_source',   utm.src);
+    if(utm.med) params.set('utm_medium',   utm.med);
+    if(utm.cmp) params.set('utm_campaign', utm.cmp);
+    if(utm.cnt) params.set('utm_content',  utm.cnt);
+    if(utm.trm) params.set('utm_term',     utm.trm);
+    return base + (base.includes('?') ? '&' : '?') + params.toString();
+  }
 
   function fire(){
     var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';
@@ -1018,22 +1368,15 @@
     try{navigator.sendBeacon('/tracker',new Blob([JSON.stringify({event_name:'InitiateCheckout',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{}})],{type:'application/json'}));}catch(_){}
   }
 
-  function dest(base){
-    var param=TRK[PLATFORM]||'trk', params=new URLSearchParams();
-    params.set(param,trk);
-    if(PLATFORM==='hotmart'){var any=utm.src||utm.med||utm.cmp||utm.cnt||utm.trm;if(any)params.set('sck',[utm.src,utm.med,utm.cmp,utm.cnt,utm.trm].map(encodeURIComponent).join('|'));}
-    else{if(utm.src)params.set('utm_source',utm.src);if(utm.med)params.set('utm_medium',utm.med);if(utm.cmp)params.set('utm_campaign',utm.cmp);if(utm.cnt)params.set('utm_content',utm.cnt);if(utm.trm)params.set('utm_term',utm.trm);}
-    return base+(base.includes('?')?'&':'?')+params.toString();
-  }
-
-  function wire(id,url){
-    var btn=document.getElementById(id);
-    if(!btn)return;
-    btn.addEventListener('click',function(e){e.preventDefault();fire();setTimeout(function(){location.href=dest(url);},80);});
-  }
-
-  wire('checkout-btn-alunos', URL_ALUNOS);
-  wire('checkout-btn-publico',URL_PUBLICO);
+  BUTTONS.forEach(function(b){
+    var btn = document.getElementById(b.id);
+    if(!btn) return;
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      fire();
+      setTimeout(function(){ location.href = dest(URLS[b.ticket]); }, 80);
+    });
+  });
 })();
 </script>
 
