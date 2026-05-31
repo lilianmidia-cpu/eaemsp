@@ -398,7 +398,7 @@
       max-width: 64rem; margin: 0 auto;
     }
     .bio-text { font-family: 'Nunito Sans', 'Inter', sans-serif; color: rgba(255,255,255,.85); font-size: 1.25rem; line-height: 1.45; letter-spacing: -.022rem; }
-    .bio-text p { margin-bottom: 1.1rem; }
+    .bio-text p { margin-bottom: 1.1rem; font-size: 1.05rem; line-height: 1.65; }
     .bio-text strong { color: #fff; font-weight: 700; }
     .bio-subtitle {
       font-family: 'Anton', sans-serif;
@@ -462,7 +462,7 @@
       padding: .85rem;
       font-family: 'Inter', sans-serif; font-weight: 700; font-size: .92rem;
     }
-    .ticket-body { padding: 2rem 1.75rem; flex: 1; }
+    .ticket-body { padding: 2rem 1.75rem 0.6rem 1.75rem; flex: 1; }
     .ticket-body ul { display: flex; flex-direction: column; gap: .6rem; }
     .ticket-body li {
       font-size: 1.05rem; color: var(--ink-soft);
@@ -477,19 +477,23 @@
       background-color: var(--purple);
     }
     .ticket-price {
-      text-align: center; padding: 1rem 1.75rem 0 1.75rem;
+      text-align: center; padding: 0.3rem 1.75rem 0 1.75rem;
     }
     .ticket-price small {
       font-family: 'Anton', sans-serif;
-      font-size: 1.5rem; color: var(--ink);
-      vertical-align: baseline;
-      margin-right: .15rem;
+      font-size: 1.35rem; color: var(--ink);
+      vertical-align: top;
+      margin-right: .1rem;
+      margin-top: 0.45rem;
+      display: inline-block;
+      line-height: 1;
     }
     .ticket-price strong {
       font-family: 'Anton', sans-serif;
       font-size: 2.75rem; color: var(--black);
       letter-spacing: .01em;
       font-weight: 400;
+      line-height: 1;
     }
     .ticket-cta { padding: 1rem 1.75rem 2rem 1.75rem; text-align: center; }
 
@@ -499,7 +503,7 @@
     .faq-section {
       background: var(--black);
       color: #fff;
-      padding: 3rem 0 4rem 0;
+      padding: 1.5rem 0 4rem 0;
       position: relative;
       overflow: hidden;
     }
@@ -693,6 +697,7 @@
 
       .perfis-grid { grid-template-columns: 1fr; gap: 1.75rem; }
       .perfil { padding: 0; text-align: center; }
+      .perfil-title { font-size: 20px; }
 
       .programa-list { gap: 1rem; }
       .programa-item {
