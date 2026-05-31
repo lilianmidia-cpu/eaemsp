@@ -182,8 +182,8 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem;
     }
-    .hero-meta-text .meta-label { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.2; }
-    .hero-meta-text .meta-sub   { font-size: .95rem; color: rgba(255,255,255,.75); margin-top: 2px; }
+    .hero-meta-text .meta-label { font-size: 1.15rem; font-weight: 700; color: #fff; line-height: 1.2; }
+    .hero-meta-text .meta-sub   { font-size: 1.05rem; color: rgba(255,255,255,.75); margin-top: 2px; }
     .hero-photo {
       position: relative; z-index: 2;
       align-self: end;          /* foto encosta na base do hero */
@@ -293,9 +293,9 @@
     .perfil-title {
       font-family: 'Anton', sans-serif;
       color: #fff;
-      font-size: 25.6px;
-      line-height: 1.25;
-      letter-spacing: .01em;
+      font-size: 36px;
+      line-height: 1.2;
+      letter-spacing: .05em;
       margin-bottom: .85rem;
       font-weight: 400;
     }
@@ -402,14 +402,15 @@
     .bio-text strong { color: #fff; font-weight: 700; }
     .bio-subtitle {
       font-family: 'Anton', sans-serif;
-      color: #fff;
-      background: var(--purple);
+      color: var(--purple);
+      background: rgba(155,89,226,.12);
+      border: 1.5px solid rgba(155,89,226,.5);
       display: inline-block;
-      padding: .3rem .75rem;
+      padding: .4rem .9rem;
       border-radius: 6px;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       text-transform: uppercase;
-      letter-spacing: .015em;
+      letter-spacing: .02em;
       margin: 1.75rem 0 1rem 0;
     }
     .bio-photo {
@@ -465,7 +466,7 @@
     .ticket-body { padding: 2rem 1.75rem 0.35rem 1.75rem; }
     .ticket-body ul { display: flex; flex-direction: column; gap: .6rem; }
     .ticket-body li {
-      font-size: 1.05rem; color: var(--ink-soft);
+      font-size: 1.2rem; color: var(--ink-soft);
       display: flex; align-items: center; gap: .65rem;
     }
     .ticket-body li::before {
@@ -490,7 +491,7 @@
     }
     .ticket-price strong {
       font-family: 'Anton', sans-serif;
-      font-size: 2.75rem; color: var(--black);
+      font-size: 2.2rem; color: var(--black);
       letter-spacing: .01em;
       font-weight: 400;
       line-height: 1;
@@ -503,7 +504,7 @@
     .faq-section {
       background: var(--black);
       color: #fff;
-      padding: 1.5rem 0 4rem 0;
+      padding: 1.5rem 0 2rem 0;
       position: relative;
       overflow: hidden;
     }
@@ -697,7 +698,7 @@
 
       .perfis-grid { grid-template-columns: 1fr; gap: 1.75rem; }
       .perfil { padding: 0; text-align: center; }
-      .perfil-title { font-size: 20px; }
+      .perfil-title { font-size: 26px; letter-spacing: .04em; }
 
       .programa-list { gap: 1rem; }
       .programa-item {
@@ -722,8 +723,8 @@
 
       .tickets-wrap { grid-template-columns: 1fr; gap: 1.25rem; }
       .ticket-card { max-width: 420px; margin: 0 auto; width: 100%; }
-      .ticket-price strong { font-size: 3.25rem; }
-      .ticket-price small { font-size: 1.15rem; }
+      .ticket-price strong { font-size: 2.5rem; }
+      .ticket-price small { font-size: 1.1rem; }
 
       .cta-final { padding: 4rem 0; }
       .cta-final .display { font-size: 1.65rem; }
@@ -763,9 +764,9 @@
 
       .ticket-header { font-size: 1rem; padding: 1rem 1.25rem; }
       .ticket-body { padding: 1.5rem 1.25rem 0.25rem 1.25rem; }
-      .ticket-body li { font-size: 1.05rem; }
-      .ticket-price strong { font-size: 2.75rem; }
-      .ticket-price small { font-size: 1rem; }
+      .ticket-body li { font-size: 1.2rem; }
+      .ticket-price strong { font-size: 2.2rem; }
+      .ticket-price small { font-size: .95rem; }
       .ticket-cta { padding: .85rem 1.25rem 1.75rem 1.25rem; }
 
       .cta-final .display { font-size: 1.4rem; line-height: 1.15; }
@@ -949,6 +950,7 @@
       margin-bottom: .4rem;
       line-height: 1.1;
     }
+    .footer-brand { text-align: center; width: 100%; }
     .footer-brand p { font-size: .85rem; line-height: 1.55; color: rgba(255,255,255,.65); }
     .footer-links { display: flex; flex-direction: row; gap: 1.25rem; justify-content: center; }
     .footer-links h5 { display: none; }
