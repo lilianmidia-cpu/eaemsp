@@ -1070,7 +1070,7 @@
     </div>
 
     <div style="text-align:center;margin-top:3rem" class="reveal">
-      <a href="#ingressos" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
+      <a href="#ingressos" id="btn-perfis-cta" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
     </div>
   </div>
 </section>
@@ -1116,7 +1116,7 @@
       </ul>
     </div>
     <div class="reveal">
-      <a href="#ingressos" class="btn btn-black btn-lg">Quero meu ingresso</a>
+      <a href="#ingressos" id="btn-inclui-cta" class="btn btn-black btn-lg">Quero meu ingresso</a>
     </div>
   </div>
 </section>
@@ -1277,7 +1277,7 @@
     </h2>
     <p class="cta-final-sub reveal"><strong style="font-size:1.35em;color:#fff;display:block;margin-bottom:.35rem">04 de setembro · 8h às 18h</strong>Holiday Inn Anhembi (SP) · <strong style="color:var(--purple)">Poucas vagas</strong></p>
     <div style="margin-top:2rem" class="reveal">
-      <a href="#ingressos" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
+      <a href="#ingressos" id="btn-cta-final" class="btn btn-purple btn-lg">Quero participar desta experiência</a>
     </div>
   </div>
 </section>
@@ -1308,6 +1308,43 @@
      JS: scroll reveal + sticky CTA + tracking + checkout direto pra Sympla
 ════════════════════════════════════ -->
 <script>
+// ============== Rastreamento de botões ==============
+(function(){
+  function trackBtn(btnId) {
+    try {
+      var id = (crypto.randomUUID && crypto.randomUUID()) || Date.now() + '-' + Math.random().toString(36).slice(2);
+      navigator.sendBeacon('/tracker', new Blob([JSON.stringify({
+        event_name: btnId,
+        event_id: id,
+        event_time: Math.floor(Date.now() / 1000),
+        event_source_url: location.href,
+        user_data: {}
+      })], { type: 'application/json' }));
+    } catch(_) {}
+  }
+
+  // Âncoras
+  [
+    ['hero-cta-link',  'btn_hero_cta'],
+    ['sticky-cta',     'btn_sticky'],
+    ['btn-perfis-cta', 'btn_perfis_cta'],
+    ['btn-inclui-cta', 'btn_inclui_cta'],
+    ['btn-cta-final',  'btn_cta_final'],
+  ].forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if(el) el.addEventListener('click', function(){ trackBtn(pair[1]); });
+  });
+
+  // Compras (além do InitiateCheckout já existente)
+  ['checkout-btn-alunos',  'btn_compra_alunos',
+   'checkout-btn-publico', 'btn_compra_publico'].reduce(function(_, v, i, a){
+    if(i % 2 === 0){
+      var el = document.getElementById(v);
+      if(el) el.addEventListener('click', function(){ trackBtn(a[i+1]); });
+    }
+  }, null);
+})();
+
 // ============== Scroll Reveal (IntersectionObserver) ==============
 (function(){
   const els = document.querySelectorAll('.reveal, .reveal-stagger');

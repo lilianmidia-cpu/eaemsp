@@ -121,7 +121,7 @@ export async function onRequestPost(context) {
     // GA4 fires are suppressed. Without this gate, every link-unfurl
     // crawl (WhatsApp preview, Slackbot, facebookexternalhit, etc.)
     // would burn a Meta CAPI event and pollute the Pixel.
-    const results = isBot ? [] : await Promise.allSettled([
+    const results = (isBot || isButtonClick) ? [] : await Promise.allSettled([
       sendToMeta({ body, clientIp, userAgent, fbp, fbc, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, sessionData, env }),
       sendToGA4({ body, gaClientId, gaSessionId, hashedEm, env }),
     ]);
@@ -166,6 +166,8 @@ export async function onRequestPost(context) {
     // event_log writes so per-instance D1 stays healthy long-term.
     const loggedEventName = (body.event_name || '').toLowerCase();
     const shouldLogEvent = loggedEventName !== 'pageview' && loggedEventName !== 'page_view';
+    // btn_* events are internal click metrics — skip CAPI/GA4, log to D1 only
+    const isButtonClick = loggedEventName.startsWith('btn_');
     const browserInfo = parseBrowser(userAgent);
     context.waitUntil(
       (async () => {

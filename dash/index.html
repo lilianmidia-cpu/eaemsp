@@ -317,6 +317,50 @@
       </div>
     </section>
 
+    <!-- Button Clicks -->
+    <section class="card p-5 fade-in">
+      <div class="mb-4">
+        <div class="font-semibold">Cliques nos botões</div>
+        <div class="text-xs text-[color:var(--muted)]">Todos os cliques registrados na página de vendas, sem bots, no período selecionado.</div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+        <div class="border border-[color:var(--border)] rounded-lg p-3">
+          <div class="kpi-label">⭐ Hero CTA</div>
+          <div class="text-2xl mono mt-1" id="btn-kpi-hero">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-0.5">1º botão da página</div>
+        </div>
+        <div class="border border-[color:var(--border)] rounded-lg p-3">
+          <div class="kpi-label">⭐ Alunos LC — R$590</div>
+          <div class="text-2xl mono accent-purple mt-1" id="btn-kpi-alunos">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-0.5">Botão de compra</div>
+        </div>
+        <div class="border border-[color:var(--border)] rounded-lg p-3">
+          <div class="kpi-label">⭐ Público — R$750</div>
+          <div class="text-2xl mono accent-purple mt-1" id="btn-kpi-publico">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-0.5">Botão de compra</div>
+        </div>
+        <div class="border border-[color:var(--border)] rounded-lg p-3">
+          <div class="kpi-label">Total âncoras</div>
+          <div class="text-2xl mono mt-1" id="btn-kpi-ancoras">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-0.5">Hero + Perfis + Inclui + Final</div>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[color:var(--border)]">
+              <th class="text-left py-2 text-xs uppercase tracking-wider text-[color:var(--dim)] font-semibold">Botão</th>
+              <th class="text-left py-2 text-xs uppercase tracking-wider text-[color:var(--dim)] font-semibold">Localização</th>
+              <th class="text-right py-2 text-xs uppercase tracking-wider text-[color:var(--dim)] font-semibold mono">Cliques</th>
+            </tr>
+          </thead>
+          <tbody id="btn-clicks-table">
+            <tr><td colspan="3" class="py-3 text-[color:var(--muted)]">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <footer class="pt-4 pb-10 text-xs text-[color:var(--muted)] text-center">
       Tracking Stack &middot; self-hosted on Cloudflare Pages
     </footer>
@@ -734,6 +778,53 @@
     });
   }
 
+  // -------- Button clicks --------
+  const BTN_META = {
+    'btn_hero_cta':       { label: 'Quero garantir minha vaga',         location: 'Hero — 1º botão da página', type: 'ancora' },
+    'btn_sticky':         { label: 'Quero me inscrever agora',           location: 'Barra sticky',              type: 'sticky'  },
+    'btn_perfis_cta':     { label: 'Quero participar desta experiência', location: 'Seção Perfis',              type: 'ancora' },
+    'btn_inclui_cta':     { label: 'Quero meu ingresso',                 location: 'Seção Ingresso Inclui',    type: 'ancora' },
+    'btn_compra_alunos':  { label: 'Compra — Alunos LC (R$590)',         location: 'Card de ingresso',         type: 'compra' },
+    'btn_compra_publico': { label: 'Compra — Público Geral (R$750)',     location: 'Card de ingresso',         type: 'compra' },
+    'btn_cta_final':      { label: 'Quero participar desta experiência', location: 'CTA Final',                type: 'ancora' },
+  };
+  const BTN_ORDER = ['btn_hero_cta','btn_compra_alunos','btn_compra_publico','btn_sticky','btn_perfis_cta','btn_inclui_cta','btn_cta_final'];
+
+  async function loadButtonClicks(days) {
+    try {
+      const data = await fetchJson(`/api/button-clicks?days=${days}`);
+      const byId = {};
+      (data.buttons || []).forEach(r => { byId[r.event_name] = Number(r.clicks); });
+
+      qs('#btn-kpi-hero').textContent    = fmtInt(byId['btn_hero_cta']       || 0);
+      qs('#btn-kpi-alunos').textContent  = fmtInt(byId['btn_compra_alunos']  || 0);
+      qs('#btn-kpi-publico').textContent = fmtInt(byId['btn_compra_publico'] || 0);
+      const totalAncoras = ['btn_hero_cta','btn_perfis_cta','btn_inclui_cta','btn_cta_final']
+        .reduce((s, k) => s + (byId[k] || 0), 0);
+      qs('#btn-kpi-ancoras').textContent = fmtInt(totalAncoras);
+
+      const tbody = qs('#btn-clicks-table');
+      if (!data.buttons || data.buttons.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="py-3 text-[color:var(--muted)] text-sm">Nenhum clique registrado ainda.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = BTN_ORDER.map(id => {
+        const m = BTN_META[id] || { label: id, location: '—', type: '' };
+        const n = byId[id] || 0;
+        const badge = m.type === 'compra'
+          ? '<span class="ml-1.5 text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">compra</span>'
+          : m.type === 'ancora'
+          ? '<span class="ml-1.5 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">âncora</span>'
+          : '<span class="ml-1.5 text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">sticky</span>';
+        return `<tr class="border-b border-[color:var(--border)] row-hover">
+          <td class="py-2.5 pr-4">${escapeHtml(m.label)}${badge}</td>
+          <td class="py-2.5 pr-4 text-[color:var(--dim)] text-xs">${escapeHtml(m.location)}</td>
+          <td class="py-2.5 text-right mono font-semibold ${m.type === 'compra' ? 'accent-purple' : ''}">${fmtInt(n)}</td>
+        </tr>`;
+      }).join('');
+    } catch(e) { console.error('button-clicks load error', e); }
+  }
+
   // -------- Load orchestration --------
   async function loadAll(days) {
     currentDays = days;
@@ -745,6 +836,7 @@
       loadLeads(days),
       loadPurchases(),
       loadHealth(),
+      loadButtonClicks(days),
     ]);
   }
 
