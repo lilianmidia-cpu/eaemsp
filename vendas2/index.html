@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imersão Escritores Admiráveis — O livro é só o começo · 04 Set 2026 · São Paulo</title>
+  <meta name="description" content="Um encontro presencial para escritores que querem entender como transformar um livro em posicionamento, leitores, oportunidades e carreira no mercado editorial. 04 de setembro, São Paulo.">
+
+  <meta name="facebook-domain-verification" content="nm0l4jlpy0o5aqide9yej6uol583y1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- GA4 -->
+  <script async src="/scripts/gtag.js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','YOUR_META_PIXEL_ID');
+    (function(){var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';fbq('track','PageView',{},{eventID:id});fetch('/tracker',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({event_name:'PageView',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{}})}).catch(function(){});})();
+  </script>
+
+  <style>
+    :root {
+      --purple:        #9B59E2;
+      --purple-dim:    #7B3FC4;
+      --purple-deep:   #5B1F9E;
+      --purple-banner: #8B44D4;
+      --black:         #0A0A0F;
+      --black-soft:    #15151C;
+      --grey-bg:       #EBEBEB;
+      --card-bg:       #FFFFFF;
+      --ink:           #1A0A2E;
+      --ink-soft:      #4A4A5A;
+      --line:          #DDDDE8;
+      --red-lc:        #D62C5E;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; overflow-x: hidden;
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6; color: var(--ink); background: #fff;
+    }
+    img  { max-width: 100%; display: block; }
+    a    { color: inherit; text-decoration: none; }
+    ul   { padding: 0; margin: 0; list-style: none; }
+    p    { margin: 0; }
+    h1,h2,h3,h4 { margin: 0; }
+
+    .container { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── BOTÕES ── */
+    .btn {
+      appearance: none; border: 0; cursor: pointer;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 800;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: .9rem 2rem; border-radius: 999px;
+      transition: filter .15s, transform .1s;
+      display: inline-flex; align-items: center; gap: .5rem;
+      white-space: nowrap; line-height: 1; font-size: .875rem;
+    }
+    .btn:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-purple        { background: var(--purple); color: #fff; }
+    .btn-white-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.75); }
+    .btn-white-outline:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+    .btn-dark          { background: var(--black); color: #fff; }
+    .btn-full          { width: 100%; justify-content: center; }
+
+    /* ════════════════════════════════════════
+       1. HERO
+    ════════════════════════════════════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      background: var(--black); min-height: 90vh;
+      display: flex; align-items: center;
+    }
+
+    /* Desktop: foto à direita, texto à esquerda */
+    .hero-photo-desktop {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 62%;
+      background: url('../vendaspre/assets/Imersão-Escritores-Admiráveis.jpg') center top / cover no-repeat;
+    }
+    /* Mobile: foto portrait centralizada */
+    .hero-photo-mobile {
+      display: none;
+      position: absolute; inset: 0;
+      background: url('../vendaspre/assets/Imersão-Escritores-Admiráveis-mobile.jpg') center 20% / cover no-repeat;
+    }
+    /* Desktop overlay: escuro à esquerda, transparente à direita */
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to right,
+        var(--black) 0%,
+        var(--black) 32%,
+        rgba(10,10,15,.8) 50%,
+        rgba(10,10,15,.15) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 5.5rem 0; max-width: 44rem;
+    }
+    .hero h1 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.15; letter-spacing: .02em;
+      text-transform: uppercase; margin-bottom: 1.25rem;
+    }
+    .hero h1 .l1 { color: var(--purple); display: block; }
+    .hero h1 .l2 { color: #fff; display: block; }
+
+    .hero-sub {
+      font-size: 1rem; color: rgba(255,255,255,.75);
+      line-height: 1.75; max-width: 36rem; margin-bottom: 2rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-meta { display: flex; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .hero-meta-item {
+      display: flex; align-items: flex-start; gap: .5rem;
+      font-size: .9375rem; color: rgba(255,255,255,.85);
+    }
+    .hero-meta-item .ico { font-size: 1.125rem; flex: none; margin-top: .05rem; }
+    .meta-ico { width: 22px; height: 22px; flex: none; margin-top: .1rem; }
+    .hero-meta-item .txt { line-height: 1.4; }
+    .hero-meta-item .txt strong { display: block; font-weight: 700; font-family: 'Nunito Sans', sans-serif; }
+    .hero-meta-item .txt small  { font-size: .8125rem; color: rgba(255,255,255,.5); }
+
+    /* ════════════════════════════════════════
+       2. URGENCY BANNER
+    ════════════════════════════════════════ */
+    .urgency { background: var(--purple-banner); padding: .875rem 0; }
+    .urgency-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .urgency-left { display: flex; align-items: center; gap: 1rem; }
+    .vagas-badge {
+      width: 56px; height: 56px; border-radius: 50%; flex: none;
+      background: rgba(0,0,0,.25); border: 2px solid rgba(255,255,255,.3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; line-height: 1.15;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 900;
+      font-size: .42rem; letter-spacing: .12em; text-transform: uppercase; color: #fff;
+    }
+    .urgency-txt {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(.9rem, 2.2vw, 1.3rem);
+      letter-spacing: .05em; text-transform: uppercase; color: #fff;
+    }
+    .urgency .btn-white-outline {
+      font-size: .8125rem; padding: .65rem 1.375rem;
+    }
+
+    /* ════════════════════════════════════════
+       3. "UM DIA INTEIRO PARA ENTENDER"
+    ════════════════════════════════════════ */
+    .entender { background: var(--grey-bg); padding: 5rem 0; }
+    .entender-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      text-transform: uppercase; color: var(--ink);
+      text-align: center; margin-bottom: .375rem; letter-spacing: .02em;
+    }
+    .entender-sub {
+      text-align: center; font-size: 1rem; color: var(--ink-soft);
+      margin-bottom: 2.75rem; font-family: 'Inter', sans-serif;
+    }
+    .entender-sub em     { font-style: normal; font-weight: 700; color: var(--ink); }
+    .entender-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: start;
+    }
+    .entender-card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 18px; padding: 2rem;
+      font-size: .9375rem; color: var(--ink-soft);
+      line-height: 1.8; font-family: 'Inter', sans-serif;
+    }
+    .entender-card p + p { margin-top: 1rem; }
+    .entender-photos {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .625rem;
+    }
+    .ph {
+      border-radius: 12px; overflow: hidden; background: #ccc;
+    }
+    .ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .ph-wide { grid-column: 1 / -1; aspect-ratio: 16/7; }
+    .ph-tall { aspect-ratio: 3/4; }
+
+    /* ════════════════════════════════════════
+       4. PROGRAMAÇÃO
+    ════════════════════════════════════════ */
+    .prog { background: var(--grey-bg); padding: 5rem 0; }
+    .prog-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      text-transform: uppercase; color: var(--ink);
+      text-align: center; margin-bottom: 2.5rem; letter-spacing: .02em;
+    }
+    .prog-list { display: grid; gap: .625rem; max-width: 54rem; margin: 0 auto; }
+    .prog-item {
+      background: #fff; border: 1px solid rgba(0,0,0,.1);
+      border-radius: 14px; padding: 1.125rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1.25rem;
+      transition: border-color .2s;
+    }
+    .prog-item:hover { border-color: var(--purple); }
+    .prog-time {
+      background: var(--purple-dim); color: #fff;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 700;
+      font-size: .75rem; letter-spacing: .03em;
+      padding: .35rem .875rem; border-radius: 8px;
+      white-space: nowrap; flex: none; margin-top: .1rem;
+    }
+    .prog-body h4 {
+      font-family: 'Nunito Sans', sans-serif; font-weight: 800;
+      font-size: .9375rem; color: var(--ink); margin-bottom: .2rem; line-height: 1.35;
+    }
+    .prog-body p { font-size: .875rem; color: var(--ink-soft); font-family: 'Inter', sans-serif; }
+
+    /* ════════════════════════════════════════
+       5. KIT — TUDO QUE VOCÊ VAI RECEBER
+    ════════════════════════════════════════ */
+    .kit {
+      background: var(--purple-banner); padding: 5rem 0;
+      position: relative; overflow: hidden;
+    }
+    /* ticket deco */
+    .kit::before, .kit::after {
+      content: "";
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 200px; height: 100px; opacity: .08;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'><rect x='2' y='2' width='196' height='96' rx='14' stroke='white' stroke-width='4' fill='none'/><line x1='66' y1='2' x2='66' y2='32' stroke='white' stroke-width='4'/><line x1='66' y1='68' x2='66' y2='98' stroke='white' stroke-width='4'/><circle cx='66' cy='50' r='8' stroke='white' stroke-width='4' fill='none'/></svg>") center/contain no-repeat;
+    }
+    .kit::before { left: -2rem; }
+    .kit::after  { right: -2rem; }
+    .kit-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.625rem, 3.5vw, 2.5rem);
+      text-transform: uppercase; color: #fff; letter-spacing: .04em;
+      text-align: center; margin-bottom: 3rem;
+      position: relative; z-index: 1;
+    }
+    .kit-body {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 3.5rem; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .kit-list { display: grid; gap: .75rem; }
+    .kit-item {
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 10px; padding: 1rem 1.375rem;
+      display: flex; align-items: center; gap: .875rem;
+      color: #fff; font-family: 'Nunito Sans', sans-serif;
+      font-weight: 700; font-size: .9375rem;
+    }
+    .kit-item-ico {
+      width: 36px; height: 36px; background: rgba(255,255,255,.15);
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.125rem; flex: none;
+    }
+    .kit-photo { border-radius: 16px; overflow: hidden; }
+    .kit-photo img { width: 100%; object-fit: cover; }
+    .kit-cta-wrap {
+      text-align: center; margin-top: 2.5rem; position: relative; z-index: 1;
+    }
+
+    /* ════════════════════════════════════════
+       6. BIENAL + LILIAN
+    ════════════════════════════════════════ */
+    .bienal { background: var(--black); padding: 5rem 0; }
+    .bienal-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      text-transform: uppercase; text-align: center;
+      line-height: 1.05; margin-bottom: 3.5rem; letter-spacing: .02em;
+    }
+    .bienal-title .l1 { color: var(--purple); display: block; }
+    .bienal-title .l2 { color: #fff; display: block; }
+    .bienal-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start;
+    }
+    .bienal-copy { color: rgba(255,255,255,.75); font-family: 'Inter', sans-serif; }
+    .bienal-copy p { font-size: .9375rem; line-height: 1.8; margin-bottom: 1rem; }
+    .bienal-copy p strong { color: #fff; }
+    .bienal-copy p:last-child { margin: 0; }
+    .bienal-sub-title {
+      font-family: 'Nunito Sans', sans-serif; font-weight: 800;
+      font-size: 1.0625rem; color: var(--purple);
+      margin: 1.75rem 0 .875rem; line-height: 1.35;
+    }
+    .bienal-photo { border-radius: 18px; overflow: hidden; background: var(--black-soft); }
+    .bienal-photo img { width: 100%; display: block; }
+
+    /* ════════════════════════════════════════
+       7. INGRESSOS
+    ════════════════════════════════════════ */
+    .ingressos { background: var(--grey-bg); padding: 5rem 0; }
+    .ingressos-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      text-transform: uppercase; color: var(--ink);
+      text-align: center; margin-bottom: .375rem; letter-spacing: .02em;
+    }
+    .ingressos-sub {
+      text-align: center; font-size: 1rem; color: var(--ink-soft);
+      margin-bottom: 3rem; font-family: 'Inter', sans-serif;
+    }
+    .ingressos-sub strong { color: var(--ink); }
+    .lotes-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; max-width: 54rem; margin: 0 auto;
+    }
+    .lote {
+      background: #fff; border: 1.5px solid rgba(0,0,0,.1);
+      border-radius: 18px; overflow: hidden;
+    }
+    .lote-header {
+      padding: 1rem 1.5rem; text-align: center;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 900;
+      font-size: .875rem; letter-spacing: .05em; text-transform: uppercase; color: #fff;
+    }
+    .lote-header.lc    { background: linear-gradient(135deg, var(--red-lc) 0%, #E8272D 100%); }
+    .lote-header.geral { background: var(--purple-dim); }
+    .lote-sub-header {
+      background: var(--black); color: #fff; text-align: center; padding: .625rem;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 800; font-size: .875rem;
+    }
+    .lote-body { padding: 1.5rem; }
+    .lote-items { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
+    .lote-items li {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .875rem; color: var(--ink-soft); font-family: 'Inter', sans-serif;
+    }
+    .lote-items li::before {
+      content: ""; width: 1.125rem; height: 1.125rem; flex: none;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect width='18' height='18' rx='4' fill='%237B3FC4'/><path d='M4.5 9.5l3 3 6-6' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    }
+    .lote-price-wrap { text-align: center; margin-bottom: 1.25rem; }
+    .lote-price {
+      font-family: 'Anton', sans-serif;
+      font-size: 3.25rem; color: var(--ink); line-height: 1; letter-spacing: .01em;
+    }
+    .lote-price .cur { font-family: 'Nunito Sans', sans-serif; font-size: 1.25rem; font-weight: 700; vertical-align: super; margin-right: .2rem; }
+    .btn-lc    { background: var(--purple-dim); color: #fff; }
+    .btn-geral { background: transparent; color: var(--purple-dim); border: 2px solid var(--purple-dim); }
+
+    /* ════════════════════════════════════════
+       8. FAQ
+    ════════════════════════════════════════ */
+    .faq-section { background: var(--black); padding: 5rem 0; }
+    .faq-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      text-transform: uppercase; color: var(--purple);
+      text-align: center; margin-bottom: 3rem; letter-spacing: .04em;
+    }
+    .faq { max-width: 44rem; margin: 0 auto; display: grid; gap: .625rem; }
+    details.qi {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px; padding: 0 1.375rem; transition: border-color .15s;
+    }
+    details.qi[open] { border-color: var(--purple); background: rgba(155,89,226,.08); }
+    details.qi summary {
+      list-style: none; cursor: pointer; padding: 1.125rem 0;
+      font-family: 'Nunito Sans', sans-serif; font-weight: 800;
+      font-size: .9375rem; color: #fff;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      line-height: 1.35;
+    }
+    details.qi summary::-webkit-details-marker { display: none; }
+    details.qi summary::after {
+      content: ""; width: 1.5rem; height: 1.5rem; flex: none;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='11' stroke='rgba(255,255,255,.3)' stroke-width='1.5' fill='none'/><path d='M8 11l4 4 4-4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>") center/contain no-repeat;
+      transition: transform .2s;
+    }
+    details.qi[open] summary::after {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='11' stroke='%239B59E2' stroke-width='1.5' fill='none'/><path d='M8 13l4-4 4 4' stroke='%239B59E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>");
+    }
+    details.qi p {
+      padding: 0 0 1.125rem; font-size: .9375rem;
+      color: rgba(255,255,255,.65); line-height: 1.75;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ════════════════════════════════════════
+       9. CTA FINAL
+    ════════════════════════════════════════ */
+    .cta-final {
+      position: relative; overflow: hidden;
+      background: var(--black); padding: 7rem 0; text-align: center;
+    }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: url('../vendaspre/assets/cta-bg.png') center/cover no-repeat;
+      opacity: .5;
+    }
+    .cta-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,15,.5), rgba(10,10,15,.7));
+    }
+    .cta-inner { position: relative; z-index: 2; }
+    .cta-final h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.625rem, 3.5vw, 2.875rem);
+      text-transform: uppercase; line-height: 1.1;
+      margin-bottom: 1.5rem; max-width: 24ch; margin-left: auto; margin-right: auto;
+      letter-spacing: .02em;
+    }
+    .cta-final h2 .l-purple { color: var(--purple); display: block; }
+    .cta-final h2 .l-white  { color: #fff; display: block; }
+    .cta-info {
+      font-size: 1rem; color: rgba(255,255,255,.75);
+      margin-bottom: 2.25rem; line-height: 1.6;
+      font-family: 'Inter', sans-serif;
+    }
+    .cta-info p { margin-bottom: .25rem; }
+
+    /* ════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════ */
+    footer {
+      padding: 2rem 0; text-align: center;
+      font-size: .8125rem; color: rgba(255,255,255,.3);
+      background: var(--black); border-top: 1px solid rgba(255,255,255,.06);
+      font-family: 'Inter', sans-serif;
+    }
+    footer a { color: var(--purple); }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .hero-photo-desktop { display: none; }
+      .hero-photo-mobile  { display: block; }
+      /* Mobile: escuro em cima (texto), foto visível embaixo */
+      .hero-overlay {
+        background: linear-gradient(
+          to bottom,
+          rgba(10,10,15,.88) 0%,
+          rgba(10,10,15,.6) 45%,
+          rgba(10,10,15,.3) 100%
+        );
+      }
+      .entender-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .entender-photos { grid-template-columns: repeat(3,1fr); }
+      .ph-wide { grid-column: auto; aspect-ratio: 3/4; }
+      .kit-body { grid-template-columns: 1fr; gap: 2.5rem; }
+      .bienal-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .lotes-grid { grid-template-columns: 1fr; max-width: 26rem; }
+    }
+    @media (max-width: 640px) {
+      .hero-content { padding: 5rem 0 4rem; }
+      .urgency-inner { justify-content: center; text-align: center; }
+      .urgency-left { flex-direction: column; align-items: center; }
+      .prog-item { flex-direction: column; gap: .5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     1. HERO
+══════════════════════════════════ -->
+<section class="hero" id="topo">
+  <div class="hero-photo-desktop" aria-hidden="true"></div>
+  <div class="hero-photo-mobile"  aria-hidden="true"></div>
+  <div class="hero-overlay"       aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero-content">
+      <h1>
+        <span class="l1">Imersão Escritores Admiráveis:</span>
+        <span class="l2">O livro é só o começo</span>
+      </h1>
+      <p class="hero-sub">
+        Um encontro presencial para escritores que querem entender como
+        transformar um livro em posicionamento, leitores, oportunidades e
+        carreira no mercado editorial.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <img src="../vendaspre/assets/Calendar.svg" alt="" aria-hidden="true" class="meta-ico">
+          <div class="txt"><strong>04 de setembro</strong></div>
+        </div>
+        <div class="hero-meta-item">
+          <img src="../vendaspre/assets/Icon (1).svg" alt="" aria-hidden="true" class="meta-ico">
+          <div class="txt">
+            <strong>São Paulo</strong>
+            <small>Ao lado da Bienal Internacional do Livro de SP.</small>
+          </div>
+        </div>
+      </div>
+      <a id="hero-cta" class="btn btn-purple" href="#ingressos">
+        Quero garantir minha vaga
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     2. URGENCY BANNER
+══════════════════════════════════ -->
+<div class="urgency">
+  <div class="container">
+    <div class="urgency-inner">
+      <div class="urgency-left">
+        <div class="vagas-badge" aria-hidden="true">VAGAS<br>LIMITADAS</div>
+        <p class="urgency-txt">Últimos dias da oferta especial de lote 1</p>
+      </div>
+      <a id="urgency-cta" class="btn btn-white-outline" href="#ingressos">
+        Quero me inscrever agora
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     3. UM DIA INTEIRO PARA ENTENDER
+══════════════════════════════════ -->
+<section class="entender" id="sobre">
+  <div class="container">
+    <h2 class="entender-title">Um dia inteiro para entender</h2>
+    <p class="entender-sub">que ninguém te contou sobre o <em>mercado do livro.</em></p>
+    <div class="entender-grid">
+      <div class="entender-card">
+        <p>O Brasil publica mais de 60 mil títulos por ano, mas a maioria desaparece em poucos meses — não por falta de qualidade, e sim porque escrever e construir uma carreira literária são desafios diferentes. A Imersão Escritores Admiráveis existe para o segundo desafio.</p>
+        <p>Em um único dia, você vai estar ao lado de autores, editores, profissionais de marketing e especialistas do mercado editorial — pessoas que vivem isso na prática e vão compartilhar o que realmente faz a diferença.</p>
+      </div>
+      <div class="entender-photos">
+        <div class="ph ph-wide">
+          <img src="../vendaspre/assets/image 1.png" alt="Palestrante">
+        </div>
+        <div class="ph ph-tall">
+          <img src="../vendaspre/assets/image 2.png" alt="Palestrante">
+        </div>
+        <div class="ph ph-tall">
+          <img src="../vendaspre/assets/image 3.png" alt="Palestrante">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     4. PROGRAMAÇÃO DA IMERSÃO
+══════════════════════════════════ -->
+<section class="prog" id="programacao">
+  <div class="container">
+    <h2 class="prog-title">Programação da imersão</h2>
+    <div class="prog-list">
+      <div class="prog-item">
+        <span class="prog-time">08h00 às 08h30</span>
+        <div class="prog-body"><h4>Credenciamento + recepção dos participantes</h4></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">08h30 às 09h00</span>
+        <div class="prog-body">
+          <h4>Comunicação que vende livros</h4>
+          <p>Com Eduardo Zugaib</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">09h15 às 10h00</span>
+        <div class="prog-body">
+          <h4>Inspiração de quem começou do zero e fez seu nome pela literatura</h4>
+          <p>Mediação por Marina Hadlich + Palestrantes a confirmar</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">10h15 às 10h45</span>
+        <div class="prog-body">
+          <h4>Agente literária: os melhores conselhos de uma das maiores caçadoras de escritores do Brasil</h4>
+          <p>Com Alessandra Ruiz</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">11h00 às 12h00</span>
+        <div class="prog-body">
+          <h4>O Livro Invisível: como metadados, ficha técnica e decisões editoriais determinam se você vende para além da capa</h4>
+          <p>Com André Fonseca, Cinthya Müller e Eduardo Cunha</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">12h00 às 13h30</span>
+        <div class="prog-body"><h4>Almoço e momento de networking</h4></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">14h45 às 15h30</span>
+        <div class="prog-body">
+          <h4>Editores: o que faz eles apostarem na sua obra?</h4>
+          <p>Com Paulo Tadeu + palestrantes a confirmar</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">15h30 às 16h00</span>
+        <div class="prog-body"><h4>Coffee Break</h4></div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">16h00 às 16h45</span>
+        <div class="prog-body">
+          <h4>Autopublicação e Amazon KDP: o que realmente faz alguns autores viverem da própria escrita</h4>
+          <p>Palestrantes a confirmar</p>
+        </div>
+      </div>
+      <div class="prog-item">
+        <span class="prog-time">16h45 às 17h30</span>
+        <div class="prog-body">
+          <h4>BookTok, influenciadores e comunidade: os novos caminhos que estão formando leitores e best-sellers</h4>
+          <p>Palestrantes a confirmar</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     5. TUDO QUE VOCÊ VAI RECEBER
+══════════════════════════════════ -->
+<section class="kit" id="incluso">
+  <div class="container">
+    <h2 class="kit-title">Tudo o que você vai receber no evento</h2>
+    <div class="kit-body">
+      <div class="kit-list">
+        <div class="kit-item"><div class="kit-item-ico">🎒</div>Kit de boas-vindas</div>
+        <div class="kit-item"><div class="kit-item-ico">🏷️</div>Credencial do evento</div>
+        <div class="kit-item"><div class="kit-item-ico">🍽️</div>Almoço completo</div>
+        <div class="kit-item"><div class="kit-item-ico">☕</div>Coffee break incluso</div>
+        <div class="kit-item"><div class="kit-item-ico">📋</div>Acesso à programação completa da imersão</div>
+      </div>
+      <div class="kit-photo">
+        <img src="../vendaspre/assets/Kit Boas Vindas.png" alt="Kit do evento — sacola, camiseta, caderneta, credencial e acessórios Escritores Admiráveis">
+      </div>
+    </div>
+    <div class="kit-cta-wrap">
+      <a id="kit-cta" class="btn btn-dark" href="#ingressos">
+        Quero meu ingresso
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     6. BIENAL + LILIAN
+══════════════════════════════════ -->
+<section class="bienal" id="lilian">
+  <div class="container">
+    <h2 class="bienal-title">
+      <span class="l1">No mesmo dia da abertura</span>
+      <span class="l2">da Bienal do Livro de São Paulo</span>
+    </h2>
+    <div class="bienal-grid">
+      <div class="bienal-copy">
+        <p>A Imersão Escritores Admiráveis acontece no Holiday Inn Parque Anhembi, ao lado da Bienal.<br>
+        Isso significa que você poderá viver dois movimentos importantes no mesmo dia: participar de uma <strong>imersão focada em carreira literária</strong> e, depois, entrar no maior evento do mercado editorial brasileiro <strong>com uma nova visão sobre o que deseja construir como autor</strong>.</p>
+        <p class="bienal-sub-title">Imersão conduzida pela CEO da agência que mais divulga livros no Brasil</p>
+        <p>Autora best-seller e fundadora do <strong>Grupo LC, Lilian Cardoso</strong> é a mente por trás da Imersão Escritores Admiráveis. De romances a títulos técnicos, de novos autores a best-sellers, trabalhou com a sua equipe em mais de <strong>4 mil campanhas literárias</strong>. Em 2019, saiu dos bastidores de lançamentos para realizar um sonho antigo: criar o curso <strong>Escritores Admiráveis</strong>. É reconhecida também pelos workshops e eventos on-line gratuitos que já impactaram <strong>mais de 100 mil autores</strong>.</p>
+        <p>Na imersão, ela reúne ao seu redor um time de convidados especiais — <strong>do editorial ao marketing</strong> — para que você saia do dia com total clareza e direção de quais passos dar na sua carreira literária.</p>
+      </div>
+      <div class="bienal-photo">
+        <img src="../vendaspre/assets/lilian-palco.png" alt="Lilian Cardoso no palco">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     7. INGRESSOS
+══════════════════════════════════ -->
+<section class="ingressos" id="ingressos">
+  <div class="container">
+    <h2 class="ingressos-title">Garanta sua vaga no 1º Lote</h2>
+    <p class="ingressos-sub">O menor preço disponível e por <strong>tempo limitado</strong></p>
+    <div class="lotes-grid">
+      <div class="lote">
+        <div class="lote-header lc">Exclusivo — Alunos LC &amp; Clientes LC</div>
+        <div class="lote-sub-header">1º Lote</div>
+        <div class="lote-body">
+          <ul class="lote-items">
+            <li>Imersão presencial completa — dia inteiro</li>
+            <li>Kit de boas-vindas + credencial</li>
+            <li>Almoço completo incluso</li>
+            <li>Coffee break incluso</li>
+            <li>Acesso aos convidados e palestrantes</li>
+          </ul>
+          <div class="lote-price-wrap">
+            <div class="lote-price"><span class="cur">R$</span>590</div>
+          </div>
+          <a id="checkout-btn-alunos" class="btn btn-lc btn-full" href="#">
+            Quero garantir a minha vaga
+          </a>
+        </div>
+      </div>
+      <div class="lote">
+        <div class="lote-header geral">Público Geral</div>
+        <div class="lote-sub-header">1º Lote</div>
+        <div class="lote-body">
+          <ul class="lote-items">
+            <li>Imersão presencial completa — dia inteiro</li>
+            <li>Kit de boas-vindas + credencial</li>
+            <li>Almoço completo incluso</li>
+            <li>Coffee break incluso</li>
+            <li>Acesso aos convidados e palestrantes</li>
+          </ul>
+          <div class="lote-price-wrap">
+            <div class="lote-price"><span class="cur">R$</span>750</div>
+          </div>
+          <a id="checkout-btn-publico" class="btn btn-geral btn-full" href="#">
+            Quero garantir a minha vaga
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     8. FAQ
+══════════════════════════════════ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <h2 class="faq-title">Perguntas frequentes</h2>
+    <div class="faq">
+      <details class="qi" open>
+        <summary>O ingresso inclui a entrada da Bienal do Livro?</summary>
+        <p>Não. A Imersão Escritores Admiráveis e a Bienal Internacional do Livro de São Paulo são eventos independentes. Seu ingresso dá acesso somente à programação da imersão no Holiday Inn Parque Anhembi, com almoço, coffee break, kit de boas-vindas e credencial inclusos.<br><br>
+        A entrada da Bienal é vendida separadamente, no site oficial do evento. Como os dois acontecem lado a lado, no mesmo dia, você pode aproveitar para visitar a Bienal depois da Imersão.</p>
+      </details>
+      <details class="qi" open>
+        <summary>Não sou aluno(a) dos cursos da Lilian. Posso participar da imersão?</summary>
+        <p>Sim. O evento também é aberto para não alunos. Nesse caso, basta selecionar a opção "Público geral" no momento da compra do ingresso.</p>
+      </details>
+      <details class="qi">
+        <summary>Onde o evento acontecerá?</summary>
+        <p>O evento será realizado no Hotel Holiday Inn Anhembi, em São Paulo.</p>
+      </details>
+      <details class="qi">
+        <summary>O ingresso inclui hospedagem?</summary>
+        <p>Não. Os custos com hospedagem e locomoção são de responsabilidade dos participantes. Existem outras opções próximas, como: Golden Tower Express Anhembi, Ramada Encore Centro Tiradentes, ibis São Paulo Barra Funda e Novotel São Paulo Center Norte.<br><br>
+        A LC não possui parceria com esses hotéis e não se responsabiliza pelos serviços prestados por eles. As opções acima são apenas sugestões de hospedagem próximas ao local do evento.</p>
+      </details>
+      <details class="qi">
+        <summary>Posso participar on-line?</summary>
+        <p>Não. A imersão será realizada exclusivamente de forma presencial e não terá transmissão on-line.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     9. CTA FINAL
+══════════════════════════════════ -->
+<section class="cta-final">
+  <div class="cta-bg" aria-hidden="true"></div>
+  <div class="cta-overlay" aria-hidden="true"></div>
+  <div class="container cta-inner">
+    <h2>
+      <span class="l-purple">Seu livro pode abrir portas, mas alguém precisa te ensinar como atravessá-las.</span>
+      <span class="l-white">A imersão é esse caminho.</span>
+    </h2>
+    <div class="cta-info">
+      <p>04 de setembro • 8h às 18h</p>
+      <p>Holiday Inn Anhembi (SP) • Poucas vagas</p>
+    </div>
+    <a id="final-cta" class="btn btn-purple" href="#ingressos">
+      Quero participar desta experiência
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Escritores Admiráveis · Equipe LC ·
+      <a href="https://escritoresadmiraveis.com.br/" target="_blank" rel="noopener">escritoresadmiraveis.com.br</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ════════════════════════════
+     ATTRIBUTION — Sympla
+════════════════════════════ -->
+<script>
+(function(){
+  /* ── CONFIGURE AQUI ── */
+  var URL_ALUNOS  = 'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056';
+  var URL_PUBLICO = 'https://www.sympla.com.br/evento/imersao-escritores-admiraveis/3386056';
+  /* ──────────────────── */
+
+  var trk = sessionStorage.getItem('krob_trk');
+  if(!trk){ trk=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'-'+Math.random().toString(36).slice(2); sessionStorage.setItem('krob_trk',trk); }
+
+  var p=new URLSearchParams(location.search);
+  var utm={src:p.get('utm_source')||'',med:p.get('utm_medium')||'',cmp:p.get('utm_campaign')||'',cnt:p.get('utm_content')||'',trm:p.get('utm_term')||''};
+
+  fetch('/checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({trk,utm_source:utm.src,utm_medium:utm.med,utm_campaign:utm.cmp,utm_content:utm.cnt,utm_term:utm.trm,event_source_url:location.href})}).catch(function(){});
+
+  function fire(){
+    var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';
+    try{if(window.fbq)fbq('track','InitiateCheckout',{},{eventID:id});}catch(_){}
+    try{navigator.sendBeacon('/tracker',new Blob([JSON.stringify({event_name:'InitiateCheckout',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{}})],{type:'application/json'}));}catch(_){}
+  }
+
+  function dest(base){
+    var qs=new URLSearchParams();
+    if(utm.src) qs.set('utm_source',utm.src);
+    if(utm.med) qs.set('utm_medium',utm.med);
+    if(utm.cmp) qs.set('utm_campaign',utm.cmp);
+    if(utm.cnt) qs.set('utm_content',utm.cnt);
+    if(utm.trm) qs.set('utm_term',utm.trm);
+    qs.set('ref',trk);
+    return base+(base.includes('?')?'&':'?')+qs.toString();
+  }
+
+  function wire(id,url){
+    var el=document.getElementById(id); if(!el)return;
+    el.addEventListener('click',function(e){e.preventDefault();fire();setTimeout(function(){location.href=dest(url);},80);});
+  }
+
+  wire('hero-cta',            URL_PUBLICO);
+  wire('urgency-cta',         URL_PUBLICO);
+  wire('kit-cta',             URL_PUBLICO);
+  wire('checkout-btn-alunos', URL_ALUNOS);
+  wire('checkout-btn-publico',URL_PUBLICO);
+  wire('final-cta',           URL_PUBLICO);
+})();
+</script>
+
+</body>
+</html>

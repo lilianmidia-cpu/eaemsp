@@ -157,12 +157,13 @@
       align-items: center;
     }
     .hero-content { max-width: 42rem; min-width: 0; }
-    .hero-title { color: var(--purple); margin-bottom: 1.25rem; overflow-wrap: break-word; }
+    h1.hero-title { color: var(--purple); margin-bottom: 1.25rem; overflow-wrap: break-word; line-height: 1.18; }
     .hero-title .accent { color: var(--purple); }
     .hero-title .light { color: #fff; }
     .hero-sub {
       font-size: 1.12rem; line-height: 1.55;
-      color: rgba(255,255,255,.78);
+      font-weight: 500;
+      color: rgba(255,255,255,.88);
       max-width: 32rem;
       margin-bottom: 1.75rem;
     }
@@ -232,6 +233,44 @@
       padding: .65rem 1.15rem; font-size: .75rem;
     }
     .sticky-offer .btn:hover { background: var(--purple-pale); transform: translateY(-1px); }
+    /* Barra de cronômetro no topo da página */
+    .countdown-bar {
+      background: var(--black);
+      color: #fff;
+      padding: .7rem 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.25rem; flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .countdown-bar-text {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--purple);
+    }
+    /* Cronômetro de virada de lote */
+    .countdown {
+      display: flex; align-items: center; gap: .4rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .countdown-box {
+      display: flex; flex-direction: column; align-items: center;
+      background: rgba(0,0,0,.22);
+      border-radius: 8px;
+      padding: .3rem .5rem; min-width: 44px;
+    }
+    .countdown-num {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.25rem; line-height: 1; color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    .countdown-label {
+      font-size: .55rem; text-transform: uppercase;
+      letter-spacing: .06em; color: rgba(255,255,255,.8);
+      margin-top: 2px;
+    }
+    .countdown-sep { font-family: 'Anton', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,.6); }
 
     /* ═══════════════════════════════════════════════════
        SEÇÃO "UM DIA INTEIRO"
@@ -293,7 +332,7 @@
     .perfil-title {
       font-family: 'Anton', sans-serif;
       color: #fff;
-      font-size: 36px;
+      font-size: 26px;
       line-height: 1.2;
       letter-spacing: .05em;
       margin-bottom: .85rem;
@@ -436,6 +475,20 @@
       grid-template-columns: repeat(2, 1fr);
       max-width: 60rem; margin: 0 auto;
     }
+    .vagas-limitadas {
+      display: inline-block;
+      margin-top: 1rem;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: .5rem 1.1rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow-red);
+    }
     .ticket-card {
       background: #fff;
       border-radius: var(--rxl);
@@ -516,10 +569,9 @@
     }
     .faq-grid {
       position: relative; z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 3rem;
-      align-items: start;
+      display: block;
+      max-width: 52rem;
+      margin: 0 auto;
     }
     .faq-title {
       font-family: 'Anton', Impact, sans-serif;
@@ -529,9 +581,8 @@
       line-height: 55.7px;
       color: var(--purple);
       letter-spacing: 0;
-      position: sticky;
-      top: 6rem;
-      margin: 0;
+      text-align: center;
+      margin: 0 0 1.75rem 0;
     }
     @media (max-width: 900px) { .faq-title { font-size: 40px; line-height: 42px; } }
     .faq-cards { display: flex; flex-direction: column; gap: 1rem; }
@@ -557,6 +608,8 @@
       color: #fff;
     }
     .faq-item summary::-webkit-details-marker { display: none; }
+    /* Garante a primeira letra de toda pergunta sempre maiúscula */
+    .faq-item summary::first-letter { text-transform: uppercase; }
     .faq-item summary::after {
       content: '';
       margin-left: auto;
@@ -662,24 +715,29 @@
 
       /* Hero — no mobile a manchete vem primeiro e a foto vai pra baixo do texto */
       .hero { padding: 2.5rem 0 0 0 !important; }
+      /* Escurece o fundo no celular p/ aumentar contraste com as letras brancas */
+      .hero-bg { filter: brightness(.42); }
       .hero-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
-      .hero-content { order: 1; text-align: center; margin: 0 auto; }
-      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-content { order: 1; text-align: left; margin: 0; }
+      .hero-sub { margin-left: 0; margin-right: 0; margin-bottom: 1.1rem; }
       .hero-meta { text-align: left; }
       .hero-photo { order: 2; min-height: auto; align-self: auto; margin-bottom: 0; display: block; line-height: 0; font-size: 0; overflow: hidden; }
       .hero-photo picture { display: block; line-height: 0; font-size: 0; }
-      .hero-photo img { display: block; max-height: none; width: 100%; height: auto; animation: none; vertical-align: bottom; filter: none; }
+      .hero-photo img { display: block; width: auto; max-width: 100%; height: auto; max-height: 70vh; margin: 0 auto; animation: none; vertical-align: bottom; filter: none; }
       .hero-meta {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
-        padding: 1rem 1.1rem;
+        gap: .6rem;
+        padding: .8rem 1rem;
+        margin-bottom: 1.1rem;
       }
       .hero-meta-item { width: 100%; }
-      .hero-title { font-size: 2.25rem; }
+      h1.hero-title { font-size: 2.25rem; line-height: 1.32; }
+      /* Botão da 1ª seção centralizado no celular */
+      #hero-cta-link { display: flex; width: fit-content; margin-left: auto; margin-right: auto; }
 
       /* Sticky offer — empilha em mobile */
       .sticky-offer {
@@ -690,6 +748,8 @@
       }
       .sticky-offer .offer-title { font-size: 1rem; text-align: center; }
       .sticky-offer .btn { width: 100%; max-width: 280px; justify-content: center; }
+      .countdown-box { min-width: 40px; padding: .25rem .4rem; }
+      .countdown-num { font-size: 1.1rem; }
 
       /* Seções de conteúdo */
       .two-cards { gap: 1.25rem; }
@@ -698,7 +758,7 @@
 
       .perfis-grid { grid-template-columns: 1fr; gap: 1.75rem; }
       .perfil { padding: 0; text-align: center; }
-      .perfil-title { font-size: 26px; letter-spacing: .04em; }
+      .perfil-title { font-size: 22px; letter-spacing: .04em; }
 
       .programa-list { gap: 1rem; }
       .programa-item {
@@ -742,14 +802,17 @@
     /* Celular pequeno */
     @media (max-width: 480px) {
       .container { padding: 0 1rem; }
-      .hero { padding: 1.5rem 0 0 0 !important; }
-      .hero-title { font-size: 1.95rem; }
+      .hero { padding: 3rem 0 0 0 !important; }
+      h1.hero-title { font-size: 1.95rem; line-height: 1.32; }
       .hero-sub { font-size: 1.12rem; }
       .hero-meta-text .meta-label { font-size: .95rem; }
-      .hero-photo img { max-height: 300px; width: auto; max-width: 100%; }
+      .hero-photo img { width: auto; max-width: 100%; height: auto; max-height: 60vh; margin: 0 auto; }
 
       .section, .ingresso-inclui, .cta-final { padding: 3rem 0; }
       h2.display { font-size: 1.55rem; }
+      /* Headline da programação: tira a quebra fixa no celular p/ fluir em 3 linhas equilibradas */
+      .assuntos-head br { display: none; }
+      .assuntos-head { text-wrap: balance; }
       .section-head p { font-size: 1.12rem; }
 
       .two-cards { grid-template-columns: 1fr; gap: 2rem; }
@@ -859,15 +922,28 @@
        AJUSTES DO PRINT + ANIMAÇÕES NEURO
     ═══════════════════════════════════════════════════ */
 
-    @media (min-width: 881px) { .hero { padding: 4.5rem 0 5rem 0; } }
+    @media (min-width: 881px) {
+      .hero { padding: 2.25rem 0 3rem 0; }
+      .hero-photo { min-height: 520px; margin-bottom: -3rem; }
+      .hero-photo img { max-height: 600px; }
+    }
     @media (min-width: 1200px) {
-      .hero { padding: 5rem 0 5.5rem 0; }
-      .hero-photo { min-height: 720px; }
-      .hero-photo img { max-height: 880px; }
+      .hero { padding: 2.5rem 0 3.5rem 0; }
+      .hero-photo { min-height: 560px; margin-bottom: -3.5rem; }
+      .hero-photo img { max-height: 660px; }
     }
     @media (min-width: 1600px) {
-      .hero-photo { min-height: 780px; }
-      .hero-photo img { max-height: 960px; }
+      .hero-photo { min-height: 600px; }
+      .hero-photo img { max-height: 720px; }
+    }
+
+    /* Desktop: espaços verticais mais enxutos p/ cada bloco caber melhor na tela */
+    @media (min-width: 881px) {
+      .section { padding: 2.75rem 0; }
+      .section-head { margin-bottom: 2rem; }
+      .ingresso-inclui { padding: 3.25rem 0; }
+      .cta-final { padding: 3.5rem 0; }
+      .faq-section { padding: 2.75rem 0; }
     }
 
     .btn-purple { position: relative; overflow: hidden; isolation: isolate; }
@@ -945,7 +1021,7 @@
       font-family: 'Anton', Impact, sans-serif;
       text-transform: uppercase;
       font-size: 1.25rem;
-      letter-spacing: .01em;
+      letter-spacing: .08em;
       color: #fff;
       margin-bottom: .4rem;
       line-height: 1.1;
@@ -969,6 +1045,22 @@
   </style>
 </head>
 <body>
+
+<!-- ════════════════════════════════════
+     BARRA DE CRONÔMETRO (topo da página)
+════════════════════════════════════ -->
+<div class="countdown-bar">
+  <span class="countdown-bar-text">⏳ Mudança de lote sexta-feira</span>
+  <div class="countdown" id="countdown" data-deadline="2026-06-05T23:59:00-03:00" aria-label="Tempo até a mudança de lote">
+    <div class="countdown-box"><span class="countdown-num" id="cd-days">00</span><span class="countdown-label">dias</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-box"><span class="countdown-num" id="cd-hours">00</span><span class="countdown-label">horas</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-box"><span class="countdown-num" id="cd-mins">00</span><span class="countdown-label">min</span></div>
+    <span class="countdown-sep">:</span>
+    <div class="countdown-box"><span class="countdown-num" id="cd-secs">00</span><span class="countdown-label">seg</span></div>
+  </div>
+</div>
 
 <!-- ════════════════════════════════════
      HERO
@@ -1083,7 +1175,7 @@
 <section class="section section-grey">
   <div class="container">
     <div class="section-head reveal">
-      <h2 class="display">Os assuntos que ninguém discute<br>abertamente no mercado editorial:</h2>
+      <h2 class="display assuntos-head">Os assuntos que ninguém discute <br>abertamente no mercado editorial:</h2>
     </div>
 
     <div class="programa-list reveal-stagger">
@@ -1153,13 +1245,70 @@
 </section>
 
 <!-- ════════════════════════════════════
+     INGRESSOS — 2 cards
+════════════════════════════════════ -->
+<section id="ingressos" class="section section-grey">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="display">Garanta sua vaga no 1º lote</h2>
+      <p>O menor preço disponível e por <strong>tempo limitado</strong></p>
+      <div class="vagas-limitadas">🔥 Vagas limitadas</div>
+    </div>
+
+    <div class="tickets-wrap reveal-stagger">
+      <!-- TICKET 1: ALUNOS LC -->
+      <div class="ticket-card">
+        <div class="ticket-header ticket-header-red">Exclusivo — Alunos LC &amp; Clientes LC</div>
+        <div class="ticket-lote">1º Lote</div>
+        <div class="ticket-body">
+          <ul>
+            <li>Imersão presencial completa — dia inteiro</li>
+            <li>Kit de boas-vindas + credencial</li>
+            <li>Almoço completo incluso</li>
+            <li>Coffee break incluso</li>
+            <li>Acesso aos convidados e palestrantes</li>
+          </ul>
+        </div>
+        <div class="ticket-price">
+          <small>R$</small><strong>590</strong>
+        </div>
+        <div class="ticket-cta">
+          <button id="checkout-btn-alunos" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
+        </div>
+      </div>
+
+      <!-- TICKET 2: PÚBLICO GERAL -->
+      <div class="ticket-card">
+        <div class="ticket-header ticket-header-purple">Público geral</div>
+        <div class="ticket-lote">1º Lote</div>
+        <div class="ticket-body">
+          <ul>
+            <li>Imersão presencial completa — dia inteiro</li>
+            <li>Kit de boas-vindas + credencial</li>
+            <li>Almoço completo incluso</li>
+            <li>Coffee break incluso</li>
+            <li>Acesso aos convidados e palestrantes</li>
+          </ul>
+        </div>
+        <div class="ticket-price">
+          <small>R$</small><strong>750</strong>
+        </div>
+        <div class="ticket-cta">
+          <button id="checkout-btn-publico" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
      FAQ (design Brenda)
 ════════════════════════════════════ -->
 <section class="faq-section">
   <div class="container">
     <div class="faq-grid">
       <div class="reveal">
-        <h2 class="faq-title">Perguntas<br>frequentes</h2>
+        <h2 class="faq-title">Perguntas frequentes</h2>
       </div>
       <div class="faq-cards reveal-stagger">
 
@@ -1213,62 +1362,6 @@
 </section>
 
 <!-- ════════════════════════════════════
-     INGRESSOS — 2 cards
-════════════════════════════════════ -->
-<section id="ingressos" class="section section-grey">
-  <div class="container">
-    <div class="section-head reveal">
-      <h2 class="display">Garanta sua vaga no 1º lote</h2>
-      <p>O menor preço disponível e por <strong>tempo limitado</strong></p>
-    </div>
-
-    <div class="tickets-wrap reveal-stagger">
-      <!-- TICKET 1: ALUNOS LC -->
-      <div class="ticket-card">
-        <div class="ticket-header ticket-header-red">Exclusivo — Alunos LC &amp; Clientes LC</div>
-        <div class="ticket-lote">1º Lote</div>
-        <div class="ticket-body">
-          <ul>
-            <li>Imersão presencial completa — dia inteiro</li>
-            <li>Kit de boas-vindas + credencial</li>
-            <li>Almoço completo incluso</li>
-            <li>Coffee break incluso</li>
-            <li>Acesso aos convidados e palestrantes</li>
-          </ul>
-        </div>
-        <div class="ticket-price">
-          <small>R$</small><strong>590</strong>
-        </div>
-        <div class="ticket-cta">
-          <button id="checkout-btn-alunos" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
-        </div>
-      </div>
-
-      <!-- TICKET 2: PÚBLICO GERAL -->
-      <div class="ticket-card">
-        <div class="ticket-header ticket-header-purple">Público geral</div>
-        <div class="ticket-lote">1º Lote</div>
-        <div class="ticket-body">
-          <ul>
-            <li>Imersão presencial completa — dia inteiro</li>
-            <li>Kit de boas-vindas + credencial</li>
-            <li>Almoço completo incluso</li>
-            <li>Coffee break incluso</li>
-            <li>Acesso aos convidados e palestrantes</li>
-          </ul>
-        </div>
-        <div class="ticket-price">
-          <small>R$</small><strong>750</strong>
-        </div>
-        <div class="ticket-cta">
-          <button id="checkout-btn-publico" class="btn btn-purple btn-lg" style="width:100%;justify-content:center">Quero garantir a minha vaga</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════
      CTA FINAL
 ════════════════════════════════════ -->
 <section class="cta-final">
@@ -1310,6 +1403,32 @@
      JS: scroll reveal + sticky CTA + tracking + checkout direto pra Sympla
 ════════════════════════════════════ -->
 <script>
+// ============== Cronômetro de virada de lote ==============
+(function(){
+  var el = document.getElementById('countdown');
+  if(!el) return;
+  var deadline = new Date(el.getAttribute('data-deadline')).getTime();
+  var d = document.getElementById('cd-days'),
+      h = document.getElementById('cd-hours'),
+      m = document.getElementById('cd-mins'),
+      s = document.getElementById('cd-secs');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var diff = deadline - Date.now();
+    if(diff <= 0){
+      d.textContent = h.textContent = m.textContent = s.textContent = '00';
+      return; // chegou na virada de lote
+    }
+    var sec = Math.floor(diff / 1000);
+    d.textContent = pad(Math.floor(sec / 86400));
+    h.textContent = pad(Math.floor((sec % 86400) / 3600));
+    m.textContent = pad(Math.floor((sec % 3600) / 60));
+    s.textContent = pad(sec % 60);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
 // ============== Rastreamento de botões ==============
 (function(){
   function trackBtn(btnId) {
