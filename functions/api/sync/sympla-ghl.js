@@ -109,6 +109,22 @@ export async function onRequestGet(context) {
       utmSummary = { by_utm_source_approved: bySource, google_orders: googleOrders };
     }
 
+    let creativeSummary;
+    if (url.searchParams.get('creative_summary') === '1') {
+      const byContent = {};
+      for (const o of orders) {
+        if (o.order_status !== 'APPROVED') continue;
+        const content = (o.utm && o.utm.utm_content) ? o.utm.utm_content : 'sem_utm_content';
+        if (!byContent[content]) {
+          byContent[content] = { vendas: 0, utm_source: o.utm && o.utm.utm_source, utm_campaign: o.utm && o.utm.utm_campaign };
+        }
+        byContent[content].vendas++;
+      }
+      creativeSummary = Object.entries(byContent)
+        .map(([utm_content, v]) => ({ utm_content, ...v }))
+        .sort((a, b) => b.vendas - a.vendas);
+    }
+
     // Debug: dump the raw shape of the first order (and its participants) to
     // check whether Sympla exposes any custom-form / tracking field we could
     // use for real UTM attribution. Temporary — remove once resolved.
@@ -130,6 +146,7 @@ export async function onRequestGet(context) {
       by_status: byStatus,
       ...(recent ? { recent } : {}),
       ...(utmSummary ? { utm_summary: utmSummary } : {}),
+      ...(creativeSummary ? { creative_summary: creativeSummary } : {}),
       ...(rawOrder ? { raw_order: rawOrder, raw_participants: rawParticipants } : {}),
       note: 'Diagnóstico só da primeira página (até 200 pedidos, ordenada por mais recente) — não escreve no D1 nem chama o GHL.',
     });
