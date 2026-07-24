@@ -84,6 +84,7 @@ export async function onRequestGet(context) {
           buyer_email: o.buyer_email,
           order_status: o.order_status,
           updated_date: o.updated_date,
+          utm: o.utm,
         }))
       : undefined;
 
