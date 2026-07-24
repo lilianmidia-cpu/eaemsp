@@ -88,6 +88,27 @@ export async function onRequestGet(context) {
         }))
       : undefined;
 
+    let utmSummary;
+    if (url.searchParams.get('utm_summary') === '1') {
+      const bySource = {};
+      const googleOrders = [];
+      for (const o of orders) {
+        if (o.order_status !== 'APPROVED') continue;
+        const source = (o.utm && o.utm.utm_source) ? o.utm.utm_source : 'sem_utm';
+        bySource[source] = (bySource[source] || 0) + 1;
+        if (source === 'google') {
+          googleOrders.push({
+            buyer_name: [o.buyer_first_name, o.buyer_last_name].filter(Boolean).join(' '),
+            buyer_email: o.buyer_email,
+            updated_date: o.updated_date,
+            utm_campaign: o.utm.utm_campaign,
+            utm_medium: o.utm.utm_medium,
+          });
+        }
+      }
+      utmSummary = { by_utm_source_approved: bySource, google_orders: googleOrders };
+    }
+
     // Debug: dump the raw shape of the first order (and its participants) to
     // check whether Sympla exposes any custom-form / tracking field we could
     // use for real UTM attribution. Temporary — remove once resolved.
@@ -108,6 +129,7 @@ export async function onRequestGet(context) {
       orders_page_1: orders.length,
       by_status: byStatus,
       ...(recent ? { recent } : {}),
+      ...(utmSummary ? { utm_summary: utmSummary } : {}),
       ...(rawOrder ? { raw_order: rawOrder, raw_participants: rawParticipants } : {}),
       note: 'Diagnóstico só da primeira página (até 200 pedidos, ordenada por mais recente) — não escreve no D1 nem chama o GHL.',
     });
