@@ -87,6 +87,19 @@ export async function onRequestGet(context) {
         }))
       : undefined;
 
+    // Debug: dump the raw shape of the first order (and its participants) to
+    // check whether Sympla exposes any custom-form / tracking field we could
+    // use for real UTM attribution. Temporary — remove once resolved.
+    let rawOrder, rawParticipants;
+    if (url.searchParams.get('raw') === '1' && orders[0]) {
+      rawOrder = orders[0];
+      const pResp = await symplaFetch(
+        env.SYMPLA_TOKEN,
+        `${SYMPLA_API}/events/${eventId}/orders/${orders[0].id}/participants`
+      );
+      rawParticipants = pResp.data || pResp;
+    }
+
     return json({
       ok: true,
       event_id: eventId,
@@ -94,6 +107,7 @@ export async function onRequestGet(context) {
       orders_page_1: orders.length,
       by_status: byStatus,
       ...(recent ? { recent } : {}),
+      ...(rawOrder ? { raw_order: rawOrder, raw_participants: rawParticipants } : {}),
       note: 'Diagnóstico só da primeira página (até 200 pedidos, ordenada por mais recente) — não escreve no D1 nem chama o GHL.',
     });
   } catch (err) {
