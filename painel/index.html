@@ -3,221 +3,522 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Painel · Meta Ads</title>
+  <title>Painel · Tráfego</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/painel/_shared/app.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css?v=3">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+  <style>
+    input[type="date"] {
+      font-family: var(--mono); font-size: .8rem;
+      padding: .38rem .65rem; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); cursor: pointer; outline: none;
+      transition: border-color .15s;
+    }
+    input[type="date"]:focus { border-color: var(--accent); }
+    .badge {
+      display: inline-block; padding: .15rem .55rem; border-radius: 999px;
+      font-size: .7rem; font-weight: 700;
+    }
+    .badge-meta    { background: rgba(24,119,242,.12); color: #1877F2; }
+    .badge-google  { background: rgba(66,133,244,.12); color: #3367D6; }
+    .badge-organic { background: var(--green-dim); color: var(--green); }
+    .badge-direct  { background: var(--surface-alt); color: var(--text-muted); }
+    .badge-other   { background: var(--purple-dim); color: var(--purple); }
+    .charts-row {
+      display: grid; grid-template-columns: 1fr 280px; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    @media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
   <div id="painel-root"></div>
 
   <template id="content-tpl">
     <div class="page-head fade-up">
-      <div class="acct-badge"><span class="dot" id="connDot"></span><span id="connTxt">Verificando conexão…</span></div>
-      <h1 class="title">Meta Ads</h1>
-      <div class="subtitle">Relatório geral da conta</div>
+      <div class="acct-badge"><span class="dot"></span>Dados do site</div>
+      <h1 class="title">Tráfego</h1>
+      <div class="subtitle">Origem, dispositivo e volume de visitantes</div>
     </div>
 
-    <div class="toolbar fade-up" id="rangeBar"></div>
-
-    <div id="notConnectedAlert" class="alert fade-up" style="display:none">
-      <span class="label">Não conectado.</span>
-      Os números estão zerados porque o Meta Ads ainda não foi vinculado. Veja o
-      <a href="/PASSO_A_PASSO.md" style="color:var(--accent);text-decoration:underline">passo-a-passo</a>
-      pra ligar o token (sem precisar mexer no código).
+    <!-- Filtro de datas -->
+    <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:1.5rem">
+      <button class="range-btn" data-days="0">Hoje</button>
+      <button class="range-btn" data-days="7">7 dias</button>
+      <button class="range-btn active" data-days="30">30 dias</button>
+      <button class="range-btn" data-days="90">90 dias</button>
+      <button class="range-btn" data-days="-1">Tudo</button>
+      <span style="color:var(--text-muted);font-size:.85rem;margin:0 .25rem">ou</span>
+      <input type="date" id="dtStart">
+      <span style="color:var(--text-muted);font-size:.85rem">até</span>
+      <input type="date" id="dtEnd">
+      <button class="range-btn" id="btnAplicar" style="font-weight:800">Aplicar</button>
+      <span style="color:var(--border);font-size:.85rem;margin:0 .1rem">|</span>
+      <button class="range-btn active" id="btnBR" title="Mostrar só acessos do Brasil">🇧🇷 Só Brasil</button>
     </div>
 
+    <!-- KPIs -->
     <section class="kpi-grid fade-up">
       <div class="card">
-        <div class="kpi-label">Valor Usado</div>
-        <div class="kpi-value mono amber" id="kpi-spend">—</div>
-        <div class="kpi-sub">Investimento total</div>
+        <div class="kpi-label">Total de visitas</div>
+        <div class="kpi-value mono accent" id="kpiTotal">—</div>
+        <div class="kpi-sub">Sessões únicas</div>
       </div>
       <div class="card">
-        <div class="kpi-label">Alcance</div>
-        <div class="kpi-value mono accent" id="kpi-reach">—</div>
-        <div class="kpi-sub">Pessoas únicas</div>
+        <div class="kpi-label">Visitantes únicos</div>
+        <div class="kpi-value mono green" id="kpiUniq">—</div>
+        <div class="kpi-sub">IPs distintos</div>
       </div>
       <div class="card">
-        <div class="kpi-label">CTR</div>
-        <div class="kpi-value mono green" id="kpi-ctr">—</div>
-        <div class="kpi-sub">Cliques no link / imp.</div>
+        <div class="kpi-label">Vindo do Meta</div>
+        <div class="kpi-value mono" style="color:#1877F2" id="kpiMeta">—</div>
+        <div class="kpi-sub">Com fbclid ou utm Meta</div>
       </div>
       <div class="card">
-        <div class="kpi-label">CPM</div>
-        <div class="kpi-value mono dim" id="kpi-cpm">—</div>
-        <div class="kpi-sub">Custo por mil impressões</div>
+        <div class="kpi-label">Vindo do Google</div>
+        <div class="kpi-value mono" style="color:#3367D6" id="kpiGoogle">—</div>
+        <div class="kpi-sub">Com gclid ou utm Google</div>
       </div>
       <div class="card">
-        <div class="kpi-label">Frequência</div>
-        <div class="kpi-value mono purple" id="kpi-freq">—</div>
-        <div class="kpi-sub">Imp. por pessoa</div>
+        <div class="kpi-label">Orgânico / Outros</div>
+        <div class="kpi-value mono purple" id="kpiOrganic">—</div>
+        <div class="kpi-sub">Sem parâmetros de campanha</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Acesso direto</div>
+        <div class="kpi-value mono dim" id="kpiDirect">—</div>
+        <div class="kpi-sub">Sem referrer</div>
       </div>
     </section>
 
-    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <div>
-          <div style="font-weight:600">Gasto diário</div>
-          <div class="kpi-sub">Investimento por dia</div>
+    <!-- Gráficos -->
+    <div class="charts-row fade-up">
+      <div class="card card-lg">
+        <div style="font-weight:700;color:var(--purple-deep);margin-bottom:.25rem">Visitas por dia</div>
+        <div class="kpi-sub" style="margin-bottom:1rem">Mobile vs Desktop</div>
+        <div style="height:210px"><canvas id="chartDaily"></canvas></div>
+      </div>
+      <div class="card card-lg">
+        <div style="font-weight:700;color:var(--purple-deep);margin-bottom:.25rem">Dispositivos</div>
+        <div class="kpi-sub" style="margin-bottom:1rem">Distribuição total</div>
+        <div style="height:210px;display:flex;align-items:center;justify-content:center">
+          <canvas id="chartDevice"></canvas>
         </div>
       </div>
-      <div style="height:220px"><canvas id="chart-spend"></canvas></div>
+    </div>
+
+    <!-- Comparativo por página -->
+    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
+      <div style="margin-bottom:1rem">
+        <div style="font-weight:700;color:var(--purple-deep)">Acessos e cliques por página</div>
+        <div class="kpi-sub">Todas as páginas de tráfego lado a lado, com o total no fim</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:.85rem;min-width:520px">
+          <thead>
+            <tr style="text-align:left;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
+              <th style="padding:.5rem .6rem;font-weight:700">Página</th>
+              <th style="padding:.5rem .6rem;font-weight:700;text-align:right">Visitas</th>
+              <th style="padding:.5rem .6rem;font-weight:700;text-align:right">Únicos</th>
+              <th style="padding:.5rem .6rem;font-weight:700;text-align:right">CTA</th>
+              <th style="padding:.5rem .6rem;font-weight:700;text-align:right">Comprar</th>
+              <th style="padding:.5rem .6rem;font-weight:700;text-align:right">Conversão</th>
+            </tr>
+          </thead>
+          <tbody id="tblPaginas"></tbody>
+        </table>
+      </div>
+      <div class="kpi-sub" style="margin-top:.75rem;font-size:.72rem">
+        Conversão = cliques em "Comprar" ÷ visitas. O clique é atribuído à página onde a pessoa entrou.
+      </div>
     </section>
 
+    <!-- Funil da página de vendas -->
+    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+        <div>
+          <div style="font-weight:700;color:var(--purple-deep)">Funil da página de vendas</div>
+          <div class="kpi-sub">Da visita ao clique em "Comprar"</div>
+        </div>
+        <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text-muted)">
+          Página
+          <select id="selPagina" style="font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.4rem .6rem">
+            <option value="todas">Todas as páginas</option>
+            <option value="home">Home</option>
+            <option value="vendas2">/vendas2</option>
+            <option value="vendas3">/vendas3 (roxo)</option>
+            <option value="vendas4">/vendas4 (verde)</option>
+            <option value="vendas3pre">/vendas3pre (roxo + form)</option>
+            <option value="vendas4pre">/vendas4pre (verde + form)</option>
+            <option value="vendaspre">/vendaspre</option>
+            <option value="sp2026pre">/sp2026pre</option>
+            <option value="vendasvideo">/vendasvideo</option>
+            <option value="vendasvideo2">/vendasvideo2</option>
+            <option value="vendas5">/vendas5</option>
+            <option value="vendas5pre">/vendas5pre (+ form)</option>
+          </select>
+        </label>
+      </div>
+      <div id="funilSteps" style="display:flex;flex-direction:column;gap:.55rem"></div>
+      <div style="margin-top:1.25rem">
+        <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem">Botões individualmente</div>
+        <div id="funilBreakdown" style="display:flex;flex-direction:column;gap:.3rem"></div>
+      </div>
+    </section>
+
+    <!-- Resumo de origens -->
     <section class="table-wrap fade-up">
       <div class="table-head">
         <div>
-          <div class="table-title">Campanhas</div>
-          <div class="table-sub">Ordenado por valor usado</div>
+          <div class="table-title">Origens de tráfego</div>
+          <div class="table-sub">Agrupado por canal de origem</div>
         </div>
       </div>
       <table>
         <thead><tr>
-          <th>Campanha</th>
-          <th class="num">Valor Usado</th>
-          <th class="num">Alcance</th>
-          <th class="num">CPM</th>
-          <th class="num">CTR</th>
-          <th class="num">Resultados</th>
-          <th class="num">Custo/Resultado</th>
+          <th>Origem</th>
+          <th class="num">Visitas</th>
+          <th class="num">Únicos</th>
         </tr></thead>
-        <tbody id="campTbody"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
+        <tbody id="origensTbody"><tr><td colspan="3" class="empty">Carregando…</td></tr></tbody>
       </table>
     </section>
 
+    <!-- Tabela de campanhas/origens -->
     <section class="table-wrap fade-up">
       <div class="table-head">
         <div>
-          <div class="table-title">Anúncios</div>
-          <div class="table-sub">Ordenado por valor usado</div>
+          <div class="table-title">Origens e campanhas</div>
+          <div class="table-sub" id="tblSub">Agrupado por fonte e campanha</div>
         </div>
       </div>
       <table>
         <thead><tr>
-          <th>Anúncio</th>
-          <th class="num">Valor Usado</th>
-          <th class="num">Alcance</th>
-          <th class="num">CPM</th>
-          <th class="num">CTR</th>
-          <th class="num">Impressões</th>
+          <th>Fonte</th>
+          <th>Meio</th>
+          <th>Campanha</th>
+          <th class="num">Visitas</th>
+          <th class="num">Únicos</th>
         </tr></thead>
-        <tbody id="adsTbody"><tr><td colspan="6" class="empty">Carregando…</td></tr></tbody>
+        <tbody id="campTbody"><tr><td colspan="5" class="empty">Carregando…</td></tr></tbody>
+      </table>
+    </section>
+
+    <!-- Relatório de cidades -->
+    <section class="table-wrap fade-up">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Cidades com mais acesso</div>
+          <div class="table-sub">Top 25 cidades por volume de visitas</div>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Cidade</th>
+          <th>Estado</th>
+          <th class="num">Visitas</th>
+          <th class="num">Únicos</th>
+        </tr></thead>
+        <tbody id="citiesTbody"><tr><td colspan="4" class="empty">Carregando…</td></tr></tbody>
       </table>
     </section>
   </template>
 
   <script type="module">
-    import { mountLayout, api, fmt, rangePicker } from '/painel/_shared/app.js';
+    import { mountLayout, api, fmt } from '/painel/_shared/app.js?v=3';
 
     mountLayout({ active: 'meta-ads' });
+    document.getElementById('painel-main').appendChild(document.getElementById('content-tpl').content.cloneNode(true));
 
-    const main = document.getElementById('painel-main');
-    main.appendChild(document.getElementById('content-tpl').content.cloneNode(true));
+    let chartDaily = null;
+    let chartDevice = null;
+    let startDate = daysAgo(30);
+    let endDate   = today();
+    let onlyBR    = true;
+    let pagina    = 'todas';
 
-    let chart;
-    let currentRange = null;
+    document.getElementById('dtStart').value = startDate;
+    document.getElementById('dtEnd').value   = endDate;
 
-    async function load({ startDate, endDate }) {
-      currentRange = { startDate, endDate };
-      const qs = `?startDate=${startDate}&endDate=${endDate}`;
+    document.getElementById('btnBR').addEventListener('click', () => {
+      onlyBR = !onlyBR;
+      document.getElementById('btnBR').classList.toggle('active', onlyBR);
+      load();
+    });
 
-      const [kpisR, tsR, campR, adsR] = await Promise.all([
-        api('/api/painel/meta-mock?type=kpis' + qs.replace('?', '&')),
-        api('/api/painel/meta-mock?type=timeseries' + qs.replace('?', '&')),
-        api('/api/painel/meta-mock?type=campaigns' + qs.replace('?', '&')),
-        api('/api/painel/meta-mock?type=ads' + qs.replace('?', '&')),
+    // O recorte por página só muda o funil, então recarrega só ele.
+    document.getElementById('selPagina').addEventListener('change', (e) => {
+      pagina = e.target.value;
+      loadFunil();
+    });
+
+    function baseQs() {
+      return `startDate=${startDate}&endDate=${endDate}` + (onlyBR ? '&country=BR' : '');
+    }
+
+    async function loadFunil() {
+      const r = await api(`/api/painel/funil?${baseQs()}&page=${encodeURIComponent(pagina)}`);
+      renderFunil(r.data || {});
+    }
+
+    async function load() {
+      const qs = baseQs();
+      const [kpisR, dailyR, devicesR, campR, origensR, citiesR, funilR, pagsR] = await Promise.all([
+        api('/api/painel/meta?type=kpis&'      + qs),
+        api('/api/painel/meta?type=daily&'     + qs),
+        api('/api/painel/meta?type=devices&'   + qs),
+        api('/api/painel/meta?type=campaigns&' + qs),
+        api('/api/painel/meta?type=origens&'   + qs),
+        api('/api/painel/meta?type=cities&'    + qs),
+        api(`/api/painel/funil?${qs}&page=${encodeURIComponent(pagina)}`),
+        api('/api/painel/paginas?' + qs),
       ]);
+      renderPaginas(pagsR.data || {});
 
-      // Conexão
-      const connected = !!kpisR.meta_connected;
-      const dot = document.getElementById('connDot');
-      const txt = document.getElementById('connTxt');
-      dot.className = 'dot ' + (connected ? '' : 'warn');
-      txt.textContent = connected ? 'Meta Ads conectado' : 'Meta Ads não conectado';
-      document.getElementById('notConnectedAlert').style.display = connected ? 'none' : 'block';
-
-      // KPIs
       const k = kpisR.data || {};
-      document.getElementById('kpi-spend').textContent = fmt.brl(k.valorUsado);
-      document.getElementById('kpi-reach').textContent = fmt.num(k.alcance);
-      document.getElementById('kpi-ctr').textContent   = fmt.pct(k.ctr);
-      document.getElementById('kpi-cpm').textContent   = fmt.brl(k.cpm);
-      document.getElementById('kpi-freq').textContent  = fmt.dec(k.frequencia, 2);
+      document.getElementById('kpiTotal').textContent   = fmt.num(k.total           || 0);
+      document.getElementById('kpiUniq').textContent    = fmt.num(k.unique_visitors  || 0);
+      document.getElementById('kpiMeta').textContent    = fmt.num(k.meta_paid        || 0);
+      document.getElementById('kpiGoogle').textContent  = fmt.num(k.google_paid      || 0);
+      document.getElementById('kpiOrganic').textContent = fmt.num(k.organic          || 0);
+      document.getElementById('kpiDirect').textContent  = fmt.num(k.direct           || 0);
+      document.getElementById('tblSub').textContent     =
+        `${fmt.dateBR(startDate)} a ${fmt.dateBR(endDate)}`;
 
-      // Chart
-      const labels = (tsR.data || []).map((p) => fmt.dateBR(p.date));
-      const values = (tsR.data || []).map((p) => p.valorUsado);
-      if (chart) chart.destroy();
-      const ctx = document.getElementById('chart-spend').getContext('2d');
-      chart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{
-          label: 'Gasto', data: values,
-          borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.1)',
-          tension: 0.3, fill: true, pointRadius: 0, borderWidth: 2,
-        }]},
+      renderDailyChart(dailyR.data    || []);
+      renderDeviceChart(devicesR.data || []);
+      renderFunil(funilR.data         || {});
+      renderOrigens(origensR.data     || []);
+      renderCampaigns(campR.data      || []);
+      renderCities(citiesR.data       || []);
+    }
+
+    function renderDailyChart(daily) {
+      const labels  = daily.map(d => fmt.dateBR(d.day));
+      const mobile  = daily.map(d => d.mobile  || 0);
+      const desktop = daily.map(d => d.desktop || 0);
+      if (chartDaily) chartDaily.destroy();
+      chartDaily = new Chart(document.getElementById('chartDaily').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Mobile',  data: mobile,  backgroundColor: 'rgba(177,106,232,0.6)', borderRadius: 3 },
+            { label: 'Desktop', data: desktop, backgroundColor: 'rgba(91,31,158,0.35)',  borderRadius: 3 },
+          ],
+        },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#4A3568', font: { family: 'Nunito Sans', size: 11 } } },
+            tooltip: {
+              backgroundColor: '#fff', borderColor: '#E8E0F5', borderWidth: 1,
+              titleColor: '#1A0A2E', bodyColor: '#4A3568',
+              titleFont: { family: 'Nunito Sans', weight: '700', size: 13 },
+              bodyFont: { family: 'JetBrains Mono', size: 12 },
+              padding: 12,
+              callbacks: {
+                title: (items) => items[0]?.label || '',
+                label: (item) => ` ${item.dataset.label}: ${item.parsed.y} ${item.dataset.label === 'Mobile' || item.dataset.label === 'Desktop' ? 'visitas' : 'visitas'}`,
+              },
+            },
+          },
           scales: {
-            x: { ticks: { color: '#7a7a8c', font: { family: 'JetBrains Mono', size: 11 } }, grid: { color: '#1f1f28' } },
-            y: { ticks: { color: '#7a7a8c', font: { family: 'JetBrains Mono', size: 11 }, callback: (v) => fmt.brl(v) }, grid: { color: '#1f1f28' } },
+            x: { stacked: true, ticks: { color: '#7B6B96', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: '#E8E0F5' } },
+            y: { stacked: true, ticks: { color: '#7B6B96', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: '#E8E0F5' }, beginAtZero: true },
           },
         },
       });
+    }
 
-      // Tabelas
-      renderCampaigns(campR.data || []);
-      renderAds(adsR.data || []);
+    function renderDeviceChart(devices) {
+      const labels = devices.map(d => d.device === 'mobile' ? 'Mobile' : 'Desktop');
+      const values = devices.map(d => d.total);
+      if (chartDevice) chartDevice.destroy();
+      chartDevice = new Chart(document.getElementById('chartDevice').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data: values, backgroundColor: ['rgba(177,106,232,0.8)', 'rgba(91,31,158,0.6)'], borderWidth: 0 }],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { color: '#4A3568', font: { family: 'Nunito Sans', size: 12 }, padding: 16 } } },
+        },
+      });
+    }
+
+    function renderOrigens(rows) {
+      const tb = document.getElementById('origensTbody');
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="3" class="empty">Sem dados no período.</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map(r => {
+        const badgeType = /meta|facebook|instagram|ig/i.test(r.origem) ? 'meta'
+          : /google/i.test(r.origem) ? 'google'
+          : r.origem === 'Direto' ? 'direct'
+          : r.origem === 'Referral' ? 'organic'
+          : 'other';
+        return `<tr>
+          <td><span class="badge badge-${badgeType}">${esc(r.origem)}</span></td>
+          <td class="num mono">${fmt.num(r.visitas)}</td>
+          <td class="num mono dim">${fmt.num(r.unicos)}</td>
+        </tr>`;
+      }).join('');
     }
 
     function renderCampaigns(rows) {
       const tb = document.getElementById('campTbody');
       if (!rows.length) {
-        tb.innerHTML = `<tr><td colspan="7" class="empty">Sem dados no período. ${currentRange ? '' : ''}</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="5" class="empty">Sem dados no período.</td></tr>`;
         return;
       }
-      tb.innerHTML = rows.map((r) => `
-        <tr>
-          <td>${escapeHtml(r.campaignName || '—')}</td>
-          <td class="num mono amber">${fmt.brl(r.valorUsado)}</td>
-          <td class="num mono">${fmt.num(r.alcance)}</td>
-          <td class="num mono dim">${fmt.brl(r.cpm)}</td>
-          <td class="num mono green">${fmt.pct(r.ctr)}</td>
-          <td class="num mono">${fmt.num(r.resultados)}</td>
-          <td class="num mono red">${fmt.brl(r.custoPorResultado)}</td>
-        </tr>
-      `).join('');
+      tb.innerHTML = rows.map(r => {
+        const badgeType = r.fonte === 'direto' ? 'direct'
+          : /facebook|instagram|fb|meta/i.test(r.fonte) ? 'meta'
+          : /google/i.test(r.fonte) ? 'google'
+          : 'other';
+        return `<tr>
+          <td><span class="badge badge-${badgeType}">${esc(r.fonte)}</span></td>
+          <td class="dim" style="font-size:.85rem">${esc(r.meio)}</td>
+          <td class="dim" style="font-size:.85rem">${esc(r.campanha)}</td>
+          <td class="num mono">${fmt.num(r.visitas)}</td>
+          <td class="num mono dim">${fmt.num(r.unicos)}</td>
+        </tr>`;
+      }).join('');
     }
 
-    function renderAds(rows) {
-      const tb = document.getElementById('adsTbody');
+    function renderPaginas(data) {
+      const linhas = data.linhas || [];
+      const total  = data.total;
+      const el = document.getElementById('tblPaginas');
+      if (!linhas.length) {
+        el.innerHTML = `<tr><td colspan="6" class="empty" style="padding:.75rem;font-size:.85rem">Sem dados no período.</td></tr>`;
+        return;
+      }
+      const linha = (l, ehTotal) => {
+        const peso = ehTotal ? 'font-weight:800' : 'font-weight:500';
+        const topo = ehTotal ? 'border-top:2px solid var(--border)' : 'border-top:1px solid var(--border)';
+        const cor  = ehTotal ? 'color:var(--purple-deep)' : '';
+        return `<tr style="${topo}">
+          <td style="padding:.55rem .6rem;${peso};${cor}">${esc(l.label)}</td>
+          <td style="padding:.55rem .6rem;text-align:right;${peso}">${fmt.num(l.visitas)}</td>
+          <td style="padding:.55rem .6rem;text-align:right;color:var(--text-muted)">${fmt.num(l.unicos)}</td>
+          <td style="padding:.55rem .6rem;text-align:right;color:var(--text-muted)">${fmt.num(l.ancora)}</td>
+          <td style="padding:.55rem .6rem;text-align:right;${peso}">${fmt.num(l.compra)}</td>
+          <td style="padding:.55rem .6rem;text-align:right;${peso};${cor}">${(l.conversao || 0).toString().replace('.', ',')}%</td>
+        </tr>`;
+      };
+      el.innerHTML = linhas.map(l => linha(l, false)).join('') + (total ? linha(total, true) : '');
+    }
+
+    const BTN_LABELS = {
+      btn_cta_ancora:     'CTA âncora (ir para ingressos)',
+      btn_compra_alunos:  'Comprar (Alunos LC)',
+      btn_compra_publico: 'Comprar (Público geral)',
+      btn_whatsapp:       'Botão flutuante WhatsApp',
+    };
+
+    function renderFunil(data) {
+      const steps     = data.steps     || [];
+      const breakdown = data.breakdown || [];
+
+      const stepsEl = document.getElementById('funilSteps');
+      const brkEl   = document.getElementById('funilBreakdown');
+
+      if (!steps.length) {
+        stepsEl.innerHTML = `<div class="empty" style="padding:.75rem 0;font-size:.85rem">Sem dados no período.</div>`;
+        brkEl.innerHTML   = '';
+        return;
+      }
+
+      const STEP_COLORS = ['#B16AE8','#9B59E2','#7B3FC4','#6D2FB8','#5B1F9E'];
+      stepsEl.innerHTML = steps.map((s, i) => {
+        const barW = Math.max(s.pct, 0);
+        const color = STEP_COLORS[Math.min(i, STEP_COLORS.length - 1)];
+        return `<div style="display:flex;align-items:center;gap:.75rem">
+          <div style="min-width:220px;font-size:.82rem;color:var(--text)">${esc(s.label)}</div>
+          <div style="flex:1;background:var(--surface-alt);border-radius:6px;height:10px;overflow:hidden">
+            <div style="width:${barW}%;height:100%;background:${color};border-radius:6px;transition:width .4s"></div>
+          </div>
+          <div class="mono" style="min-width:38px;text-align:right;font-size:.82rem;color:${color};font-weight:700">${fmt.num(s.value)}</div>
+          <div class="mono dim" style="min-width:46px;font-size:.75rem">${s.pct.toLocaleString('pt-BR', {maximumFractionDigits:1})}%</div>
+        </div>`;
+      }).join('');
+
+      if (!breakdown.length) { brkEl.innerHTML = ''; return; }
+      const maxBreak = breakdown[0]?.total || 1;
+      brkEl.innerHTML = breakdown.map(r => {
+        const label = BTN_LABELS[r.event_name] || r.event_name;
+        const isCheckout = r.event_name.startsWith('btn_compra');
+        const color = isCheckout ? '#16a34a' : '#B16AE8';
+        const barW = Math.round((r.total / maxBreak) * 100);
+        return `<div style="display:flex;align-items:center;gap:.65rem">
+          <div style="min-width:220px;font-size:.78rem;color:var(--text-muted)">${esc(label)}</div>
+          <div style="flex:1;background:var(--surface-alt);border-radius:4px;height:7px;overflow:hidden">
+            <div style="width:${barW}%;height:100%;background:${color};border-radius:4px"></div>
+          </div>
+          <div class="mono" style="min-width:32px;text-align:right;font-size:.78rem;color:${color};font-weight:700">${fmt.num(r.total)}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderCities(rows) {
+      const tb = document.getElementById('citiesTbody');
       if (!rows.length) {
-        tb.innerHTML = `<tr><td colspan="6" class="empty">Sem dados no período.</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="4" class="empty">Sem dados no período.</td></tr>`;
         return;
       }
-      tb.innerHTML = rows.map((r) => `
-        <tr>
-          <td>${escapeHtml(r.adName || '—')}</td>
-          <td class="num mono amber">${fmt.brl(r.valorUsado)}</td>
-          <td class="num mono">${fmt.num(r.alcance)}</td>
-          <td class="num mono dim">${fmt.brl(r.cpm)}</td>
-          <td class="num mono green">${fmt.pct(r.ctr)}</td>
-          <td class="num mono">${fmt.num(r.impressions)}</td>
-        </tr>
-      `).join('');
+      tb.innerHTML = rows.map((r, i) => `<tr>
+        <td style="font-size:.85rem">
+          <span class="mono dim" style="font-size:.72rem;margin-right:.4rem">${i + 1}</span>
+          ${esc(r.cidade)}
+        </td>
+        <td class="dim" style="font-size:.8rem">${esc(r.estado)}</td>
+        <td class="num mono">${fmt.num(r.visitas)}</td>
+        <td class="num mono dim">${fmt.num(r.unicos)}</td>
+      </tr>`).join('');
     }
 
-    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c =>
+        ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])
+      );
+    }
 
-    rangePicker({
-      container: document.getElementById('rangeBar'),
-      defaultDays: 30,
-      onChange: load,
+    // Botões rápidos
+    document.querySelectorAll('.range-btn[data-days]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.range-btn[data-days]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const days = parseInt(btn.dataset.days, 10);
+        if (days === -1)     { startDate = '2020-01-01'; endDate = today(); }
+        else if (days === 0) { startDate = today();      endDate = today(); }
+        else                 { startDate = daysAgo(days); endDate = today(); }
+        document.getElementById('dtStart').value = startDate;
+        document.getElementById('dtEnd').value   = endDate;
+        load();
+      });
     });
+
+    document.getElementById('btnAplicar').addEventListener('click', () => {
+      const s = document.getElementById('dtStart').value;
+      const e = document.getElementById('dtEnd').value;
+      if (!s || !e) return;
+      document.querySelectorAll('.range-btn[data-days]').forEach(b => b.classList.remove('active'));
+      startDate = s; endDate = e;
+      load();
+    });
+
+    // Datas no fuso de Brasília (UTC-3), pra bater com o backend.
+    function today()    { return daysAgo(0); }
+    function daysAgo(n) { const d = new Date(Date.now() - 3 * 3600 * 1000); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); }
+
+    load();
   </script>
 </body>
 </html>

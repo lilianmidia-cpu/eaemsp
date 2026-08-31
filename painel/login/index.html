@@ -7,34 +7,34 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:#0a0a0c; --surface:#121216; --surface-alt:#18181e;
-      --border:#1f1f28; --border-light:#2a2a36;
-      --text:#e8e8ed; --text-dim:#7a7a8c; --text-muted:#4a4a58;
-      --accent:#3b82f6; --red:#ef4444; --green:#22c55e;
-      --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
+      --bg:#F8F5FF; --surface:#FFFFFF; --surface-alt:#F3ECFF;
+      --border:#E8E0F5;
+      --text:#1A0A2E; --text-dim:#4A3568; --text-muted:#7B6B96;
+      --accent:#B16AE8; --purple-deep:#5B1F9E; --red:#dc2626; --green:#16a34a;
+      --display:'Anton',Impact,sans-serif; --sans:'Nunito Sans',sans-serif; --mono:'JetBrains Mono',monospace;
     }
     html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
     .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 4px 24px rgba(91,31,158,.08)}
     .input{background:var(--surface-alt);border:1px solid var(--border);color:var(--text);
-      border-radius:10px;padding:.85rem 1rem;font-family:var(--mono);width:100%;outline:none;
-      transition:border-color .15s}
+      border-radius:10px;padding:.85rem 1rem;font-family:var(--sans);width:100%;outline:none;
+      font-size:.95rem;transition:border-color .15s}
     .input:focus{border-color:var(--accent)}
-    .btn{background:var(--accent);color:#fff;border-radius:10px;padding:.85rem 1rem;
-      font-family:var(--mono);font-weight:600;width:100%;cursor:pointer;border:0;
-      transition:opacity .15s}
-    .btn:hover{opacity:.9}
+    .btn{background:var(--purple-deep);color:#fff;border-radius:10px;padding:.85rem 1rem;
+      font-family:var(--sans);font-weight:800;font-size:1rem;width:100%;cursor:pointer;border:0;
+      transition:opacity .15s,transform .15s}
+    .btn:hover{opacity:.9;transform:translateY(-1px)}
     .btn:disabled{opacity:.5;cursor:not-allowed}
-    .err{color:var(--red);font-family:var(--mono);font-size:.875rem;margin-top:.75rem;min-height:1.25rem}
+    .err{color:var(--red);font-family:var(--sans);font-size:.875rem;margin-top:.75rem;min-height:1.25rem}
   </style>
 </head>
 <body class="flex items-center justify-center px-4">
   <div class="w-full max-w-md card p-8 fade-in">
     <div class="flex items-center gap-3 mb-8">
-      <div class="w-10 h-10 rounded-lg bg-[color:var(--accent)] flex items-center justify-center font-bold text-white">P</div>
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white" style="background:var(--purple-deep)">P</div>
       <div>
         <div class="font-semibold">Painel</div>
         <div class="text-xs" style="color:var(--text-muted)">Imersão Escritores · Acesso restrito</div>

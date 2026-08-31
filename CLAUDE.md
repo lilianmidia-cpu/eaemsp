@@ -125,12 +125,13 @@ Hop-by-hop debugging bible: `docs/data-flow.md`
 | `api/events.js` | Dashboard: tracking-health stats (ITP recovery, adblock, bot filter, fbp source). |
 | `api/purchases.js` | Dashboard: purchases table with platform delivery status. |
 | `api/sync/meta-ads.js` | `POST /api/sync/meta-ads` — cron-triggered Meta Marketing API pull into `ad_spend`. Gated by `SYNC_SECRET` header. |
+| `api/sync/sympla-ghl.js` | `POST /api/sync/sympla-ghl` — cron-triggered Sympla order poll that tags the matching GHL contact by purchase status (`compra-aprovada-*`, `recuperacao-*`, `cancelada-*`). Gated by `SYNC_SECRET` header. See `docs/sympla-ghl-sync.md`. |
 
 ### Schema, config, and static (`migrations/`, `config/`, `dash/`, `examples/`)
 
 | Path | Purpose |
 |---|---|
-| `migrations/` | D1 schema, numbered 0001-0015 (0005 intentionally skipped). Applied via `wrangler d1 migrations apply`. Includes `sessions`, `checkout_sessions`, `event_log`, `purchase_log`, `purchase_items`, `ad_spend`, `sync_log`. |
+| `migrations/` | D1 schema, numbered 0001-0020 (0005 intentionally skipped). Applied via `wrangler d1 migrations apply`. Includes `sessions`, `checkout_sessions`, `event_log`, `purchase_log`, `purchase_items`, `ad_spend`, `sync_log`, `leads_presell`, `sympla_ghl_sync`, `sympla_sync_state`. |
 | `config/products.js` | Per-product integration config: Encharge tag, ManyChat tag ID, Google Ads conversion action. Keyed by `platform → productId`. Tracked in git; no secrets. |
 | `dash/index.html` | Self-contained dashboard. Tailwind + Chart.js via CDN, no build step. Auth via `DASH_KEY` query param. Click any Lead or Purchase row to inspect the exact payload sent to Meta/GA4/Google Ads and the response. |
 | `examples/lead-form-page/index.html` | Lead form starter (email-only by default; add phone/name per `docs/page-types/lead-form-page.md`). Demonstrates the full pixel+CAPI dedup pattern. |
@@ -178,3 +179,4 @@ These have sensible defaults. Change them only if you know why.
 | Which sales platforms are active | Eduzz / Hotmart / Kiwify all built in | A platform goes live once its `<PLATFORM>_WEBHOOK_SLUG` env var is set. Recipients paste the full `/webhook/<platform>/<slug>` URL into the platform's dashboard; wrong slug = 404 |
 | Dashboard auth | Query param `?key=<DASH_KEY>` | Rotate by changing the env var; no code change |
 | Ad-spend sync | Off until recipient configures Meta Ads cron (see `docs/ad-spend-sync.md`) | Set `META_ADS_ACCESS_TOKEN`, `META_ADS_ACCOUNT_ID`, `SYNC_SECRET` and schedule an external cron to hit `/api/sync/meta-ads` hourly |
+| Sympla → GHL tag sync | Off until recipient configures the GHL Private Integration Token (see `docs/sympla-ghl-sync.md`) | Set `GHL_API_TOKEN`, `GHL_LOCATION_ID` (plus existing `SYMPLA_TOKEN`/`SYNC_SECRET`) and schedule an external cron to hit `/api/sync/sympla-ghl` hourly |

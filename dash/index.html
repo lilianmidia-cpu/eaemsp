@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tracking Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
 <style>
@@ -24,7 +25,7 @@
   .mono { font-family: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .kpi-label { color: var(--dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-  .kpi-value { font-size: 1.875rem; font-weight: 600; letter-spacing: -0.02em; }
+  .kpi-value { font-size: 1.875rem; font-weight: 600; letter-spacing: -0.02em; font-family: "DM Sans", ui-sans-serif, sans-serif; }
   .accent-blue   { color: var(--accent-blue);   }
   .accent-green  { color: var(--accent-green);  }
   .accent-amber  { color: var(--accent-amber);  }
@@ -62,6 +63,50 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-6 py-6 space-y-6">
+
+    <!-- Visitantes /vendas2 -->
+    <section class="fade-in">
+      <div class="mb-3">
+        <div class="font-semibold text-base">Visitantes</div>
+        <div class="text-xs text-[color:var(--muted)]">Sessões capturadas no período selecionado</div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div class="card p-5">
+          <div class="kpi-label">Sessões</div>
+          <div class="kpi-value mono mt-1" id="vis-sessions">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-1">Visitas totais</div>
+        </div>
+        <div class="card p-5">
+          <div class="kpi-label">Visitantes únicos</div>
+          <div class="kpi-value mono accent-blue mt-1" id="vis-unique">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-1">Por external_id</div>
+        </div>
+        <div class="card p-5">
+          <div class="kpi-label">País principal</div>
+          <div class="kpi-value mono mt-1" id="vis-country">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-1">Mais frequente</div>
+        </div>
+        <div class="card p-5">
+          <div class="kpi-label">% Mobile</div>
+          <div class="kpi-value mono accent-green mt-1" id="vis-mobile">—</div>
+          <div class="text-xs text-[color:var(--muted)] mt-1">vs desktop</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="card p-5">
+          <div class="font-semibold mb-4">Origem do tráfego</div>
+          <div id="vis-sources" class="space-y-3 text-sm"></div>
+        </div>
+        <div class="card p-5">
+          <div class="font-semibold mb-4">Países</div>
+          <div id="vis-countries" class="space-y-3 text-sm"></div>
+        </div>
+        <div class="card p-5">
+          <div class="font-semibold mb-4">Dispositivos</div>
+          <div id="vis-devices" class="space-y-3 text-sm"></div>
+        </div>
+      </div>
+    </section>
 
     <!-- Revenue Overview -->
     <section class="fade-in">
@@ -787,8 +832,9 @@
     'btn_compra_alunos':  { label: 'Compra — Alunos LC (R$590)',         location: 'Card de ingresso',         type: 'compra' },
     'btn_compra_publico': { label: 'Compra — Público Geral (R$750)',     location: 'Card de ingresso',         type: 'compra' },
     'btn_cta_final':      { label: 'Quero participar desta experiência', location: 'CTA Final',                type: 'ancora' },
+    'btn_whatsapp':       { label: 'Botão flutuante WhatsApp',           location: 'Todas as páginas',         type: 'whatsapp' },
   };
-  const BTN_ORDER = ['btn_hero_cta','btn_compra_alunos','btn_compra_publico','btn_sticky','btn_perfis_cta','btn_inclui_cta','btn_cta_final'];
+  const BTN_ORDER = ['btn_hero_cta','btn_compra_alunos','btn_compra_publico','btn_whatsapp','btn_sticky','btn_perfis_cta','btn_inclui_cta','btn_cta_final'];
 
   async function loadButtonClicks(days) {
     try {
@@ -815,6 +861,8 @@
           ? '<span class="ml-1.5 text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">compra</span>'
           : m.type === 'ancora'
           ? '<span class="ml-1.5 text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">âncora</span>'
+          : m.type === 'whatsapp'
+          ? '<span class="ml-1.5 text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">whatsapp</span>'
           : '<span class="ml-1.5 text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">sticky</span>';
         return `<tr class="border-b border-[color:var(--border)] row-hover">
           <td class="py-2.5 pr-4">${escapeHtml(m.label)}${badge}</td>
@@ -825,10 +873,69 @@
     } catch(e) { console.error('button-clicks load error', e); }
   }
 
+  async function loadVisitors(days) {
+    try {
+      const data = await fetchJson(`/api/visitors?days=${days}`);
+      qs('#vis-sessions').textContent = fmtInt(data.sessions);
+      qs('#vis-unique').textContent   = fmtInt(data.unique_visitors);
+      qs('#vis-country').textContent  = data.top_country || '—';
+      qs('#vis-mobile').textContent   = data.mobile_percent != null ? data.mobile_percent + '%' : '—';
+
+      function renderBars(id, rows, labelKey) {
+        const el = qs(id);
+        if (!rows || rows.length === 0) {
+          el.innerHTML = '<div class="text-[color:var(--muted)] text-xs">Sem dados ainda.</div>';
+          return;
+        }
+        const max = Math.max(...rows.map(r => r.visits), 1);
+        el.innerHTML = rows.map(r => {
+          const pct = Math.round((r.visits / max) * 100);
+          return `
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs truncate max-w-[72%]">${escapeHtml(String(r[labelKey] || '—'))}</span>
+                <span class="mono text-xs text-[color:var(--dim)]">${fmtInt(r.visits)}</span>
+              </div>
+              <div class="h-1.5 bg-[color:var(--border)] rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width:${pct}%;background:var(--accent-blue)"></div>
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      renderBars('#vis-sources',   data.sources,   'source');
+      renderBars('#vis-devices',   data.devices,   'device_type');
+
+      // countries: label = "country / region" when region is present
+      const el = qs('#vis-countries');
+      const rows = data.countries || [];
+      if (rows.length === 0) {
+        el.innerHTML = '<div class="text-[color:var(--muted)] text-xs">Sem dados ainda.</div>';
+      } else {
+        const max = Math.max(...rows.map(r => r.visits), 1);
+        el.innerHTML = rows.map(r => {
+          const label = r.region ? `${r.country} / ${r.region}` : (r.country || '—');
+          const pct   = Math.round((r.visits / max) * 100);
+          return `
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs truncate max-w-[72%]">${escapeHtml(label)}</span>
+                <span class="mono text-xs text-[color:var(--dim)]">${fmtInt(r.visits)}</span>
+              </div>
+              <div class="h-1.5 bg-[color:var(--border)] rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width:${pct}%;background:var(--accent-blue)"></div>
+              </div>
+            </div>`;
+        }).join('');
+      }
+    } catch(e) { console.error('visitors load error', e); }
+  }
+
   // -------- Load orchestration --------
   async function loadAll(days) {
     currentDays = days;
     await Promise.all([
+      loadVisitors(days),
       loadRevenue(days),
       loadProducts(days),
       loadAttribution(days),

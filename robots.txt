@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dash
+Disallow: /api/
+Disallow: /tracker
+Disallow: /webhook/
+Disallow: /painel/
+
+Sitemap: https://imersaoescritores.com.br/sitemap.xml

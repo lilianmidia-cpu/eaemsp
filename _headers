@@ -1,0 +1,30 @@
+# ══════════════════════════════════════════════════════════════
+#  Cache de assets estáticos (imagens, ícones, fontes)
+#  Cache longo + imutável para acelerar visitas repetidas e
+#  limpar o aviso "ciclos de cache eficientes" do PageSpeed.
+#
+#  ⚠️  Trocou um arquivo mantendo o MESMO nome? Adicione ?v=N na
+#      referência dele no HTML (ex.: kdp-logo.png?v=2) para forçar
+#      atualização imediata nos navegadores.
+#
+#  O HTML NÃO entra aqui — continua com max-age=0 (sempre fresco),
+#  então mudanças de conteúdo e o ?v= aparecem na hora.
+# ══════════════════════════════════════════════════════════════
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mp4
+  Cache-Control: public, max-age=31536000, immutable

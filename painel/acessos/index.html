@@ -3,117 +3,264 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Painel · Acessos</title>
+  <title>Painel · Visitas do Site</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/painel/_shared/app.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css?v=3">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+  <style>
+    input[type="date"] {
+      font-family: var(--mono); font-size: .8rem;
+      padding: .38rem .65rem; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); cursor: pointer; outline: none;
+      transition: border-color .15s;
+    }
+    input[type="date"]:focus { border-color: var(--accent); }
+    .badge {
+      display: inline-block; padding: .15rem .55rem; border-radius: 999px;
+      font-size: .7rem; font-weight: 700; white-space: nowrap;
+    }
+    .badge-meta    { background: rgba(24,119,242,.12); color: #1877F2; }
+    .badge-google  { background: rgba(66,133,244,.12); color: #3367D6; }
+    .badge-organic { background: var(--green-dim); color: var(--green); }
+    .badge-direct  { background: var(--surface-alt); color: var(--text-muted); }
+    .badge-other   { background: var(--purple-dim); color: var(--purple); }
+    .badge-email   { background: rgba(217,119,6,.12); color: var(--amber); }
+    td.page-cell   { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    td.camp-cell   { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  </style>
 </head>
 <body>
   <div id="painel-root"></div>
 
   <template id="content-tpl">
     <div class="page-head fade-up">
-      <div class="acct-badge"><span class="dot"></span>Registro interno</div>
-      <h1 class="title">Acessos</h1>
-      <div class="subtitle">De onde vêm os acessos ao painel (IP, país, cidade, navegador)</div>
+      <div class="acct-badge"><span class="dot"></span>Sessões capturadas</div>
+      <h1 class="title">Visitas ao site</h1>
+      <div class="subtitle">Origem, página, UTMs e localização de cada visitante</div>
     </div>
 
+    <!-- Filtros de data -->
+    <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:.75rem">
+      <button class="range-btn" data-days="0">Hoje</button>
+      <button class="range-btn" data-days="7">7 dias</button>
+      <button class="range-btn active" data-days="30">30 dias</button>
+      <button class="range-btn" data-days="90">90 dias</button>
+      <button class="range-btn" data-days="-1">Tudo</button>
+      <span style="color:var(--text-muted);font-size:.85rem;margin:0 .25rem">ou</span>
+      <input type="date" id="dtStart">
+      <span style="color:var(--text-muted);font-size:.85rem">até</span>
+      <input type="date" id="dtEnd">
+      <button class="range-btn" id="btnAplicar" style="font-weight:800">Aplicar</button>
+    </div>
+
+    <!-- KPIs -->
     <section class="kpi-grid fade-up">
       <div class="card">
-        <div class="kpi-label">Total de acessos</div>
+        <div class="kpi-label">Total de visitas</div>
         <div class="kpi-value mono accent" id="kpiTotal">—</div>
       </div>
       <div class="card">
-        <div class="kpi-label">IPs únicos</div>
-        <div class="kpi-value mono green" id="kpiIps">—</div>
+        <div class="kpi-label">Visitantes únicos</div>
+        <div class="kpi-value mono green" id="kpiUniq">—</div>
       </div>
       <div class="card">
-        <div class="kpi-label">Últimas 24h</div>
-        <div class="kpi-value mono amber" id="kpi24h">—</div>
+        <div class="kpi-label">Vindo do Meta</div>
+        <div class="kpi-value mono" style="color:#1877F2" id="kpiMeta">—</div>
       </div>
       <div class="card">
-        <div class="kpi-label">Logins (com senha)</div>
-        <div class="kpi-value mono purple" id="kpiLog">—</div>
+        <div class="kpi-label">Vindo do Google</div>
+        <div class="kpi-value mono" style="color:#3367D6" id="kpiGoogle">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Acesso direto</div>
+        <div class="kpi-value mono dim" id="kpiDirect">—</div>
       </div>
     </section>
 
-    <div class="toolbar fade-up">
-      <button class="range-btn active" id="fAll">Todos</button>
-      <button class="range-btn" id="fLogged">Só logados</button>
-    </div>
+    <!-- Gráfico diário -->
+    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div>
+          <div style="font-weight:700;color:var(--purple-deep)">Visitas por dia</div>
+          <div class="kpi-sub">Total e visitantes únicos</div>
+        </div>
+      </div>
+      <div style="height:200px"><canvas id="chartVisitas"></canvas></div>
+    </section>
 
+    <!-- Tabela -->
     <section class="table-wrap fade-up">
       <div class="table-head">
         <div>
-          <div class="table-title">Últimos acessos</div>
-          <div class="table-sub">Ordenado do mais recente</div>
+          <div class="table-title">Histórico de visitas</div>
+          <div class="table-sub" id="tblSub">Ordenado do mais recente</div>
         </div>
       </div>
       <table>
         <thead><tr>
           <th>Quando</th>
           <th>Página</th>
+          <th>Origem</th>
+          <th>Campanha</th>
           <th>País</th>
-          <th>Cidade / Região</th>
-          <th>IP</th>
-          <th>Navegador</th>
-          <th>Logado?</th>
+          <th>Cidade</th>
+          <th>Dispositivo</th>
         </tr></thead>
-        <tbody id="accTbody"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
+        <tbody id="tblBody"><tr><td colspan="7" class="empty">Carregando…</td></tr></tbody>
       </table>
     </section>
   </template>
 
   <script type="module">
-    import { mountLayout, api, fmt } from '/painel/_shared/app.js';
+    import { mountLayout, api, fmt } from '/painel/_shared/app.js?v=3';
 
     mountLayout({ active: 'acessos' });
     document.getElementById('painel-main').appendChild(document.getElementById('content-tpl').content.cloneNode(true));
 
-    let onlyLogged = false;
+    let chart = null;
+    let startDate = daysAgo(30);
+    let endDate   = today();
+
+    document.getElementById('dtStart').value = startDate;
+    document.getElementById('dtEnd').value   = endDate;
 
     async function load() {
-      const r = await api('/api/painel/acessos' + (onlyLogged ? '?onlyLogged=1' : ''));
-      const s = r.summary || {};
-      document.getElementById('kpiTotal').textContent = fmt.num(s.total || 0);
-      document.getElementById('kpiIps').textContent   = fmt.num(s.unique_ips || 0);
-      document.getElementById('kpi24h').textContent   = fmt.num(s.last_24h || 0);
-      document.getElementById('kpiLog').textContent   = fmt.num(s.logged_in || 0);
+      const qs = new URLSearchParams({ startDate, endDate });
+      const r  = await api('/api/painel/visitas?' + qs);
+      const s  = r.summary || {};
 
-      const tb = document.getElementById('accTbody');
-      const rows = r.rows || [];
-      if (!rows.length) {
-        tb.innerHTML = `<tr><td colspan="7" class="empty">Nenhum acesso registrado ainda.</td></tr>`;
-        return;
-      }
-      tb.innerHTML = rows.map((row) => `
-        <tr>
-          <td class="mono">${fmt.ts(row.accessed_at)}</td>
-          <td class="mono dim">${escapeHtml(row.path || '—')}</td>
-          <td>${fmt.country(row.country)}</td>
-          <td class="dim">${escapeHtml([row.city, row.region].filter(Boolean).join(' / ') || '—')}</td>
-          <td class="mono dim" style="font-size:.78rem">${escapeHtml(row.ip_address || '—')}</td>
-          <td class="dim">${escapeHtml(fmt.ua(row.user_agent))}</td>
-          <td>${row.is_logged_in ? '<span class="green mono">✓ sim</span>' : '<span class="dim mono">não</span>'}</td>
-        </tr>
-      `).join('');
+      document.getElementById('kpiTotal').textContent  = fmt.num(s.total          || 0);
+      document.getElementById('kpiUniq').textContent   = fmt.num(s.unique_visitors || 0);
+      document.getElementById('kpiMeta').textContent   = fmt.num(s.from_meta      || 0);
+      document.getElementById('kpiGoogle').textContent = fmt.num(s.from_google    || 0);
+      document.getElementById('kpiDirect').textContent = fmt.num(s.direct         || 0);
+      document.getElementById('tblSub').textContent    =
+        `${fmt.dateBR(startDate)} a ${fmt.dateBR(endDate)} · ${fmt.num(s.total || 0)} registros`;
+
+      renderChart(r.daily || []);
+      renderTable(r.rows  || []);
     }
 
-    function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function renderChart(daily) {
+      const labels  = daily.map(d => fmt.dateBR(d.day));
+      const totals  = daily.map(d => d.total);
+      const uniques = daily.map(d => d.unique_visitors);
+      if (chart) chart.destroy();
+      const ctx = document.getElementById('chartVisitas').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Visitas', data: totals,  backgroundColor: 'rgba(177,106,232,0.45)', borderColor: '#B16AE8', borderWidth: 1.5, borderRadius: 4 },
+            { label: 'Únicos',  data: uniques, backgroundColor: 'rgba(22,163,74,0.2)',    borderColor: '#16a34a', borderWidth: 1.5, borderRadius: 4, type: 'line', tension: 0.3, fill: false, pointRadius: 3 },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#4A3568', font: { family: 'Nunito Sans', size: 12 } } },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#E8E0F5',
+              borderWidth: 1,
+              titleColor: '#1A0A2E',
+              bodyColor: '#4A3568',
+              titleFont: { family: 'Nunito Sans', weight: '700', size: 13 },
+              bodyFont: { family: 'JetBrains Mono', size: 12 },
+              padding: 12,
+              callbacks: {
+                title: (items) => items[0]?.label || '',
+                label: (item) => ` ${item.dataset.label}: ${item.parsed.y} visitas`,
+              },
+            },
+          },
+          scales: {
+            x: { ticks: { color: '#7B6B96', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: '#E8E0F5' } },
+            y: { ticks: { color: '#7B6B96', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: '#E8E0F5' }, beginAtZero: true },
+          },
+        },
+      });
+    }
 
-    document.getElementById('fAll').addEventListener('click', () => {
-      onlyLogged = false;
-      document.getElementById('fAll').classList.add('active');
-      document.getElementById('fLogged').classList.remove('active');
+    function renderTable(rows) {
+      const tb = document.getElementById('tblBody');
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="7" class="empty">Nenhuma visita registrada no período.</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map(r => {
+        const origin = classifyOrigin(r);
+        const campanha = r.utm_campaign || r.utm_content || '—';
+        const device = r.device_type || (r.user_agent ? fmt.ua(r.user_agent).split(' · ')[1] : '—') || '—';
+        return `<tr>
+          <td class="mono" style="font-size:.78rem">${fmt.ts(r.created_at)}</td>
+          <td class="page-cell mono dim" style="font-size:.78rem" title="${esc(r.landing_url || '')}">${esc(r.landing_url || '—')}</td>
+          <td><span class="badge badge-${origin.type}">${esc(origin.label)}</span></td>
+          <td class="camp-cell dim" style="font-size:.8rem" title="${esc(campanha)}">${esc(campanha)}</td>
+          <td style="font-size:.85rem">${fmt.country(r.country)}</td>
+          <td class="dim" style="font-size:.8rem">${esc([r.city, r.region].filter(Boolean).join(' / ') || '—')}</td>
+          <td class="dim" style="font-size:.8rem">${esc(device)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function classifyOrigin(r) {
+      if (r.fbclid || (r.utm_source || '').toLowerCase().includes('facebook') || (r.utm_source || '').toLowerCase().includes('instagram'))
+        return { type: 'meta', label: 'Meta' + (r.utm_medium ? ' · ' + r.utm_medium : '') };
+      if (r.gclid || (r.utm_source || '').toLowerCase().includes('google'))
+        return { type: 'google', label: 'Google' + (r.utm_medium ? ' · ' + r.utm_medium : '') };
+      if ((r.utm_source || '') !== '')
+        return { type: 'other', label: r.utm_source + (r.utm_medium ? ' / ' + r.utm_medium : '') };
+      if (r.referrer) {
+        try {
+          const host = new URL(r.referrer).hostname.replace(/^www\./, '');
+          if (/google\./.test(host)) return { type: 'google', label: 'Google orgânico' };
+          if (/facebook\.|instagram\./.test(host)) return { type: 'meta', label: 'Meta orgânico' };
+          if (/mail\.|email\./.test(host)) return { type: 'email', label: 'E-mail' };
+          return { type: 'other', label: host };
+        } catch { /**/ }
+      }
+      return { type: 'direct', label: 'Direto' };
+    }
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c =>
+        ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])
+      );
+    }
+
+    // Botões rápidos
+    document.querySelectorAll('.range-btn[data-days]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.range-btn[data-days]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const days = parseInt(btn.dataset.days, 10);
+        if (days === -1)     { startDate = '2020-01-01'; endDate = today(); }
+        else if (days === 0) { startDate = today();      endDate = today(); }
+        else                 { startDate = daysAgo(days); endDate = today(); }
+        document.getElementById('dtStart').value = startDate;
+        document.getElementById('dtEnd').value   = endDate;
+        load();
+      });
+    });
+
+    document.getElementById('btnAplicar').addEventListener('click', () => {
+      const s = document.getElementById('dtStart').value;
+      const e = document.getElementById('dtEnd').value;
+      if (!s || !e) return;
+      document.querySelectorAll('.range-btn[data-days]').forEach(b => b.classList.remove('active'));
+      startDate = s; endDate = e;
       load();
     });
-    document.getElementById('fLogged').addEventListener('click', () => {
-      onlyLogged = true;
-      document.getElementById('fLogged').classList.add('active');
-      document.getElementById('fAll').classList.remove('active');
-      load();
-    });
+
+    // Datas no fuso de Brasília (UTC-3), pra bater com o backend.
+    function today()     { return daysAgo(0); }
+    function daysAgo(n)  { const d = new Date(Date.now() - 3 * 3600 * 1000); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); }
 
     load();
   </script>

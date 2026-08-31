@@ -1,0 +1,3 @@
+ALTER TABLE sessions ADD COLUMN country TEXT DEFAULT '';
+ALTER TABLE sessions ADD COLUMN city TEXT DEFAULT '';
+ALTER TABLE sessions ADD COLUMN device_type TEXT DEFAULT '';

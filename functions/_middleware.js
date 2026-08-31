@@ -2,6 +2,19 @@ export async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
 
+  // Auth guard for /estrutura — internal team page, no tracking
+  if (url.pathname.startsWith('/estrutura')) {
+    if (!url.pathname.startsWith('/estrutura/login')) {
+      const cookies = parseCookies(request.headers.get('Cookie') || '');
+      const authToken = cookies['estrutura_auth'] || '';
+      const expected = (env.ESTRUTURA_SENHA || 'VEJA').trim();
+      if (!authToken || authToken !== expected) {
+        return Response.redirect(new URL('/estrutura/login', url).toString(), 302);
+      }
+    }
+    return next();
+  }
+
   // Only intercept HTML page requests, skip static assets, API endpoints,
   // and the operator-facing dashboard (we don't want tracking cookies set
   // when an admin checks metrics).
@@ -73,6 +86,10 @@ export async function onRequest(context) {
   const clientIp = request.headers.get('cf-connecting-ip') || '';
   const userAgent = request.headers.get('user-agent') || '';
   const referrer = request.headers.get('referer') || '';
+  const country = request.cf?.country || '';
+  const region  = request.cf?.region  || '';
+  const city    = request.cf?.city    || '';
+  const deviceType = /mobile|android|iphone|ipad|ipod|blackberry|windows phone/i.test(userAgent) ? 'mobile' : 'desktop';
   const now = Math.floor(Date.now() / 1000);
 
   // --- Serve the page FIRST, then write to D1 in background ---
@@ -103,8 +120,8 @@ export async function onRequest(context) {
       try {
         if (env.DB) {
           await env.DB.prepare(`
-            INSERT INTO sessions (session_id, external_id, fbclid, gclid, msclkid, fbc, fbp, ip_address, user_agent, referrer, landing_url, utm_source, utm_medium, utm_campaign, utm_content, utm_term, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO sessions (session_id, external_id, fbclid, gclid, msclkid, fbc, fbp, ip_address, user_agent, referrer, landing_url, utm_source, utm_medium, utm_campaign, utm_content, utm_term, country, region, city, device_type, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(session_id) DO UPDATE SET
               fbclid = CASE WHEN excluded.fbclid != '' THEN excluded.fbclid ELSE sessions.fbclid END,
               gclid = CASE WHEN excluded.gclid != '' THEN excluded.gclid ELSE sessions.gclid END,
@@ -115,8 +132,12 @@ export async function onRequest(context) {
               utm_campaign = CASE WHEN excluded.utm_campaign != '' THEN excluded.utm_campaign ELSE sessions.utm_campaign END,
               utm_content = CASE WHEN excluded.utm_content != '' THEN excluded.utm_content ELSE sessions.utm_content END,
               utm_term = CASE WHEN excluded.utm_term != '' THEN excluded.utm_term ELSE sessions.utm_term END,
+              country = CASE WHEN excluded.country != '' THEN excluded.country ELSE sessions.country END,
+              region = CASE WHEN excluded.region != '' THEN excluded.region ELSE sessions.region END,
+              city = CASE WHEN excluded.city != '' THEN excluded.city ELSE sessions.city END,
+              device_type = CASE WHEN excluded.device_type != '' THEN excluded.device_type ELSE sessions.device_type END,
               updated_at = excluded.updated_at
-          `).bind(sessionId, externalId, fbclid, gclid, msclkid, fbc, fbp, clientIp, userAgent, referrer, url.toString(), utmSource, utmMedium, utmCampaign, utmContent, utmTerm, now, now).run();
+          `).bind(sessionId, externalId, fbclid, gclid, msclkid, fbc, fbp, clientIp, userAgent, referrer, url.toString(), utmSource, utmMedium, utmCampaign, utmContent, utmTerm, country, region, city, deviceType, now, now).run();
         }
       } catch (e) {
         console.error('Middleware D1 error:', e.message);

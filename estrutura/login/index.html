@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Grupo LC · Acesso restrito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #1A1A1A;
+      --purple-main: #9B7EC8;
+      --purple-light: #C4A8E8;
+      --purple-pale: #EDE4F7;
+      --purple-deep: #6B4FA0;
+      --line: #D5C8EA;
+      --gray: #5A5A5A;
+      --red: #dc2626;
+    }
+    html, body {
+      min-height: 100vh;
+      background: var(--black);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(155,126,200,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 40px 36px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--black);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .logo-mark span {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--purple-light);
+    }
+    .logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.2;
+    }
+    .logo p {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--purple-deep);
+      margin-bottom: 8px;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--black);
+      background: var(--purple-pale);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="password"]:focus {
+      border-color: var(--purple-main);
+    }
+    button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 14px;
+      background: var(--black);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    button:hover { opacity: 0.88; transform: translateY(-1px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .err {
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-mark"><span>LC</span></div>
+      <h1>Grupo LC</h1>
+      <p>Área restrita · Equipe interna</p>
+    </div>
+
+    <form id="form" autocomplete="off">
+      <label for="senha">Senha de acesso</label>
+      <input id="senha" type="password" placeholder="••••••••" required autofocus>
+      <button id="btn" type="submit">Entrar</button>
+      <div id="err" class="err"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const btn  = document.getElementById('btn');
+    const err  = document.getElementById('err');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Verificando…';
+
+      try {
+        const r = await fetch('/api/estrutura/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senha: document.getElementById('senha').value }),
+        });
+        const data = await r.json();
+        if (!r.ok || !data.ok) {
+          err.textContent = data.error || 'Senha incorreta';
+          btn.disabled = false;
+          btn.textContent = 'Entrar';
+          return;
+        }
+        // Ignora o redirect do API (que vai pro /painel) e vai pro /estrutura
+        window.location.href = '/estrutura';
+      } catch {
+        err.textContent = 'Falha de rede. Tente de novo.';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>

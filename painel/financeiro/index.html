@@ -6,8 +6,8 @@
   <title>Painel · Financeiro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/painel/_shared/app.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/painel/_shared/app.css?v=3">
 </head>
 <body>
   <div id="painel-root"></div>
@@ -61,7 +61,7 @@
   </template>
 
   <script type="module">
-    import { mountLayout, api, fmt } from '/painel/_shared/app.js';
+    import { mountLayout, api, fmt } from '/painel/_shared/app.js?v=3';
 
     mountLayout({ active: 'financeiro' });
     document.getElementById('painel-main').appendChild(document.getElementById('content-tpl').content.cloneNode(true));

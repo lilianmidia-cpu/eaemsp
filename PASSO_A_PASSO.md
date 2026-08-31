@@ -45,7 +45,7 @@ e bancos de dados — coisas que não devem morar no código.
 ### Ou, pela linha de comando (se preferir)
 
 ```bash
-cd "/Users/ica/Pasta LC Agencia ISA/krob-tracking-stack"
+cd "/Users/ica/Pasta LC Agencia ISA/imersao-sp-2026"
 npx wrangler d1 execute imersao-escritores-db --remote --file=./migrations/0016_dash_access.sql
 npx wrangler d1 execute imersao-escritores-db --remote --file=./migrations/0017_leads_presell.sql
 ```
@@ -145,7 +145,7 @@ Isso faz o site pegar as variáveis novas.
 Se você usa **GitHub conectado ao Cloudflare Pages**, basta:
 
 ```bash
-cd "/Users/ica/Pasta LC Agencia ISA/krob-tracking-stack"
+cd "/Users/ica/Pasta LC Agencia ISA/imersao-sp-2026"
 git add .
 git commit -m "Painel com senha + /vendaspre com form pré-checkout"
 git push

@@ -115,6 +115,10 @@ export async function onRequestPost(context) {
     // --- Bot detection ---
     const { isBot, botReason } = detectBot(userAgent);
 
+    // btn_* events are internal click metrics — skip CAPI/GA4, log to D1 only
+    const loggedEventName = (body.event_name || '').toLowerCase();
+    const isButtonClick = loggedEventName.startsWith('btn_');
+
     // --- Fan out to ad platforms (skipped for bot UAs) ---
     // Bots still get logged to event_log so the dashboard's bot-filter
     // tracking-health metric stays accurate; only the outbound CAPI /
@@ -124,7 +128,21 @@ export async function onRequestPost(context) {
     const results = (isBot || isButtonClick) ? [] : await Promise.allSettled([
       sendToMeta({ body, clientIp, userAgent, fbp, fbc, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, sessionData, env }),
       sendToGA4({ body, gaClientId, gaSessionId, hashedEm, env }),
+      sendToTikTok({ body, cookies, clientIp, userAgent, hashedEm, hashedPh, hashedExternalId, env }),
+      sendToOpenAIAds({ body, env }),
     ]);
+
+    if (results[2]?.status === 'fulfilled' && results[2].value?.response && !results[2].value.response.ok) {
+      console.error('TikTok Events API error:', results[2].value.response.status, await results[2].value.response.text().catch(() => ''));
+    } else if (results[2]?.status === 'rejected') {
+      console.error('TikTok Events API fetch error:', results[2].reason?.message || 'unknown');
+    }
+
+    if (results[3]?.status === 'fulfilled' && results[3].value?.response && !results[3].value.response.ok) {
+      console.error('ChatGPT Ads Conversions API error:', results[3].value.response.status, await results[3].value.response.text().catch(() => ''));
+    } else if (results[3]?.status === 'rejected') {
+      console.error('ChatGPT Ads Conversions API fetch error:', results[3].reason?.message || 'unknown');
+    }
 
     // --- Parse Meta result ---
     let metaStatusCode = 0, metaResponseOk = 0, metaResponseBody = '', metaPayloadSent = null;
@@ -164,10 +182,7 @@ export async function onRequestPost(context) {
     // Skip PageView: conversions fire regardless of this log, and the health
     // dashboard only reports Lead/Purchase. Dropping PageView cuts ~70% of
     // event_log writes so per-instance D1 stays healthy long-term.
-    const loggedEventName = (body.event_name || '').toLowerCase();
     const shouldLogEvent = loggedEventName !== 'pageview' && loggedEventName !== 'page_view';
-    // btn_* events are internal click metrics — skip CAPI/GA4, log to D1 only
-    const isButtonClick = loggedEventName.startsWith('btn_');
     const browserInfo = parseBrowser(userAgent);
     context.waitUntil(
       (async () => {
@@ -237,16 +252,18 @@ async function sendToMeta({ body, clientIp, userAgent, fbp, fbc, hashedEm, hashe
   if (fbp) metaUserData.fbp = fbp;
   if (fbc) metaUserData.fbc = fbc;
 
-  const payload = {
-    data: [{
-      event_name: body.event_name,
-      event_time: body.event_time,
-      event_id: body.event_id,
-      event_source_url: body.event_source_url || '',
-      action_source: 'website',
-      user_data: metaUserData,
-    }],
+  const eventObj = {
+    event_name: body.event_name,
+    event_time: body.event_time,
+    event_id: body.event_id,
+    event_source_url: body.event_source_url || '',
+    action_source: 'website',
+    user_data: metaUserData,
   };
+  if (body.custom_data && typeof body.custom_data === 'object') {
+    eventObj.custom_data = body.custom_data;
+  }
+  const payload = { data: [eventObj] };
 
   if (env.META_TEST_EVENT_CODE) {
     payload.test_event_code = env.META_TEST_EVENT_CODE;
@@ -299,6 +316,103 @@ async function sendToGA4({ body, gaClientId, gaSessionId, hashedEm, env }) {
   const response = await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${env.GA4_MEASUREMENT_ID}&api_secret=${env.GA4_API_SECRET}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    body: payloadJson,
+  });
+  return { payload: payloadJson, response };
+}
+
+// -------------------------------------------------------
+// TIKTOK EVENTS API
+// -------------------------------------------------------
+// Only ViewContent (mapped from the existing PageView beacon) and
+// InitiateCheckout are sent — the two events Isabella chose for the
+// TikTok campaign. Everything else (Lead, Purchase, btn_* clicks) is
+// intentionally skipped here; ask before wiring more, see
+// feedback_nao_construir_em_cima_de_suposicao in memory.
+async function sendToTikTok({ body, cookies, clientIp, userAgent, hashedEm, hashedPh, hashedExternalId, env }) {
+  if (!env.TIKTOK_PIXEL_CODE || !env.TIKTOK_ACCESS_TOKEN) {
+    return { skipped: 'missing tiktok env', payload: null, response: null };
+  }
+
+  const eventName = (body.event_name || '').toLowerCase();
+  const ttEvent = eventName === 'pageview' || eventName === 'page_view' ? 'ViewContent'
+    : eventName === 'initiatecheckout' ? 'InitiateCheckout'
+    : null;
+  if (!ttEvent) {
+    return { skipped: 'event not tracked for tiktok', payload: null, response: null };
+  }
+
+  const ttUser = {
+    ip: clientIp,
+    user_agent: userAgent,
+  };
+  if (hashedEm) ttUser.email = hashedEm;
+  if (hashedPh) ttUser.phone = hashedPh;
+  if (hashedExternalId) ttUser.external_id = hashedExternalId;
+  // ttclid has no cookie of its own (unlike fbclid → _fbc) — pulled straight
+  // from the page URL the client sent, same as it appears at click time.
+  const ttclidMatch = (body.event_source_url || '').match(/[?&]ttclid=([^&]+)/);
+  if (ttclidMatch) ttUser.ttclid = decodeURIComponent(ttclidMatch[1]);
+  if (cookies['_ttp']) ttUser.ttp = cookies['_ttp'];
+
+  const eventObj = {
+    event: ttEvent,
+    event_time: body.event_time,
+    event_id: body.event_id,
+    user: ttUser,
+    page: { url: body.event_source_url || '' },
+  };
+  if (body.custom_data?.content_name) {
+    eventObj.properties = { content_name: body.custom_data.content_name };
+  }
+
+  const payload = {
+    event_source: 'web',
+    event_source_id: env.TIKTOK_PIXEL_CODE,
+    data: [eventObj],
+  };
+
+  const payloadJson = JSON.stringify(payload);
+  const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Access-Token': env.TIKTOK_ACCESS_TOKEN },
+    body: payloadJson,
+  });
+  return { payload: payloadJson, response };
+}
+
+// -------------------------------------------------------
+// CHATGPT ADS (OPENAI) CONVERSIONS API
+// -------------------------------------------------------
+// Only "checkout_started" (mapped from InitiateCheckout) — the single
+// conversion Isabella set up on the OpenAI Ads side ("Checkout iniciado").
+// Same rule as TikTok: don't add more event types here without asking.
+async function sendToOpenAIAds({ body, env }) {
+  if (!env.OPENAI_ADS_PIXEL_ID || !env.OPENAI_ADS_API_KEY) {
+    return { skipped: 'missing openai ads env', payload: null, response: null };
+  }
+
+  const eventName = (body.event_name || '').toLowerCase();
+  if (eventName !== 'initiatecheckout') {
+    return { skipped: 'event not tracked for openai ads', payload: null, response: null };
+  }
+
+  const payload = {
+    validate_only: false,
+    events: [{
+      id: body.event_id,
+      type: 'checkout_started',
+      timestamp_ms: (body.event_time || Math.floor(Date.now() / 1000)) * 1000,
+      source_url: body.event_source_url || '',
+      action_source: 'web',
+      data: { type: 'contents' },
+    }],
+  };
+
+  const payloadJson = JSON.stringify(payload);
+  const response = await fetch(`https://bzr.openai.com/v1/events?pid=${env.OPENAI_ADS_PIXEL_ID}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.OPENAI_ADS_API_KEY}` },
     body: payloadJson,
   });
   return { payload: payloadJson, response };

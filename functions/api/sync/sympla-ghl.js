@@ -67,11 +67,7 @@ export async function onRequestGet(context) {
 
   try {
     const eventId = await resolveEventId(env.SYMPLA_TOKEN, EVENT_NAME);
-    const resp = await symplaFetch(
-      env.SYMPLA_TOKEN,
-      `${SYMPLA_API}/events/${eventId}/orders?status=true&field_sort=updated_date&sort=DESC&page_size=200&page=1`
-    );
-    const orders = resp.data || [];
+    const orders = await fetchAllOrders(env.SYMPLA_TOKEN, eventId);
     const byStatus = {};
     for (const order of orders) {
       byStatus[order.order_status] = (byStatus[order.order_status] || 0) + 1;
@@ -138,17 +134,53 @@ export async function onRequestGet(context) {
       rawParticipants = pResp.data || pResp;
     }
 
+    // Sums tickets (participants) across a slice of approved orders — an
+    // order can hold more than one ticket, so this can exceed the order
+    // count. Capped per call to stay under the Worker subrequest limit;
+    // page through with `offset` across multiple calls to cover them all.
+    let ticketCount;
+    if (url.searchParams.get('ticket_count') === '1') {
+      const allApproved = orders.filter(o => o.order_status === 'APPROVED');
+      const offset = parseInt(url.searchParams.get('offset') || '0', 10);
+      const limit = Math.min(parseInt(url.searchParams.get('limit') || '40', 10), 40);
+      const approvedOrders = allApproved.slice(offset, offset + limit);
+
+      const counts = [];
+      const batchSize = 10;
+      for (let i = 0; i < approvedOrders.length; i += batchSize) {
+        const batch = approvedOrders.slice(i, i + batchSize);
+        const batchCounts = await Promise.all(batch.map(async (o) => {
+          const pResp = await symplaFetch(
+            env.SYMPLA_TOKEN,
+            `${SYMPLA_API}/events/${eventId}/orders/${o.id}/participants`
+          );
+          const participants = pResp.data || pResp;
+          return Array.isArray(participants) ? participants.length : 0;
+        }));
+        counts.push(...batchCounts);
+      }
+      ticketCount = {
+        tickets_in_this_batch: counts.reduce((a, b) => a + b, 0),
+        orders_checked_this_batch: approvedOrders.length,
+        multi_ticket_orders_this_batch: counts.filter(c => c > 1).length,
+        offset,
+        approved_orders_total: allApproved.length,
+        next_offset: offset + limit < allApproved.length ? offset + limit : null,
+      };
+    }
+
     return json({
       ok: true,
       event_id: eventId,
       event_name: EVENT_NAME,
-      orders_page_1: orders.length,
+      orders_total: orders.length,
       by_status: byStatus,
       ...(recent ? { recent } : {}),
       ...(utmSummary ? { utm_summary: utmSummary } : {}),
       ...(creativeSummary ? { creative_summary: creativeSummary } : {}),
       ...(rawOrder ? { raw_order: rawOrder, raw_participants: rawParticipants } : {}),
-      note: 'Diagnóstico só da primeira página (até 200 pedidos, ordenada por mais recente) — não escreve no D1 nem chama o GHL.',
+      ...(ticketCount ? { ticket_count: ticketCount } : {}),
+      note: 'Diagnóstico varre todos os pedidos do evento (todas as páginas) — não escreve no D1 nem chama o GHL.',
     });
   } catch (err) {
     return json({ ok: false, error: err.message || String(err) }, 500);
@@ -224,6 +256,29 @@ async function resolveEventId(token, eventName) {
   return match.id;
 }
 
+// Pages through every order (all statuses), newest updated_date first, with
+// no stopping condition — used by the read-only GET diagnostic so counts
+// reflect the whole event, not just the most recent page.
+async function fetchAllOrders(token, eventId) {
+  const collected = [];
+  let page = 1;
+  const pageSize = 200;
+
+  while (true) {
+    const url = `${SYMPLA_API}/events/${eventId}/orders` +
+      `?status=true&field_sort=updated_date&sort=DESC&page_size=${pageSize}&page=${page}`;
+    const resp = await symplaFetch(token, url);
+    const rows = resp.data || [];
+    if (rows.length === 0) break;
+
+    collected.push(...rows);
+    page++;
+    if (page > 50) break; // safety valve
+  }
+
+  return collected;
+}
+
 // Pages through orders (all statuses), newest updated_date first, stopping
 // as soon as we reach an order already covered by the stored watermark —
 // avoids re-fetching the full order history on every hourly run.
@@ -247,7 +302,7 @@ async function fetchOrdersSince(token, eventId, watermark) {
       }
       collected.push(order);
     }
-    if (reachedWatermark || rows.length < pageSize) break;
+    if (reachedWatermark) break;
     page++;
     if (page > 50) break; // safety valve
   }

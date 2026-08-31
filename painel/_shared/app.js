@@ -1,9 +1,8 @@
 // Painel — utilitários compartilhados (sidebar, formatters, fetch)
 
 const NAV = [
-  { key: 'meta-ads',   label: 'Meta Ads',   href: '/painel',            icon: '▶' },
-  { key: 'financeiro', label: 'Financeiro', href: '/painel/financeiro', icon: '$' },
-  { key: 'acessos',    label: 'Acessos',    href: '/painel/acessos',    icon: '◉' },
+  { key: 'meta-ads', label: 'Tráfego',  href: '/painel',         icon: '▶' },
+  { key: 'acessos',  label: 'Acessos',  href: '/painel/acessos', icon: '◉' },
 ];
 
 // === Renderiza layout (sidebar + container do conteúdo) ===
@@ -32,7 +31,6 @@ export function mountLayout({ active }) {
         <div class="nav-section">Relatórios</div>
         ${navHtml}
         <div class="sidebar-footer">
-          <div>Meta Marketing API</div>
           <button class="logout-btn" id="logoutBtn">Sair</button>
         </div>
       </aside>
@@ -125,20 +123,23 @@ export function rangePicker({ container, onChange, defaultDays = 30 }) {
     .map((o, i) => `<button class="range-btn ${o.days === defaultDays ? 'active' : ''}" data-i="${i}">${o.label}</button>`)
     .join('');
 
+  // Datas calculadas no fuso de Brasília (UTC-3), pra bater com o backend
+  // (functions/api/painel/*.js trata startDate/endDate como meia-noite BR).
+  function nowBR() { return new Date(Date.now() - 3 * 3600 * 1000); }
   function dateNDaysAgo(n) {
-    const d = new Date();
+    const d = nowBR();
     d.setUTCDate(d.getUTCDate() - n);
     return d.toISOString().slice(0, 10);
   }
-  function today() { return new Date().toISOString().slice(0, 10); }
+  function today() { return nowBR().toISOString().slice(0, 10); }
   function monthStart(offset = 0) {
-    const d = new Date();
+    const d = nowBR();
     d.setUTCDate(1);
     d.setUTCMonth(d.getUTCMonth() + offset);
     return d.toISOString().slice(0, 10);
   }
   function monthEnd(offset = 0) {
-    const d = new Date();
+    const d = nowBR();
     d.setUTCMonth(d.getUTCMonth() + offset + 1, 0);
     return d.toISOString().slice(0, 10);
   }
