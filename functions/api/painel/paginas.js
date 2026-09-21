@@ -27,6 +27,7 @@ const CLASSIFICA = (t) => `
     WHEN ${t}.landing_url LIKE '%/painel%'     THEN '_interna'
     WHEN ${t}.landing_url LIKE '%/estrutura%'  THEN '_interna'
     WHEN ${t}.landing_url LIKE '%/dash%'       THEN '_interna'
+    WHEN ${t}.landing_url LIKE '%/gravacao-preview%' THEN 'gravacao'
     WHEN ${t}.landing_url LIKE '%/vendas3pre%' THEN 'vendas3pre'
     WHEN ${t}.landing_url LIKE '%/vendas4pre%' THEN 'vendas4pre'
     WHEN ${t}.landing_url LIKE '%/vendaspre%'  THEN 'vendaspre'
@@ -43,6 +44,7 @@ const CLASSIFICA = (t) => `
 `;
 
 const ROTULOS = {
+  gravacao:   '/gravacao-preview (Hotmart)',
   home:       'Home',
   vendas2:    '/vendas2',
   vendas3:    '/vendas3 (roxo)',
@@ -56,7 +58,7 @@ const ROTULOS = {
   vendas5:      '/vendas5',
   vendas5pre:   '/vendas5pre (+ form)',
 };
-const ORDEM = ['home', 'vendas2', 'vendas3', 'vendas4', 'vendas3pre', 'vendas4pre', 'vendaspre', 'sp2026pre', 'vendasvideo', 'vendasvideo2', 'vendas5', 'vendas5pre'];
+const ORDEM = ['gravacao', 'home', 'vendas2', 'vendas3', 'vendas4', 'vendas3pre', 'vendas4pre', 'vendaspre', 'sp2026pre', 'vendasvideo', 'vendasvideo2', 'vendas5', 'vendas5pre'];
 
 const ANCORA = ['btn_cta_ancora'];
 const COMPRA = ['btn_compra_alunos', 'btn_compra_publico'];

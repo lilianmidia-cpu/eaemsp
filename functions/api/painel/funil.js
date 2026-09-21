@@ -53,6 +53,7 @@ const INTERNAS = ['%/painel%', '%/estrutura%', '%/dash%'];
 // caminho seja prefixo de outra precisa da mesma proteção.
 const PAGINAS = {
   todas:      { label: 'Todas as páginas' },
+  gravacao:   { label: '/gravacao-preview (Hotmart)', like: '%/gravacao-preview%' },
   home:       { label: 'Home' },
   vendas2:    { label: '/vendas2',    like: '%/vendas2%' },
   vendas3:    { label: '/vendas3',    like: '%/vendas3%', except: ['%/vendas3pre%'], since: VENDAS34_START_TS },

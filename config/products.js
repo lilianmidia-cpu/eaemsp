@@ -33,6 +33,13 @@
 
 export default {
   eduzz: {},
-  hotmart: {},
+  hotmart: {
+    '8500318': {
+      name: 'Gravação Completa — Imersão Escritores Admiráveis',
+      enchargeTag: '',
+      manychatTagId: 0,
+      googleAdsConversionActionId: '',
+    },
+  },
   kiwify: {},
 };
