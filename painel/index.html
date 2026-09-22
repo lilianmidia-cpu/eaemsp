@@ -39,8 +39,14 @@
   <template id="content-tpl">
     <div class="page-head fade-up">
       <div class="acct-badge"><span class="dot"></span>Dados do site</div>
-      <h1 class="title">Tráfego</h1>
+      <h1 class="title" id="pageTitle">Tráfego</h1>
       <div class="subtitle">Origem, dispositivo e volume de visitantes</div>
+    </div>
+
+    <!-- Modo: geral (todas as páginas) ou só a venda da Gravação -->
+    <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:1rem">
+      <button class="range-btn active" id="tabGeral">📊 Geral (todas as páginas)</button>
+      <button class="range-btn" id="tabGravacao">🎬 Venda da Gravação</button>
     </div>
 
     <!-- Filtro de datas -->
@@ -109,8 +115,8 @@
       </div>
     </div>
 
-    <!-- Comparativo por página -->
-    <section class="card card-lg fade-up" style="margin-bottom:1.5rem">
+    <!-- Comparativo por página (só faz sentido no modo Geral) -->
+    <section class="card card-lg fade-up" id="secComparativo" style="margin-bottom:1.5rem">
       <div style="margin-bottom:1rem">
         <div style="font-weight:700;color:var(--purple-deep)">Acessos e cliques por página</div>
         <div class="kpi-sub">Todas as páginas de tráfego lado a lado, com o total no fim</div>
@@ -142,7 +148,7 @@
           <div style="font-weight:700;color:var(--purple-deep)">Funil da página de vendas</div>
           <div class="kpi-sub">Da visita ao clique em "Comprar"</div>
         </div>
-        <label style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text-muted)">
+        <label id="labelSelPagina" style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text-muted)">
           Página
           <select id="selPagina" style="font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.4rem .6rem">
             <option value="todas">Todas as páginas</option>
@@ -239,6 +245,7 @@
     let endDate   = today();
     let onlyBR    = true;
     let pagina    = 'todas';
+    let modo      = 'geral'; // 'geral' | 'gravacao'
 
     document.getElementById('dtStart').value = startDate;
     document.getElementById('dtEnd').value   = endDate;
@@ -255,8 +262,26 @@
       loadFunil();
     });
 
+    // Modo "Venda da Gravação": trava tudo na Home a partir do go-live, some
+    // com o seletor de página (não faz sentido escolher outra) e some com o
+    // comparativo entre páginas (é uma visão de várias páginas ao mesmo tempo).
+    function setModo(novo) {
+      modo = novo;
+      document.getElementById('tabGeral').classList.toggle('active', modo === 'geral');
+      document.getElementById('tabGravacao').classList.toggle('active', modo === 'gravacao');
+      document.getElementById('secComparativo').style.display = modo === 'gravacao' ? 'none' : '';
+      document.getElementById('labelSelPagina').style.display = modo === 'gravacao' ? 'none' : 'flex';
+      document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego';
+      pagina = modo === 'gravacao' ? 'home' : 'todas';
+      document.getElementById('selPagina').value = pagina;
+      load();
+    }
+    document.getElementById('tabGeral').addEventListener('click', () => setModo('geral'));
+    document.getElementById('tabGravacao').addEventListener('click', () => setModo('gravacao'));
+
     function baseQs() {
-      return `startDate=${startDate}&endDate=${endDate}` + (onlyBR ? '&country=BR' : '');
+      const pageParam = modo === 'gravacao' ? '&page=home' : '';
+      return `startDate=${startDate}&endDate=${endDate}` + (onlyBR ? '&country=BR' : '') + pageParam;
     }
 
     async function loadFunil() {
@@ -266,7 +291,7 @@
 
     async function load() {
       const qs = baseQs();
-      const [kpisR, dailyR, devicesR, campR, origensR, citiesR, funilR, pagsR] = await Promise.all([
+      const calls = [
         api('/api/painel/meta?type=kpis&'      + qs),
         api('/api/painel/meta?type=daily&'     + qs),
         api('/api/painel/meta?type=devices&'   + qs),
@@ -274,9 +299,10 @@
         api('/api/painel/meta?type=origens&'   + qs),
         api('/api/painel/meta?type=cities&'    + qs),
         api(`/api/painel/funil?${qs}&page=${encodeURIComponent(pagina)}`),
-        api('/api/painel/paginas?' + qs),
-      ]);
-      renderPaginas(pagsR.data || {});
+      ];
+      if (modo !== 'gravacao') calls.push(api('/api/painel/paginas?' + qs));
+      const [kpisR, dailyR, devicesR, campR, origensR, citiesR, funilR, pagsR] = await Promise.all(calls);
+      if (pagsR) renderPaginas(pagsR.data || {});
 
       const k = kpisR.data || {};
       document.getElementById('kpiTotal').textContent   = fmt.num(k.total           || 0);

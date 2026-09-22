@@ -21,6 +21,19 @@ const NO_BOT = `
   AND user_agent NOT LIKE '%Slackbot%'
 `;
 
+// A Home trocou de "venda da Imersão presencial" pra "venda da Gravação" neste
+// momento (deploy do commit 9eca8d7). Mesma URL "/" antes e depois — sem este
+// corte, o modo "Gravação" do painel misturaria as duas ofertas como uma só.
+const GRAVACAO_GO_LIVE_TS = Math.floor(Date.UTC(2026, 8, 22, 14, 51, 22) / 1000); // 22/09/2026 11:51 (BRT)
+
+// Mesma lista de páginas conhecidas do funil.js — usada pra isolar a Home
+// (tudo que não bate com nenhuma dessas E não é página interna).
+const OUTRAS_PAGINAS_LIKE = [
+  '%/gravacao-preview%', '%/vendas3pre%', '%/vendas4pre%', '%/vendaspre%',
+  '%/vendas2%', '%/vendas3%', '%/vendas4%', '%/sp2026pre%',
+  '%/vendasvideo2%', '%/vendasvideo%', '%/vendas5pre%', '%/vendas5%',
+];
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -37,12 +50,19 @@ export async function onRequestGet(context) {
   const startDate = url.searchParams.get('startDate') || daysAgo(30);
   const endDate   = url.searchParams.get('endDate')   || today();
   const country   = url.searchParams.get('country')   || '';
+  const page      = url.searchParams.get('page')      || '';
   const startTs   = dateToEpoch(startDate, 0);
   const endTs     = dateToEpoch(endDate, 86399);
 
   const COUNTRY_FILTER = country ? `AND country = '${country.replace(/'/g, '')}'` : '';
-  const WHERE = `WHERE landing_url NOT LIKE '/painel%' AND created_at >= ? AND created_at <= ? ${COUNTRY_FILTER} ${NO_BOT}`;
-  const B = [startTs, endTs];
+  // page=home: só a Gravação, a partir do go-live. Nada de landing_url das
+  // outras páginas, nada de antes do corte de data.
+  const PAGE_FILTER = page === 'home'
+    ? `AND created_at >= ${GRAVACAO_GO_LIVE_TS} ${OUTRAS_PAGINAS_LIKE.map(() => `AND landing_url NOT LIKE ?`).join(' ')}`
+    : '';
+  const PAGE_PARAMS = page === 'home' ? OUTRAS_PAGINAS_LIKE : [];
+  const WHERE = `WHERE landing_url NOT LIKE '/painel%' AND created_at >= ? AND created_at <= ? ${COUNTRY_FILTER} ${PAGE_FILTER} ${NO_BOT}`;
+  const B = [startTs, endTs, ...PAGE_PARAMS];
 
   try {
     if (type === 'kpis') {
