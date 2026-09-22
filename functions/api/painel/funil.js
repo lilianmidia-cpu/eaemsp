@@ -197,6 +197,17 @@ export async function onRequestGet(context) {
     const publico   = publicoCount?.total || 0;
     const compras   = alunos + publico;
 
+    // A Gravação (Home) vende um produto só, não tem separação Alunos/Público
+    // — essa era uma distinção de preço da Imersão presencial. Nesse filtro,
+    // o funil mostra um passo só pro clique no botão que joga pra Hotmart.
+    const stepsCompra = (pageKey === 'home')
+      ? [{ label: 'Clicaram no botão de compra (Hotmart)', value: compras, pct: pct(compras, visitas) }]
+      : [
+          { label: 'Clicaram "Comprar (Alunos)"',  value: alunos,  pct: pct(alunos, visitas) },
+          { label: 'Clicaram "Comprar (Público)"', value: publico, pct: pct(publico, visitas) },
+          { label: 'Total "Comprar" (ambos)',       value: compras, pct: pct(compras, visitas) },
+        ];
+
     return json({
       ok: true,
       data: {
@@ -205,9 +216,7 @@ export async function onRequestGet(context) {
         steps: [
           { label: pageKey === 'todas' ? 'Acessaram o site' : `Acessaram ${PAGINAS[pageKey].label}`, value: visitas, pct: 100 },
           { label: 'Clicaram em CTA (ir p/ ingressos)', value: ancora, pct: pct(ancora, visitas) },
-          { label: 'Clicaram "Comprar (Alunos)"',  value: alunos,  pct: pct(alunos, visitas) },
-          { label: 'Clicaram "Comprar (Público)"', value: publico, pct: pct(publico, visitas) },
-          { label: 'Total "Comprar" (ambos)',       value: compras, pct: pct(compras, visitas) },
+          ...stepsCompra,
         ],
         breakdown: breakdown || [],
       },
