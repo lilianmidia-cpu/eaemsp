@@ -49,6 +49,10 @@
       <button class="range-btn" id="tabGravacao">🎬 Venda da Gravação</button>
     </div>
 
+    <div id="bannerGravacao" class="fade-up" style="display:none;margin-bottom:1.5rem;padding:.75rem 1rem;border-radius:10px;background:var(--purple-dim);color:#fff;font-size:.85rem;font-weight:600;align-items:center;gap:.5rem">
+      📅 Contando a partir de <strong>22/09/2026, 11:51 (horário de Brasília)</strong> — o momento em que a Home passou a vender a Gravação. Acessos e cliques anteriores a esse horário não entram nesses números.
+    </div>
+
     <!-- Filtro de datas -->
     <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:1.5rem">
       <button class="range-btn" data-days="0">Hoje</button>
@@ -271,6 +275,7 @@
       document.getElementById('tabGravacao').classList.toggle('active', modo === 'gravacao');
       document.getElementById('secComparativo').style.display = modo === 'gravacao' ? 'none' : '';
       document.getElementById('labelSelPagina').style.display = modo === 'gravacao' ? 'none' : 'flex';
+      document.getElementById('bannerGravacao').style.display = modo === 'gravacao' ? 'flex' : 'none';
       document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego';
       pagina = modo === 'gravacao' ? 'home' : 'todas';
       document.getElementById('selPagina').value = pagina;
