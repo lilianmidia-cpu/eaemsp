@@ -270,7 +270,7 @@
 
     /* Reduce motion */
     @media (prefers-reduced-motion: reduce) {
-      .btn-purple::before, #final-cta, .vagas-badge { animation: none; }
+      .btn-purple::before, #final-cta, .vagas-badge, .video-unmute-nudge, .nudge-hand { animation: none; }
       .reveal { opacity: 1; transform: none; transition: none; }
     }
 
@@ -399,7 +399,20 @@
     .video-frame { position: relative; max-width: 780px; margin: 1.8rem auto 0; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
     .hero-video-frame { margin: 1.5rem auto 1.75rem; }
     .video-frame video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
-    .video-unmute { position: absolute; z-index: 3; bottom: .9rem; right: .9rem; display: flex; align-items: center; gap: .4rem; padding: .5rem .9rem; border: none; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-family: 'Inter', sans-serif; font-size: .8rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); }
+    .video-unmute-wrap { position: absolute; z-index: 3; bottom: .9rem; right: .9rem; display: flex; align-items: center; gap: .5rem; }
+    .video-unmute { display: flex; align-items: center; gap: .4rem; padding: .5rem .9rem; border: none; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-family: 'Inter', sans-serif; font-size: .8rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); }
+    .video-unmute-nudge {
+      display: flex; align-items: center; gap: .3rem;
+      background: rgba(0,0,0,.65); color: #fff;
+      padding: .35rem .65rem; border-radius: 999px;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: .7rem;
+      white-space: nowrap; backdrop-filter: blur(4px);
+      animation: nudge-pulse 1.5s ease-in-out infinite;
+    }
+    .nudge-hand { display: inline-block; font-size: .95rem; animation: nudge-hand-wiggle 1s ease-in-out infinite; }
+    @keyframes nudge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+    @keyframes nudge-hand-wiggle { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-18deg); } }
+    @media (max-width: 480px) { .video-unmute-nudge span:last-child { display: none; } }
     @media (min-width: 700px) { .video-sec .sec-head h2 { font-size: 2.1rem; } }
     /* Placeholder visível do vídeo — mostra o espaço reservado com clareza,
        sem simular um player que ainda não existe (nada de controles/scrubber). */
@@ -1153,9 +1166,12 @@
            navegadores) com botão pra ativar o som. -->
       <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
         <iframe id="hero-yt-m" data-src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720&cc_load_policy=0" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-m')" aria-label="Ativar som do vídeo">
-          <span class="video-unmute-icon">🔇</span> Ativar som
-        </button>
+        <div class="video-unmute-wrap">
+          <span class="video-unmute-nudge" aria-hidden="true"><span class="nudge-hand">👉</span><span>Ative o som!</span></span>
+          <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-m')" aria-label="Ativar som do vídeo">
+            <span class="video-unmute-icon">🔇</span> Ativar som
+          </button>
+        </div>
       </div>
       <div class="hero-meta-m">
         <div class="hero-meta-m-item">
@@ -1194,9 +1210,12 @@
            navegadores) com botão pra ativar o som. -->
       <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
         <iframe id="hero-yt-d" data-src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720&cc_load_policy=0" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-d')" aria-label="Ativar som do vídeo">
-          <span class="video-unmute-icon">🔇</span> Ativar som
-        </button>
+        <div class="video-unmute-wrap">
+          <span class="video-unmute-nudge" aria-hidden="true"><span class="nudge-hand">👉</span><span>Ative o som!</span></span>
+          <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-d')" aria-label="Ativar som do vídeo">
+            <span class="video-unmute-icon">🔇</span> Ativar som
+          </button>
+        </div>
       </div>
       <div class="hero-meta">
         <div class="hero-meta-item">
@@ -1711,6 +1730,8 @@
     var icon = btn.querySelector('.video-unmute-icon');
     if(icon) icon.textContent = estavaMudo ? '🔊' : '🔇';
     btn.lastChild.textContent = estavaMudo ? ' Silenciar' : ' Ativar som';
+    var nudge = btn.parentElement && btn.parentElement.querySelector('.video-unmute-nudge');
+    if(nudge && estavaMudo) nudge.style.display = 'none';
   }
 </script>
 
