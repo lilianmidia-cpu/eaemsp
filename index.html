@@ -80,7 +80,8 @@
   <!-- Fontes hospedadas no nosso domínio (antes vinham do Google Fonts): elimina
        2 conexões externas no caminho crítico e entram no cache imutável de 1 ano. -->
   <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-variable.woff2" crossorigin>
-  <link rel="preload" as="image" type="image/webp" href="/gravacao-preview/assets/real-video-poster.webp" fetchpriority="high">
+  <link rel="preconnect" href="https://www.youtube-nocookie.com">
+  <link rel="preconnect" href="https://i.ytimg.com">
 
   <!-- GA4 -->
   <script async src="/scripts/gtag.js?id=G-5Z3B722LET"></script>
@@ -1146,7 +1147,7 @@
       <!-- Vídeo de abertura: YouTube não listado, autoplay mudo (exigência dos
            navegadores) com botão pra ativar o som. -->
       <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
-        <iframe id="hero-yt-m" src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe>
+        <iframe id="hero-yt-m" data-src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
         <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-m')" aria-label="Ativar som do vídeo">
           <span class="video-unmute-icon">🔇</span> Ativar som
         </button>
@@ -1187,7 +1188,7 @@
       <!-- Vídeo de abertura: YouTube não listado, autoplay mudo (exigência dos
            navegadores) com botão pra ativar o som. -->
       <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
-        <iframe id="hero-yt-d" src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe>
+        <iframe id="hero-yt-d" data-src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
         <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-d')" aria-label="Ativar som do vídeo">
           <span class="video-unmute-icon">🔇</span> Ativar som
         </button>
@@ -1218,6 +1219,18 @@
     </div>
   </div>
 </section>
+
+<!-- Carrega só UM dos dois vídeos (mobile OU desktop, nunca os dois): sem isso,
+     o navegador baixa os dois players do YouTube mesmo com o outro escondido
+     por CSS (display:none não impede o carregamento de iframe), dobrando o
+     peso da página à toa. -->
+<script>
+(function(){
+  var alvo = window.matchMedia('(min-width: 900px)').matches ? 'hero-yt-d' : 'hero-yt-m';
+  var f = document.getElementById(alvo);
+  if(f && f.dataset.src){ f.src = f.dataset.src; }
+})();
+</script>
 
 <!-- ════ 1.6. AUTORIDADE — prova real do evento (mosaico de quadrados, padrão vendas5) ════ -->
 <section class="autoridade">
