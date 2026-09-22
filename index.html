@@ -101,6 +101,11 @@
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init','955620583846464');
     (function(){var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';fbq('track','PageView',{},{eventID:id});fetch('/tracker',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({event_name:'PageView',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{}})}).catch(function(){});})();
+    /* Evento custom pra separar público de quem viu a Home-gravação (a partir de
+       hoje) de quem viu a antiga página da imersão presencial — mesma URL "/",
+       então só um evento novo (que não existe no histórico) separa os públicos
+       de remarketing no Meta. */
+    (function(){var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';fbq('trackCustom','ViewGravacao',{},{eventID:id});fetch('/tracker',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({event_name:'ViewGravacao',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{}})}).catch(function(){});})();
     /* carrega fbevents.js só depois: 1ª interação OU 3s (o que vier antes) — mantém o pixel funcionando, mas fora do caminho crítico */
     (function(){var l=!1;function load(){if(l)return;l=!0;var t=document.createElement('script');t.async=!0;t.src='/scripts/fbevents.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(t,s)}['pointerdown','touchstart','keydown','scroll','mousemove'].forEach(function(ev){window.addEventListener(ev,load,{once:!0,passive:!0})});setTimeout(load,3000)})();
   </script>
