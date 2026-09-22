@@ -35,6 +35,11 @@ const VENDAS34_START_TS = Math.floor(Date.UTC(2026, 6, 14, 3, 0, 0) / 1000); // 
 // A /vendas3pre e a /vendas4pre nasceram nesta data.
 const VENDAS34PRE_START_TS = Math.floor(Date.UTC(2026, 6, 15, 3, 0, 0) / 1000); // 15/07/2026
 
+// A Home trocou de "venda da Imersão presencial" pra "venda da Gravação" neste
+// momento (deploy do commit 9eca8d7). Mesma URL "/" antes e depois — sem este
+// corte, o funil da Home misturaria as duas ofertas como se fossem uma só.
+const GRAVACAO_GO_LIVE_TS = Math.floor(Date.UTC(2026, 8, 22, 14, 51, 22) / 1000); // 22/09/2026 11:51 (BRT)
+
 const ANCHOR_BTNS = ['btn_cta_ancora'];
 const CHECKOUT_BTNS = ['btn_compra_alunos', 'btn_compra_publico'];
 // WhatsApp não é âncora nem compra — só entra no ALL_BTNS pra aparecer no
@@ -53,8 +58,8 @@ const INTERNAS = ['%/painel%', '%/estrutura%', '%/dash%'];
 // caminho seja prefixo de outra precisa da mesma proteção.
 const PAGINAS = {
   todas:      { label: 'Todas as páginas' },
-  gravacao:   { label: '/gravacao-preview (Hotmart)', like: '%/gravacao-preview%' },
-  home:       { label: 'Home' },
+  gravacao:   { label: '/gravacao-preview (rascunho, antes do lançamento)', like: '%/gravacao-preview%' },
+  home:       { label: 'Home — venda da Gravação (a partir de 22/09)', since: GRAVACAO_GO_LIVE_TS },
   vendas2:    { label: '/vendas2',    like: '%/vendas2%' },
   vendas3:    { label: '/vendas3',    like: '%/vendas3%', except: ['%/vendas3pre%'], since: VENDAS34_START_TS },
   vendas4:    { label: '/vendas4',    like: '%/vendas4%', except: ['%/vendas4pre%'], since: VENDAS34_START_TS },

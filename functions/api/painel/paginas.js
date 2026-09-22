@@ -21,6 +21,11 @@ const NO_BOT = (t) => `
   AND ${t}.user_agent NOT LIKE '%facebookexternalhit%'
 `;
 
+// A Home trocou de "venda da Imersão presencial" pra "venda da Gravação" neste
+// momento (deploy do commit 9eca8d7). Mesma URL "/" antes e depois — sem este
+// corte, a linha "Home" misturaria as duas ofertas como se fossem uma só.
+const GRAVACAO_GO_LIVE_TS = Math.floor(Date.UTC(2026, 8, 22, 14, 51, 22) / 1000); // 22/09/2026 11:51 (BRT)
+
 // A ordem importa: do caminho mais específico para o mais genérico.
 const CLASSIFICA = (t) => `
   CASE
@@ -39,13 +44,15 @@ const CLASSIFICA = (t) => `
     WHEN ${t}.landing_url LIKE '%/vendasvideo%'  THEN 'vendasvideo'
     WHEN ${t}.landing_url LIKE '%/vendas5pre%' THEN 'vendas5pre'
     WHEN ${t}.landing_url LIKE '%/vendas5%'    THEN 'vendas5'
+    WHEN ${t}.created_at < ${GRAVACAO_GO_LIVE_TS} THEN 'imersao_antiga'
     ELSE 'home'
   END
 `;
 
 const ROTULOS = {
-  gravacao:   '/gravacao-preview (Hotmart)',
-  home:       'Home',
+  gravacao:   '/gravacao-preview (rascunho, antes do lançamento)',
+  home:       'Home — venda da Gravação (a partir de 22/09)',
+  imersao_antiga: 'Imersão presencial (histórico, antes de 22/09)',
   vendas2:    '/vendas2',
   vendas3:    '/vendas3 (roxo)',
   vendas4:    '/vendas4 (verde)',
