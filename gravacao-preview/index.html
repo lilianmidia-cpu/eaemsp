@@ -1125,7 +1125,7 @@
 </head>
 <body>
 
-<div style="width:100%;background:#111;color:#ffe082;text-align:center;font-size:.8rem;font-weight:700;padding:.5rem 1rem;">🛠️ RASCUNHO PARA APROVAÇÃO: página ainda não está no ar. Falta o link de checkout (Hotmart) e o vídeo de abertura.</div>
+<div style="width:100%;background:#111;color:#ffe082;text-align:center;font-size:.8rem;font-weight:700;padding:.5rem 1rem;">🛠️ RASCUNHO PARA APROVAÇÃO: página ainda não está no ar (noindex). Checkout e vídeo já configurados, aguardando aprovação final.</div>
 
 <main>
 
@@ -1146,17 +1146,13 @@
         um guia prático sobre mercado editorial, Amazon KDP, BookTok, Inteligência
         Artificial e estratégias de vendas com profissionais do mercado editorial brasileiro.
       </p>
-      <!-- Vídeo de abertura (placeholder visível — trocar pela tag <video> real
-           quando o Adam Veiga entregar o arquivo, mesma troca da cópia desktop abaixo). -->
-      <div class="video-frame video-frame--placeholder hero-video-frame">
-        <picture>
-          <source srcset="assets/real-video-poster.webp" type="image/webp">
-          <img onerror="this.onerror=null;var s=this.getAttribute('src');this.closest('picture').querySelectorAll('source').forEach(function(n){n.remove()});this.src=s+(s.indexOf('?')>-1?'&':'?')+'wf=1';" src="assets/real-video-poster.jpg" alt="Lilian Cardoso na Imersão Escritores Admiráveis" fetchpriority="high">
-        </picture>
-        <div class="video-ph-overlay" aria-hidden="true">
-          <div class="video-ph-play"></div>
-          <span class="video-ph-badge">Vídeo de abertura: em produção</span>
-        </div>
+      <!-- Vídeo de abertura: YouTube não listado, autoplay mudo (exigência dos
+           navegadores) com botão pra ativar o som. -->
+      <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
+        <iframe id="hero-yt-m" src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe>
+        <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-m')" aria-label="Ativar som do vídeo">
+          <span class="video-unmute-icon">🔇</span> Ativar som
+        </button>
       </div>
       <div class="hero-meta-m">
         <div class="hero-meta-m-item">
@@ -1191,19 +1187,13 @@
         um guia prático sobre mercado editorial, Amazon KDP, BookTok, Inteligência
         Artificial e estratégias de vendas com profissionais do mercado editorial brasileiro.
       </p>
-      <!-- Vídeo de abertura (placeholder visível — quando o Adam Veiga entregar o
-           vídeo real, trocar a <picture> por <video controls muted loop playsinline
-           poster="assets/real-video-poster.jpg"><source src="assets/hero-video.mp4">,
-           apagar o .video-ph-overlay e o modificador --placeholder aqui e na cópia mobile acima. -->
-      <div class="video-frame video-frame--placeholder hero-video-frame">
-        <picture>
-          <source srcset="assets/real-video-poster.webp" type="image/webp">
-          <img onerror="this.onerror=null;var s=this.getAttribute('src');this.closest('picture').querySelectorAll('source').forEach(function(n){n.remove()});this.src=s+(s.indexOf('?')>-1?'&':'?')+'wf=1';" src="assets/real-video-poster.jpg" alt="Lilian Cardoso na Imersão Escritores Admiráveis" fetchpriority="high">
-        </picture>
-        <div class="video-ph-overlay" aria-hidden="true">
-          <div class="video-ph-play"></div>
-          <span class="video-ph-badge">Vídeo de abertura: em produção</span>
-        </div>
+      <!-- Vídeo de abertura: YouTube não listado, autoplay mudo (exigência dos
+           navegadores) com botão pra ativar o som. -->
+      <div class="video-frame hero-video-frame" style="aspect-ratio:16/9;">
+        <iframe id="hero-yt-d" src="https://www.youtube-nocookie.com/embed/NsD8ZfyADxs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=NsD8ZfyADxs&enablejsapi=1&vq=hd720" title="Vídeo de abertura — Imersão Escritores Admiráveis" style="width:100%;height:100%;border:0;display:block;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe>
+        <button type="button" class="video-unmute" onclick="krobToggleMute(this,'hero-yt-d')" aria-label="Ativar som do vídeo">
+          <span class="video-unmute-icon">🔇</span> Ativar som
+        </button>
       </div>
       <div class="hero-meta">
         <div class="hero-meta-item">
@@ -1691,6 +1681,23 @@
     </div>
   </div>
 </div>
+
+<!-- ════ CONTROLE DE SOM DO VÍDEO DO YOUTUBE ════ -->
+<script>
+  /* Global (chamada via onclick inline) — liga/desliga o mudo do player via
+     postMessage da IFrame API do YouTube (enablejsapi=1 no src do iframe). */
+  function krobToggleMute(btn, iframeId){
+    var f = document.getElementById(iframeId);
+    if(!f || !f.contentWindow) return;
+    var estavaMudo = btn.getAttribute('data-muted') !== '0';
+    var cmd = estavaMudo ? 'unMute' : 'mute';
+    f.contentWindow.postMessage(JSON.stringify({event:'command', func:cmd, args:[]}), '*');
+    btn.setAttribute('data-muted', estavaMudo ? '0' : '1');
+    var icon = btn.querySelector('.video-unmute-icon');
+    if(icon) icon.textContent = estavaMudo ? '🔊' : '🔇';
+    btn.lastChild.textContent = estavaMudo ? ' Silenciar' : ' Ativar som';
+  }
+</script>
 
 <script>
 (function(){
