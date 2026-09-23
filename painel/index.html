@@ -45,8 +45,8 @@
 
     <!-- Modo: geral (todas as páginas) ou só a venda da Gravação -->
     <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:1rem">
-      <button class="range-btn active" id="tabGeral">📊 Geral (todas as páginas)</button>
-      <button class="range-btn" id="tabGravacao">🎬 Venda da Gravação</button>
+      <button class="range-btn" id="tabGeral">📊 Geral (todas as páginas)</button>
+      <button class="range-btn active" id="tabGravacao">🎬 Venda da Gravação</button>
     </div>
 
     <div id="bannerGravacao" class="fade-up" style="display:none;margin-bottom:1.5rem;padding:.75rem 1rem;border-radius:10px;background:var(--purple-dim);color:var(--text);font-size:.85rem;font-weight:600;align-items:center;gap:.5rem;border:1px solid var(--border-light)">
@@ -71,6 +71,11 @@
 
     <!-- KPIs -->
     <section class="kpi-grid fade-up">
+      <div class="card" id="cardVendasGravacao" style="display:none;border-color:var(--green);background:var(--green-dim)">
+        <div class="kpi-label">Vendas da Gravação (Hotmart)</div>
+        <div class="kpi-value mono green" id="kpiVendasGravacao">—</div>
+        <div class="kpi-sub" id="kpiVendasGravacaoSub">Total acumulado, direto da Hotmart</div>
+      </div>
       <div class="card">
         <div class="kpi-label">Total de visitas</div>
         <div class="kpi-value mono accent" id="kpiTotal">—</div>
@@ -249,7 +254,7 @@
     let endDate   = today();
     let onlyBR    = true;
     let pagina    = 'todas';
-    let modo      = 'geral'; // 'geral' | 'gravacao'
+    let modo      = 'gravacao'; // 'geral' | 'gravacao' — abre direto na Gravação
 
     document.getElementById('dtStart').value = startDate;
     document.getElementById('dtEnd').value   = endDate;
@@ -276,6 +281,7 @@
       document.getElementById('secComparativo').style.display = modo === 'gravacao' ? 'none' : '';
       document.getElementById('labelSelPagina').style.display = modo === 'gravacao' ? 'none' : 'flex';
       document.getElementById('bannerGravacao').style.display = modo === 'gravacao' ? 'flex' : 'none';
+      document.getElementById('cardVendasGravacao').style.display = modo === 'gravacao' ? '' : 'none';
       document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego';
       pagina = modo === 'gravacao' ? 'home' : 'todas';
       document.getElementById('selPagina').value = pagina;
@@ -308,6 +314,14 @@
       if (modo !== 'gravacao') calls.push(api('/api/painel/paginas?' + qs));
       const [kpisR, dailyR, devicesR, campR, origensR, citiesR, funilR, pagsR] = await Promise.all(calls);
       if (pagsR) renderPaginas(pagsR.data || {});
+
+      if (modo === 'gravacao') {
+        const vR = await api('/api/painel/vendas-gravacao');
+        const v = vR.data || {};
+        document.getElementById('kpiVendasGravacao').textContent = fmt.num(v.vendas || 0);
+        document.getElementById('kpiVendasGravacaoSub').textContent =
+          `Total acumulado: R$ ${(v.total || 0).toFixed(2).replace('.', ',')}`;
+      }
 
       const k = kpisR.data || {};
       document.getElementById('kpiTotal').textContent   = fmt.num(k.total           || 0);
@@ -550,7 +564,7 @@
     function today()    { return daysAgo(0); }
     function daysAgo(n) { const d = new Date(Date.now() - 3 * 3600 * 1000); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); }
 
-    load();
+    setModo(modo);
   </script>
 </body>
 </html>

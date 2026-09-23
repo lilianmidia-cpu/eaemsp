@@ -210,7 +210,7 @@
     }
 
     function classifyOrigin(r) {
-      if (r.fbclid || (r.utm_source || '').toLowerCase().includes('facebook') || (r.utm_source || '').toLowerCase().includes('instagram'))
+      if (r.fbclid || /facebook|instagram|^meta$|^fb$|^ig$/.test((r.utm_source || '').toLowerCase()))
         return { type: 'meta', label: 'Meta' + (r.utm_medium ? ' · ' + r.utm_medium : '') };
       if (r.gclid || (r.utm_source || '').toLowerCase().includes('google'))
         return { type: 'google', label: 'Google' + (r.utm_medium ? ' · ' + r.utm_medium : '') };
