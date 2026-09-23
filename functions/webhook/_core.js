@@ -28,6 +28,7 @@
 //     productName:   string,
 //     items:         Array<{ productId, name, price: { value, currency } }>,
 //     platformUtm:   { utm_source, utm_medium, utm_campaign, utm_content, utm_term },
+//     skipMeta:      boolean,  // opcional: true = não manda Purchase pro Meta CAPI
 //   }
 //
 // Do NOT add platform-specific branching to this file. If you find yourself
@@ -112,7 +113,7 @@ export async function processPurchase({ parsed, env, context }) {
 // HANDLER: Tracking — Meta CAPI + GA4 + Google Ads (needs checkoutData)
 // -----------------------------------------------------------------------------
 async function handleTracking({ parsed, eventId, eventTime, env }) {
-  const { email, name, phone, value, currency, transactionId, productId, productName, items, checkoutData, productConfig } = parsed;
+  const { email, name, phone, value, currency, transactionId, productId, productName, items, checkoutData, productConfig, skipMeta } = parsed;
 
   const hashedEm = await sha256(email);
   const nameParts = splitName(name);
@@ -142,7 +143,7 @@ async function handleTracking({ parsed, eventId, eventTime, env }) {
   }));
 
   const [metaResult, ga4Result, googleAdsResult] = await Promise.allSettled([
-    sendToMeta({ checkoutData, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, eventId, eventTime, value, currency, productName, contents, env }),
+    sendToMeta({ skipMeta, checkoutData, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, eventId, eventTime, value, currency, productName, contents, env }),
     sendToGA4({ checkoutData, hashedEm, transactionId, value, currency, ga4Items, env }),
     sendToGoogleAds({ checkoutData, productConfig, hashedEm, transactionId, value, currency, eventTime, env }),
   ]);
@@ -448,7 +449,12 @@ async function handlePurchaseLog({ parsed, eventId, eventTime, resultMap, env })
 // -----------------------------------------------------------------------------
 // META CAPI — Purchase with full navigation data from D1
 // -----------------------------------------------------------------------------
-async function sendToMeta({ checkoutData, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, eventId, eventTime, value, currency, productName, contents, env }) {
+async function sendToMeta({ skipMeta, checkoutData, hashedEm, hashedFn, hashedLn, hashedPh, hashedExternalId, eventId, eventTime, value, currency, productName, contents, env }) {
+  // Adaptador pede pra pular quando a própria plataforma já manda o Purchase
+  // pro Meta (senão duplica com event_id diferente).
+  if (skipMeta) {
+    return { skipped: 'platform sends Purchase to Meta itself', payload: null, response: null };
+  }
   if (!env.META_PIXEL_ID || !env.META_ACCESS_TOKEN) {
     return { skipped: 'missing meta env', payload: null, response: null };
   }

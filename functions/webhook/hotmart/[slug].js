@@ -94,6 +94,10 @@ export async function onRequestPost(context) {
       // `checkout_sessions.utm_*` (the attribution the sales page
       // persisted at visit time).
       platformUtm,
+      // O Pixel da Hotmart (web + API de Conversões) já manda "Vendas
+      // realizadas" pro Meta e não deixa desmarcar. Mandar daqui também
+      // duplicaria a compra. GA4, Google Ads e purchase_log seguem normais.
+      skipMeta: true,
     };
 
     const result = await processPurchase({ parsed, env, context });
