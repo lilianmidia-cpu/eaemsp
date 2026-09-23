@@ -1800,14 +1800,21 @@
     try{navigator.sendBeacon('/tracker',new Blob([JSON.stringify({event_name:'ClickBotaoCompra',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{},custom_data:customData})],{type:'application/json'}));}catch(_){}
   }
 
-  /* Botões secundários: scroll suave + rastreamento de CTA */
+  /* Botões secundários: scroll suave + rastreamento de CTA.
+     Correção de deriva: a página é longa e tem imagens/vídeo/fonte com
+     font-display:swap carregando abaixo do ponto de clique — se algo desloca
+     o layout ENQUANTO a rolagem suave acontece, ela pode "parar antes da
+     hora" (ex.: em cima de Depoimentos em vez de Ingressos). Reencaixa a
+     posição real (sem animação, instantâneo) depois que tudo já assentou. */
   ['hero-cta-d','hero-cta-m','urgency-cta','kit-cta','sobre-cta','escritores-cta','final-cta'].forEach(function(id){
     var el=document.getElementById(id); if(!el)return;
     el.addEventListener('click',function(e){
       e.preventDefault();
       trackBtn('btn_cta_ancora');
       var target = document.getElementById('ingressos');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(function(){ target.scrollIntoView({ behavior: 'auto', block: 'start' }); }, 700);
     });
   });
 
