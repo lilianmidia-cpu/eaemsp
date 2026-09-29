@@ -15,6 +15,35 @@
 /vendasvideo2/* / 301
 /sp2026pre / 301
 /sp2026pre/* / 301
+/vendas5 / 301
+/vendas5/* / 301
+/vendas5pre / 301
+/vendas5pre/* / 301
+/vendasvideo / 301
+/vendasvideo/* / 301
+# vendas2: só a página. A Home usa /vendas2/assets/calendar.svg e pin.svg.
+/vendas2 / 301
+/vendas2/ / 301
+/vendas2/index.html / 301
+
+# Arquivos internos do projeto: não são páginas do site.
+/backups / 301
+/backups/* / 301
+/docs / 301
+/docs/* / 301
+/migrations/* / 301
+/config/* / 301
+/.claude/* / 301
+/examples / 301
+/examples/* / 301
+/CLAUDE.md / 301
+/README.md / 301
+/PASSO_A_PASSO.md / 301
+/wrangler.toml / 301
+/wrangler.toml.example / 301
+/deploy.sh / 301
+/VERSION / 301
+/.gitignore / 301
 
 /gravacao-preview / 301
 /gravacao-preview/ / 301
