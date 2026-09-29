@@ -1767,13 +1767,15 @@
 
   /* Sem value/currency: quem cobra é o Sympla, e cravar preço aqui faria o
      Meta otimizar por um valor que ainda não foi pago. */
+  /* Meta fica de fora: o Pixel da Hotmart (web + API) já manda o
+     InitiateCheckout ao abrir o checkout. Mandar daqui duplicaria.
+     TikTok, ChatGPT Ads e GA4 continuam recebendo daqui. */
   function fire(contentName){
     var id=(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'';
     var customData={content_name:contentName};
-    try{if(window.fbq)fbq('track','InitiateCheckout',customData,{eventID:id});}catch(_){}
     try{if(window.ttq)ttq.track('InitiateCheckout',customData,{event_id:id});}catch(_){}
     try{if(window.oaiq)oaiq('measure','checkout_started',{type:'contents'});}catch(_){}
-    try{navigator.sendBeacon('/tracker',new Blob([JSON.stringify({event_name:'InitiateCheckout',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{},custom_data:customData})],{type:'application/json'}));}catch(_){}
+    try{navigator.sendBeacon('/tracker',new Blob([JSON.stringify({event_name:'InitiateCheckout',event_id:id,event_time:Math.floor(Date.now()/1000),event_source_url:location.href,user_data:{},custom_data:customData,skip_meta:true})],{type:'application/json'}));}catch(_){}
   }
 
   function dest(base){

@@ -470,7 +470,7 @@ async function sendToMeta({ skipMeta, checkoutData, hashedEm, hashedFn, hashedLn
   if (hashedPh) metaUserData.ph = [hashedPh];
   if (hashedExternalId) metaUserData.external_id = [hashedExternalId];
   if (checkoutData.fbp) metaUserData.fbp = checkoutData.fbp;
-  if (checkoutData.fbc && !isFbcExpired(checkoutData.fbc)) metaUserData.fbc = checkoutData.fbc;
+  if (checkoutData.fbc) metaUserData.fbc = checkoutData.fbc;
 
   // Purchase custom_data per Meta spec: currency + value are required;
   // content_type + content_ids + contents + content_name + num_items are
@@ -690,17 +690,6 @@ async function sendToGoogleAds({ checkoutData, productConfig, hashedEm, transact
 // -----------------------------------------------------------------------------
 // HELPERS
 // -----------------------------------------------------------------------------
-// Meta treats an fbclid older than 90 days as expired (Events Manager flags
-// it). Our _fbc cookie outlives that, so drop it from the Meta payload only.
-const FBC_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000;
-
-function isFbcExpired(fbc) {
-  let createdAt = Number(fbc.split('.')[2]);
-  if (!createdAt) return true;
-  if (createdAt < 1e12) createdAt *= 1000; // seconds → ms
-  return Date.now() - createdAt > FBC_MAX_AGE_MS;
-}
-
 async function sha256(value) {
   if (!value) return '';
   const normalized = value.toLowerCase().trim();

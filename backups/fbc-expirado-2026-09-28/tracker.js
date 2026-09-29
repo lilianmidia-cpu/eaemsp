@@ -255,7 +255,7 @@ async function sendToMeta({ body, clientIp, userAgent, fbp, fbc, hashedEm, hashe
   if (hashedPh) metaUserData.ph = [hashedPh];
   if (hashedExternalId) metaUserData.external_id = [hashedExternalId];
   if (fbp) metaUserData.fbp = fbp;
-  if (fbc && !isFbcExpired(fbc)) metaUserData.fbc = fbc;
+  if (fbc) metaUserData.fbc = fbc;
 
   const eventObj = {
     event_name: body.event_name,
@@ -436,18 +436,6 @@ function validateFbCookie(value) {
   if (!/^\d+$/.test(parts[2])) return '';
   if (!parts[3]) return '';
   return value;
-}
-
-// Meta treats an fbclid older than 90 days as expired and flags it in
-// Events Manager diagnostics. Our _fbc cookie / D1 session outlive that,
-// so drop it only from the Meta payload (D1 keeps the original).
-const FBC_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000;
-
-function isFbcExpired(fbc) {
-  let createdAt = Number(fbc.split('.')[2]);
-  if (!createdAt) return true;
-  if (createdAt < 1e12) createdAt *= 1000; // seconds → ms
-  return Date.now() - createdAt > FBC_MAX_AGE_MS;
 }
 
 function parseCookies(cookieHeader) {
