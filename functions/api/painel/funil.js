@@ -60,6 +60,7 @@ const PAGINAS = {
   todas:      { label: 'Todas as páginas' },
   gravacao:   { label: '/gravacao-preview (rascunho, antes do lançamento)', like: '%/gravacao-preview%' },
   home:       { label: 'Home — venda da Gravação (a partir de 22/09)', since: GRAVACAO_GO_LIVE_TS },
+  home_imersao: { label: 'Home: Imersão presencial (até 22/09)', until: GRAVACAO_GO_LIVE_TS },
   vendas2:    { label: '/vendas2',    like: '%/vendas2%' },
   vendas3:    { label: '/vendas3',    like: '%/vendas3%', except: ['%/vendas3pre%'], since: VENDAS34_START_TS },
   vendas4:    { label: '/vendas4',    like: '%/vendas4%', except: ['%/vendas4pre%'], since: VENDAS34_START_TS },
@@ -74,8 +75,8 @@ const PAGINAS = {
 };
 
 // Monta o recorte de página como SQL + params. `t` é o alias da tabela sessions.
-function filtroPagina(pageKey, t) {
-  if (pageKey === 'home') {
+function filtroPagina(pageKey, t, fase1) {
+  if (pageKey === 'home' || pageKey === 'home_imersao') {
     // Home = qualquer entrada que não seja uma das outras páginas nem interna.
     // Basta excluir os `like`: os mais específicos (vendas3pre) já estão
     // cobertos pelos mais genéricos (vendas3).
@@ -95,10 +96,12 @@ function filtroPagina(pageKey, t) {
       params: [p.like, ...except],
     };
   }
-  // "todas": só tira as páginas internas.
+  // "todas": só tira as páginas internas. Na fase 1 tira também o rascunho
+  // da Gravação, que é preparação da fase 2.
+  const excluir = fase1 ? [...INTERNAS, '%/gravacao-preview%'] : INTERNAS;
   return {
-    sql: INTERNAS.map(() => `AND ${t}.landing_url NOT LIKE ?`).join(' '),
-    params: INTERNAS,
+    sql: excluir.map(() => `AND ${t}.landing_url NOT LIKE ?`).join(' '),
+    params: excluir,
   };
 }
 
@@ -120,13 +123,16 @@ export async function onRequestGet(context) {
 
   const pageKey = PAGINAS[url.searchParams.get('page')] ? url.searchParams.get('page') : 'todas';
   const pageSince = PAGINAS[pageKey].since || FUNIL_START_TS;
+  // fase=1: aba da Imersão presencial, termina no go-live da Gravação.
+  const fase1 = url.searchParams.get('fase') === '1';
+  const pageUntil = fase1 ? GRAVACAO_GO_LIVE_TS : PAGINAS[pageKey].until;
 
   const startTs = Math.max(dateToEpoch(startDate, 0), pageSince);
-  const endTs   = dateToEpoch(endDate, 86399);
+  const endTs   = pageUntil ? Math.min(dateToEpoch(endDate, 86399), pageUntil - 1) : dateToEpoch(endDate, 86399);
 
   // Recorte de página/país aplicado sobre sessions — nas queries de clique a
   // tabela entra via JOIN, por isso o alias muda.
-  const paginaS = filtroPagina(pageKey, 's');
+  const paginaS = filtroPagina(pageKey, 's', fase1);
   const countrySql    = country ? `AND s.country = ?` : '';
   const countryParams = country ? [country] : [];
 

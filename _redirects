@@ -26,6 +26,10 @@
 /vendas2/ / 301
 /vendas2/index.html / 301
 
+# O antigo /dash foi juntado à aba "Fase 1" do /painel.
+/dash /painel 301
+/dash/* /painel 301
+
 # Arquivos internos do projeto: não são páginas do site.
 /backups / 301
 /backups/* / 301

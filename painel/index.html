@@ -46,10 +46,14 @@
       <div class="subtitle">Origem, dispositivo e volume de visitantes</div>
     </div>
 
-    <!-- Modo: geral (todas as páginas) ou só a venda da Gravação -->
+    <!-- Modo: fase 1 (Imersão presencial, até o go-live) ou fase 2 (Gravação) -->
     <div class="toolbar fade-up" style="gap:.4rem;margin-bottom:1rem">
-      <button class="range-btn" id="tabGeral">📊 Geral (todas as páginas)</button>
-      <button class="range-btn active" id="tabGravacao">🎬 Venda da Gravação</button>
+      <button class="range-btn" id="tabFase1">🎟️ Fase 1 · Imersão presencial</button>
+      <button class="range-btn active" id="tabGravacao">🎬 Fase 2 · Gravação</button>
+    </div>
+
+    <div id="bannerFase1" class="fade-up" style="display:none;margin-bottom:1.5rem;padding:.75rem 1rem;border-radius:10px;background:var(--surface-alt);color:var(--text);font-size:.85rem;font-weight:600;align-items:center;gap:.5rem;border:1px solid var(--border-light)">
+      📅 Histórico da venda da Imersão presencial. Os números vão até <strong>22/09/2026, 11:51 (horário de Brasília)</strong>, quando a Home passou a vender a Gravação.
     </div>
 
     <div id="bannerGravacao" class="fade-up" style="display:none;margin-bottom:1.5rem;padding:.75rem 1rem;border-radius:10px;background:var(--purple-dim);color:var(--text);font-size:.85rem;font-weight:600;align-items:center;gap:.5rem;border:1px solid var(--border-light)">
@@ -143,6 +147,80 @@
       </div>
     </section>
 
+    <!-- Fase 1: o que era do antigo /dash (leads, envio pro Meta/Google, compras) -->
+    <section class="kpi-grid fade-up" id="secFase1Envios" style="display:none">
+      <div class="card">
+        <div class="kpi-label">Leads (formulário)</div>
+        <div class="kpi-value mono accent" id="kpiLeads">—</div>
+        <div class="kpi-sub">Evento Lead no período</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Leads enviados ao Meta</div>
+        <div class="kpi-value mono" style="color:#1877F2" id="kpiLeadsMeta">—</div>
+        <div class="kpi-sub" id="kpiLeadsMetaSub">Aceitos pelo Meta</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Leads enviados ao GA4</div>
+        <div class="kpi-value mono" style="color:#3367D6" id="kpiLeadsGa4">—</div>
+        <div class="kpi-sub" id="kpiLeadsGa4Sub">Aceitos pelo Google Analytics</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Recuperados pelo servidor</div>
+        <div class="kpi-value mono green" id="kpiRecuperados">—</div>
+        <div class="kpi-sub" id="kpiRecuperadosSub">Leads que o pixel sozinho perderia</div>
+      </div>
+    </section>
+
+    <section class="table-wrap fade-up" id="secFase1Leads" style="display:none">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Leads da fase 1</div>
+          <div class="table-sub" id="leadsSub">Quem preencheu o formulário e de onde veio</div>
+        </div>
+      </div>
+      <div id="leadsOrigens" style="display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border)"></div>
+      <div style="overflow-x:auto;max-height:520px;overflow-y:auto">
+        <table style="min-width:900px">
+          <thead><tr>
+            <th>Data</th>
+            <th>E-mail</th>
+            <th>Origem</th>
+            <th>Campanha</th>
+            <th>Página</th>
+            <th>Aparelho</th>
+            <th>Cidade</th>
+            <th>Meta</th>
+            <th>GA4</th>
+          </tr></thead>
+          <tbody id="leadsTbody"><tr><td colspan="9" class="empty">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="table-wrap fade-up" id="secFase1Compras" style="display:none">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Compras registradas pelo site</div>
+          <div class="table-sub" id="comprasFase1Sub">Vendas que chegaram por webhook e o envio de cada uma pro Meta e pro Google</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="min-width:820px">
+          <thead><tr>
+            <th>Data</th>
+            <th>Comprador</th>
+            <th>Produto</th>
+            <th class="num">Valor</th>
+            <th>Origem</th>
+            <th>Meta</th>
+            <th>GA4</th>
+            <th>Google Ads</th>
+          </tr></thead>
+          <tbody id="comprasFase1Tbody"><tr><td colspan="8" class="empty">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- Gráficos -->
     <div class="charts-row fade-up">
       <div class="card card-lg">
@@ -196,8 +274,7 @@
           Página
           <select id="selPagina" style="font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.4rem .6rem">
             <option value="todas">Todas as páginas</option>
-            <option value="gravacao">/gravacao-preview (rascunho, antes do lançamento)</option>
-            <option value="home">Home — venda da Gravação (a partir de 22/09)</option>
+            <option value="home_imersao">Home: Imersão presencial (até 22/09)</option>
             <option value="vendas2">/vendas2</option>
             <option value="vendas3">/vendas3 (roxo)</option>
             <option value="vendas4">/vendas4 (verde)</option>
@@ -289,7 +366,7 @@
     let endDate   = today();
     let onlyBR    = true;
     let pagina    = 'todas';
-    let modo      = 'gravacao'; // 'geral' | 'gravacao' — abre direto na Gravação
+    let modo      = 'gravacao'; // 'fase1' | 'gravacao' — abre direto na Gravação
 
     document.getElementById('dtStart').value = startDate;
     document.getElementById('dtEnd').value   = endDate;
@@ -306,12 +383,18 @@
       loadFunil();
     });
 
-    // Modo "Venda da Gravação": trava tudo na Home a partir do go-live, some
+    // Modo "Gravação" (fase 2): trava tudo na Home a partir do go-live, some
     // com o seletor de página (não faz sentido escolher outra) e some com o
     // comparativo entre páginas (é uma visão de várias páginas ao mesmo tempo).
+    // Modo "Fase 1": tudo até o go-live, mais o que era do antigo /dash.
     function setModo(novo) {
       modo = novo;
-      document.getElementById('tabGeral').classList.toggle('active', modo === 'geral');
+      const f1 = modo === 'fase1';
+      document.getElementById('tabFase1').classList.toggle('active', f1);
+      document.getElementById('bannerFase1').style.display = f1 ? 'block' : 'none';
+      ['secFase1Envios', 'secFase1Leads', 'secFase1Compras'].forEach(id => {
+        document.getElementById(id).style.display = f1 ? '' : 'none';
+      });
       document.getElementById('tabGravacao').classList.toggle('active', modo === 'gravacao');
       document.getElementById('secComparativo').style.display = modo === 'gravacao' ? 'none' : '';
       document.getElementById('labelSelPagina').style.display = modo === 'gravacao' ? 'none' : 'flex';
@@ -319,16 +402,16 @@
       document.getElementById('cardVendasGravacao').style.display = modo === 'gravacao' ? '' : 'none';
       document.getElementById('secCompradores').style.display = modo === 'gravacao' ? '' : 'none';
       document.getElementById('cardVendasPeriodo').style.display = modo === 'gravacao' ? '' : 'none';
-      document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego';
+      document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego · Fase 1 (Imersão presencial)';
       pagina = modo === 'gravacao' ? 'home' : 'todas';
       document.getElementById('selPagina').value = pagina;
       load();
     }
-    document.getElementById('tabGeral').addEventListener('click', () => setModo('geral'));
+    document.getElementById('tabFase1').addEventListener('click', () => setModo('fase1'));
     document.getElementById('tabGravacao').addEventListener('click', () => setModo('gravacao'));
 
     function baseQs() {
-      const pageParam = modo === 'gravacao' ? '&page=home' : '';
+      const pageParam = modo === 'gravacao' ? '&page=home' : '&fase=1';
       return `startDate=${startDate}&endDate=${endDate}` + (onlyBR ? '&country=BR' : '') + pageParam;
     }
 
@@ -361,6 +444,9 @@
 
         const cR = await api(`/api/painel/compradores-gravacao?startDate=${startDate}&endDate=${endDate}`);
         renderCompradores(cR.data || {});
+      } else {
+        const fR = await api(`/api/painel/fase1?startDate=${startDate}&endDate=${endDate}`);
+        renderFase1(fR.data || {});
       }
 
       const k = kpisR.data || {};
@@ -525,6 +611,70 @@
           <td style="font-size:.8rem">${STATUS_COMPRA[r.status] || esc(r.status)}</td>
         </tr>`;
       }).join('');
+    }
+
+    // ✓ aceito, ✗ recusado, — não enviado / sem resposta
+    function envio(ok) {
+      if (ok === 1) return '<span style="color:var(--green);font-weight:700">✓</span>';
+      if (ok === 0) return '<span style="color:#dc2626;font-weight:700">✗</span>';
+      return '<span class="dim">—</span>';
+    }
+
+    function renderFase1(data) {
+      const leads   = data.leads || [];
+      const compras = data.compras || [];
+      const e = data.envios || {};
+      const saude = data.saude || {};
+      // A fase 1 termina em 22/09, mesmo que o filtro vá além.
+      const periodo = `${fmt.dateBR(startDate)} a ${fmt.dateBR(endDate > '2026-09-22' ? '2026-09-22' : endDate)}`;
+
+      document.getElementById('kpiLeads').textContent = fmt.num(e.leads_total || 0);
+      document.getElementById('kpiLeadsMeta').textContent = fmt.num(e.leads_meta_ok || 0);
+      document.getElementById('kpiLeadsMetaSub').textContent =
+        e.leads_meta_erro ? `${fmt.num(e.leads_meta_erro)} ${e.leads_meta_erro === 1 ? 'recusado' : 'recusados'} pelo Meta` : 'Nenhum recusado';
+      document.getElementById('kpiLeadsGa4').textContent = fmt.num(e.leads_ga4_ok || 0);
+      document.getElementById('kpiLeadsGa4Sub').textContent =
+        e.leads_ga4_erro ? `${fmt.num(e.leads_ga4_erro)} ${e.leads_ga4_erro === 1 ? 'recusado' : 'recusados'} pelo GA4` : 'Nenhum recusado';
+      document.getElementById('kpiRecuperados').textContent =
+        fmt.num((saude.adblock_recuperado || 0) + (saude.itp_recuperado || 0));
+      document.getElementById('kpiRecuperadosSub').textContent =
+        `${fmt.num(saude.adblock_recuperado || 0)} com bloqueador de anúncio · ${fmt.num(saude.itp_recuperado || 0)} no Safari/iPhone`;
+
+      document.getElementById('leadsSub').textContent =
+        `${periodo}: ${fmt.num(leads.length)} leads` + (leads.length >= 500 ? ' (mostrando os 500 mais recentes)' : '');
+      document.getElementById('leadsOrigens').innerHTML = (data.resumo_leads || [])
+        .map(o => `<span class="badge badge-other" style="font-size:.78rem;padding:.3rem .7rem">${esc(o.origem)}: ${fmt.num(o.total)}</span>`)
+        .join('');
+
+      const tl = document.getElementById('leadsTbody');
+      tl.innerHTML = leads.length ? leads.map(r => `<tr>
+          <td class="mono dim" style="font-size:.8rem;white-space:nowrap">${fmt.ts(r.data)}</td>
+          <td style="font-size:.85rem">${esc(r.email)}</td>
+          <td style="font-size:.8rem">${esc(r.origem)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.campanha)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.pagina)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.aparelho)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.cidade)}</td>
+          <td>${envio(r.meta_ok)}</td>
+          <td>${envio(r.ga4_ok)}</td>
+        </tr>`).join('')
+        : `<tr><td colspan="9" class="empty">Nenhum lead no período.</td></tr>`;
+
+      document.getElementById('comprasFase1Sub').textContent = compras.length
+        ? `${periodo}: ${fmt.num(compras.length)} ${compras.length === 1 ? 'compra' : 'compras'} · ${fmt.num(e.compras_meta_ok || 0)} aceitas pelo Meta · ${fmt.num(e.compras_ga4_ok || 0)} pelo GA4`
+        : 'Vendas que chegaram por webhook e o envio de cada uma pro Meta e pro Google';
+      const tc = document.getElementById('comprasFase1Tbody');
+      tc.innerHTML = compras.length ? compras.map(r => `<tr>
+          <td class="mono dim" style="font-size:.8rem;white-space:nowrap">${fmt.ts(r.data)}</td>
+          <td>${esc(r.nome)}<div class="dim" style="font-size:.75rem">${esc(r.email)}</div></td>
+          <td style="font-size:.8rem">${esc(r.produto)}</td>
+          <td class="num mono">${fmt.brl(r.valor)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.origem)}</td>
+          <td>${envio(r.meta_ok)}</td>
+          <td>${envio(r.ga4_ok)}</td>
+          <td>${envio(r.gads_ok)}</td>
+        </tr>`).join('')
+        : `<tr><td colspan="8" class="empty">Nenhuma compra registrada pelo site no período. As vendas da Imersão foram pelo Sympla.</td></tr>`;
     }
 
     function renderCampaigns(rows) {

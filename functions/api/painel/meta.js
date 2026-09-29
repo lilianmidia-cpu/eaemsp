@@ -51,8 +51,10 @@ export async function onRequestGet(context) {
   const endDate   = url.searchParams.get('endDate')   || today();
   const country   = url.searchParams.get('country')   || '';
   const page      = url.searchParams.get('page')      || '';
+  const fase1     = url.searchParams.get('fase') === '1';
   const startTs   = dateToEpoch(startDate, 0);
-  const endTs     = dateToEpoch(endDate, 86399);
+  // fase=1: aba da Imersão presencial, termina no go-live da Gravação.
+  const endTs     = fase1 ? Math.min(dateToEpoch(endDate, 86399), GRAVACAO_GO_LIVE_TS - 1) : dateToEpoch(endDate, 86399);
 
   const COUNTRY_FILTER = country ? `AND country = '${country.replace(/'/g, '')}'` : '';
   // page=home: só a Gravação, a partir do go-live. Nada de landing_url das
@@ -61,7 +63,9 @@ export async function onRequestGet(context) {
     ? `AND created_at >= ${GRAVACAO_GO_LIVE_TS} ${OUTRAS_PAGINAS_LIKE.map(() => `AND landing_url NOT LIKE ?`).join(' ')}`
     : '';
   const PAGE_PARAMS = page === 'home' ? OUTRAS_PAGINAS_LIKE : [];
-  const WHERE = `WHERE landing_url NOT LIKE '/painel%' AND created_at >= ? AND created_at <= ? ${COUNTRY_FILTER} ${PAGE_FILTER} ${NO_BOT}`;
+  // O rascunho /gravacao-preview é preparação da fase 2, não entra na fase 1.
+  const FASE1_FILTER = fase1 ? `AND landing_url NOT LIKE '%/gravacao-preview%'` : '';
+  const WHERE = `WHERE landing_url NOT LIKE '/painel%' AND created_at >= ? AND created_at <= ? ${COUNTRY_FILTER} ${PAGE_FILTER} ${FASE1_FILTER} ${NO_BOT}`;
   const B = [startTs, endTs, ...PAGE_PARAMS];
 
   try {

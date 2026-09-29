@@ -52,7 +52,7 @@ const CLASSIFICA = (t) => `
 const ROTULOS = {
   gravacao:   '/gravacao-preview (rascunho, antes do lançamento)',
   home:       'Home — venda da Gravação (a partir de 22/09)',
-  imersao_antiga: 'Imersão presencial (histórico, antes de 22/09)',
+  imersao_antiga: 'Home: Imersão presencial (até 22/09)',
   vendas2:    '/vendas2',
   vendas3:    '/vendas3 (roxo)',
   vendas4:    '/vendas4 (verde)',
@@ -66,6 +66,7 @@ const ROTULOS = {
   vendas5pre:   '/vendas5pre (+ form)',
 };
 const ORDEM = ['gravacao', 'home', 'vendas2', 'vendas3', 'vendas4', 'vendas3pre', 'vendas4pre', 'vendaspre', 'sp2026pre', 'vendasvideo', 'vendasvideo2', 'vendas5', 'vendas5pre'];
+const ORDEM_FASE1 = ['imersao_antiga', 'vendas2', 'vendas3', 'vendas4', 'vendas3pre', 'vendas4pre', 'vendaspre', 'sp2026pre', 'vendasvideo', 'vendasvideo2', 'vendas5', 'vendas5pre'];
 
 const ANCORA = ['btn_cta_ancora'];
 const COMPRA = ['btn_compra_alunos', 'btn_compra_publico'];
@@ -84,8 +85,10 @@ export async function onRequestGet(context) {
   const startDate = url.searchParams.get('startDate') || daysAgo(30);
   const endDate   = url.searchParams.get('endDate')   || today();
   const country   = url.searchParams.get('country')   || '';
+  const fase1     = url.searchParams.get('fase') === '1';
   const startTs   = dateToEpoch(startDate, 0);
-  const endTs     = dateToEpoch(endDate, 86399);
+  // fase=1: aba da Imersão presencial, termina no go-live da Gravação.
+  const endTs     = fase1 ? Math.min(dateToEpoch(endDate, 86399), GRAVACAO_GO_LIVE_TS - 1) : dateToEpoch(endDate, 86399);
 
   const paisS = country ? `AND s.country = ?` : '';
   const paisP = country ? [country] : [];
@@ -132,7 +135,10 @@ export async function onRequestGet(context) {
       porPagina[c.pagina].compra = c.compra || 0;
     }
 
-    const linhas = ORDEM.filter(k => porPagina[k]).map(k => {
+    // Na fase 1 a Home de antes do corte (imersao_antiga) é uma página de venda
+    // da Imersão como as outras; o rascunho da Gravação fica de fora.
+    const ordem = fase1 ? ORDEM_FASE1 : ORDEM;
+    const linhas = ordem.filter(k => porPagina[k]).map(k => {
       const d = porPagina[k];
       return {
         key: k,
