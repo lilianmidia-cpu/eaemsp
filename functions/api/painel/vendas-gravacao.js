@@ -5,6 +5,8 @@
 // seção "Gravação: nova célula").
 
 const HOTMART_PRODUCT_ID_GRAVACAO = '8500318';
+const GRAVACAO_GO_LIVE_TS = Math.floor(Date.UTC(2026, 8, 22, 14, 51, 22) / 1000); // 22/09/2026 11:51 (BRT)
+// Reembolso/chargeback/cancelamento ficam fora (ver migrations/0021).
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -21,8 +23,9 @@ export async function onRequestGet(context) {
     const r = await env.DB.prepare(`
       SELECT COUNT(*) AS vendas, COALESCE(SUM(value), 0) AS total
       FROM purchase_log
-      WHERE product_id = ?
-    `).bind(HOTMART_PRODUCT_ID_GRAVACAO).first();
+      WHERE product_id = ? AND created_at >= ?
+        AND COALESCE(status, 'approved') = 'approved'
+    `).bind(HOTMART_PRODUCT_ID_GRAVACAO, GRAVACAO_GO_LIVE_TS).first();
 
     return json({ ok: true, data: { vendas: r?.vendas || 0, total: r?.total || 0 } });
   } catch (e) {

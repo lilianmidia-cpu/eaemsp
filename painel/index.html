@@ -27,6 +27,9 @@
     .badge-organic { background: var(--green-dim); color: var(--green); }
     .badge-direct  { background: var(--surface-alt); color: var(--text-muted); }
     .badge-other   { background: var(--purple-dim); color: var(--purple); }
+    .badge-instagram { background: rgba(214,41,118,.12); color: #c1356b; }
+    .badge-whatsapp  { background: rgba(37,211,102,.14); color: #128c4a; }
+    .badge-email     { background: rgba(217,119,6,.12); color: #b45309; }
     .charts-row {
       display: grid; grid-template-columns: 1fr 280px; gap: 1rem; margin-bottom: 1.5rem;
     }
@@ -72,9 +75,14 @@
     <!-- KPIs -->
     <section class="kpi-grid fade-up">
       <div class="card" id="cardVendasGravacao" style="display:none;border-color:var(--green);background:var(--green-dim)">
-        <div class="kpi-label">Vendas da Gravação (Hotmart)</div>
+        <div class="kpi-label">Vendas totais da Gravação (Hotmart)</div>
         <div class="kpi-value mono green" id="kpiVendasGravacao">—</div>
         <div class="kpi-sub" id="kpiVendasGravacaoSub">Total acumulado, direto da Hotmart</div>
+      </div>
+      <div class="card" id="cardVendasPeriodo" style="display:none;border-color:var(--green)">
+        <div class="kpi-label">Vendas no período</div>
+        <div class="kpi-value mono green" id="kpiVendasPeriodo">—</div>
+        <div class="kpi-sub" id="kpiVendasPeriodoSub">Segue as datas selecionadas</div>
       </div>
       <div class="card">
         <div class="kpi-label">Total de visitas</div>
@@ -105,6 +113,33 @@
         <div class="kpi-label">Acesso direto</div>
         <div class="kpi-value mono dim" id="kpiDirect">—</div>
         <div class="kpi-sub">Sem referrer</div>
+      </div>
+    </section>
+
+    <!-- Compradores da Gravação (só no modo Gravação) -->
+    <section class="table-wrap fade-up" id="secCompradores" style="display:none">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Compradores da Gravação</div>
+          <div class="table-sub" id="compradoresSub">Cada venda da Hotmart e a origem da visita que levou à compra</div>
+        </div>
+      </div>
+      <div id="compradoresOrigens" style="display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border)"></div>
+      <div style="overflow-x:auto">
+        <table style="min-width:980px">
+          <thead><tr>
+            <th>Data</th>
+            <th>Comprador</th>
+            <th class="num">Valor</th>
+            <th>Origem</th>
+            <th>Detalhe</th>
+            <th>Aparelho</th>
+            <th>Primeira visita</th>
+            <th>Cidade</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody id="compradoresTbody"><tr><td colspan="9" class="empty">Carregando…</td></tr></tbody>
+        </table>
       </div>
     </section>
 
@@ -282,6 +317,8 @@
       document.getElementById('labelSelPagina').style.display = modo === 'gravacao' ? 'none' : 'flex';
       document.getElementById('bannerGravacao').style.display = modo === 'gravacao' ? 'flex' : 'none';
       document.getElementById('cardVendasGravacao').style.display = modo === 'gravacao' ? '' : 'none';
+      document.getElementById('secCompradores').style.display = modo === 'gravacao' ? '' : 'none';
+      document.getElementById('cardVendasPeriodo').style.display = modo === 'gravacao' ? '' : 'none';
       document.getElementById('pageTitle').textContent = modo === 'gravacao' ? 'Tráfego — Venda da Gravação' : 'Tráfego';
       pagina = modo === 'gravacao' ? 'home' : 'todas';
       document.getElementById('selPagina').value = pagina;
@@ -321,6 +358,9 @@
         document.getElementById('kpiVendasGravacao').textContent = fmt.num(v.vendas || 0);
         document.getElementById('kpiVendasGravacaoSub').textContent =
           `Total acumulado: R$ ${(v.total || 0).toFixed(2).replace('.', ',')}`;
+
+        const cR = await api(`/api/painel/compradores-gravacao?startDate=${startDate}&endDate=${endDate}`);
+        renderCompradores(cR.data || {});
       }
 
       const k = kpisR.data || {};
@@ -413,6 +453,76 @@
           <td><span class="badge badge-${badgeType}">${esc(r.origem)}</span></td>
           <td class="num mono">${fmt.num(r.visitas)}</td>
           <td class="num mono dim">${fmt.num(r.unicos)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    // Mesma ordem e chaves de ORIGENS em functions/api/painel/compradores-gravacao.js
+    const ORIGEM_COMPRA = {
+      meta_ads:   { label: 'Meta Ads',            badge: 'meta' },
+      google_ads: { label: 'Google Ads',          badge: 'google' },
+      email:      { label: 'E-mail',              badge: 'email' },
+      instagram:  { label: 'Instagram orgânico',  badge: 'instagram' },
+      facebook:   { label: 'Facebook orgânico',   badge: 'organic' },
+      whatsapp:   { label: 'WhatsApp',            badge: 'whatsapp' },
+      busca:      { label: 'Busca orgânica',      badge: 'organic' },
+      outros:     { label: 'Outros',              badge: 'other' },
+      direto:     { label: 'Direto / sem rastreio', badge: 'direct' },
+    };
+
+    // "mesmo dia" / "3 dias antes" / "15/06" (primeira visita do visitante)
+    function primeiraVisita(r) {
+      if (!r.primeira_visita) return '';
+      const dias = Math.floor((r.data - r.primeira_visita) / 86400);
+      const quando = dias < 1 ? 'mesmo dia' : dias === 1 ? '1 dia antes' : `${dias} dias antes`;
+      const pagina = r.primeira_pagina && r.primeira_pagina !== '/' ? ` · ${r.primeira_pagina}` : '';
+      return `${quando} (${fmt.ts(r.primeira_visita).slice(0, 5)})${pagina}`;
+    }
+    const STATUS_COMPRA = {
+      approved:   'Aprovada',
+      refunded:   'Reembolsada',
+      chargeback: 'Chargeback',
+      canceled:   'Cancelada',
+    };
+
+    function renderCompradores(data) {
+      const resumo = data.resumo || { vendas: 0, total: 0, desfeitas: 0, por_origem: {} };
+      const rows = data.compradores || [];
+
+      document.getElementById('kpiVendasPeriodo').textContent = fmt.num(resumo.vendas);
+      document.getElementById('kpiVendasPeriodoSub').textContent =
+        `${fmt.brl(resumo.total)} de ${fmt.dateBR(startDate)} a ${fmt.dateBR(endDate)}`;
+
+      document.getElementById('compradoresSub').textContent =
+        `${fmt.dateBR(startDate)} a ${fmt.dateBR(endDate)}: ${fmt.num(resumo.vendas)} vendas, ${fmt.brl(resumo.total)}` +
+        (resumo.desfeitas ? ` (${fmt.num(resumo.desfeitas)} reembolsada/cancelada fora do total)` : '');
+
+      // Só as origens que tiveram venda no período (Meta Ads sempre, pra comparar).
+      document.getElementById('compradoresOrigens').innerHTML = Object.entries(ORIGEM_COMPRA)
+        .map(([k, o]) => [k, o, (resumo.por_origem || {})[k] || { vendas: 0, total: 0 }])
+        .filter(([k, , v]) => v.vendas > 0 || k === 'meta_ads')
+        .map(([, o, v]) => `<span class="badge badge-${o.badge}" style="font-size:.78rem;padding:.3rem .7rem">${o.label}: ${fmt.num(v.vendas)} · ${fmt.brl(v.total)}</span>`)
+        .join('');
+
+      const tb = document.getElementById('compradoresTbody');
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="9" class="empty">Nenhuma venda no período.</td></tr>`;
+        return;
+      }
+      tb.innerHTML = rows.map(r => {
+        const o = ORIGEM_COMPRA[r.origem] || ORIGEM_COMPRA.direto;
+        const desfeita = r.status !== 'approved';
+        const aparelho = [r.aparelho, r.app ? `app do ${r.app}` : ''].filter(Boolean).join(' · ');
+        return `<tr style="${desfeita ? 'opacity:.55;text-decoration:line-through' : ''}">
+          <td class="mono dim" style="font-size:.8rem;white-space:nowrap">${fmt.ts(r.data)}</td>
+          <td>${esc(r.nome)}<div class="dim" style="font-size:.75rem">${esc(r.email)}</div></td>
+          <td class="num mono">${fmt.brl(r.valor)}</td>
+          <td><span class="badge badge-${o.badge}">${o.label}</span></td>
+          <td style="font-size:.8rem">${esc(r.detalhe)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(aparelho)}</td>
+          <td class="dim" style="font-size:.8rem">${esc(primeiraVisita(r))}</td>
+          <td class="dim" style="font-size:.8rem">${esc(r.cidade)}</td>
+          <td style="font-size:.8rem">${STATUS_COMPRA[r.status] || esc(r.status)}</td>
         </tr>`;
       }).join('');
     }

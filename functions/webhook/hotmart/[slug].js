@@ -24,13 +24,21 @@
 //     `mobile` / `phone` / `checkout_phone`. ManyChat fan-out will skip.
 //   - Paid event: `rawPayload.event === 'PURCHASE_APPROVED'` combined with
 //     `data.purchase.status === 'APPROVED'`. Hotmart fires other events
-//     (PURCHASE_COMPLETE, PURCHASE_REFUNDED, etc.) — acknowledge-and-skip.
+//     (PURCHASE_COMPLETE, etc.) — acknowledge-and-skip. REFUNDED/CHARGEBACK/
+//     CANCELED only update purchase_log.status (see REVERSAL_EVENTS).
 //   - `data.product.id` is a number; stringify for storage.
 //   - Price values are already decimals (97 not 9700); no cents conversion.
 // -----------------------------------------------------------------------------
 
 import { processPurchase } from '../_core.js';
 import { guardSlug } from '../_utils.js';
+
+// Eventos que desfazem uma venda aprovada → valor gravado em purchase_log.status.
+const REVERSAL_EVENTS = {
+  PURCHASE_REFUNDED: 'refunded',
+  PURCHASE_CHARGEBACK: 'chargeback',
+  PURCHASE_CANCELED: 'canceled',
+};
 
 export async function onRequestPost(context) {
   const { request, env, params } = context;
@@ -43,9 +51,27 @@ export async function onRequestPost(context) {
     const body = rawPayload.data || {};
     const eventName = rawPayload.event || '';
 
+    // Reembolso / chargeback / cancelamento: marca a venda já gravada, não
+    // apaga e não manda nada pro Meta/GA4/Google. A venda sai do total do
+    // /painel porque ele só conta status 'approved'.
+    const reversalStatus = REVERSAL_EVENTS[eventName];
+    if (reversalStatus) {
+      const transactionId = body.purchase?.transaction || '';
+      let updated = 0;
+      if (transactionId && env.DB) {
+        const r = await env.DB.prepare(
+          `UPDATE purchase_log SET status = ?, status_updated_at = ? WHERE transaction_id = ?`
+        ).bind(reversalStatus, Math.floor(Date.now() / 1000), transactionId).run();
+        updated = r.meta?.changes || 0;
+      }
+      return new Response(
+        JSON.stringify({ ok: true, event: eventName, status: reversalStatus, transaction: transactionId, updated }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Only process approved purchases. Every other event (PURCHASE_COMPLETE,
-    // PURCHASE_REFUNDED, PURCHASE_CHARGEBACK, PURCHASE_DELAYED,
-    // PURCHASE_CANCELED, SUBSCRIPTION_*) returns 200 and skips.
+    // PURCHASE_DELAYED, SUBSCRIPTION_*) returns 200 and skips.
     if (eventName !== 'PURCHASE_APPROVED' || body.purchase?.status !== 'APPROVED') {
       return new Response(
         JSON.stringify({ ok: true, skipped: 'not an approved purchase', event: eventName, status: body.purchase?.status }),
